@@ -1,11 +1,43 @@
+Introductory tasks
+Write a separate AI for each task.
+
+1. Shoot stationary targets.
+9x9 map with targets. Shoot them down. Skeleton code provided.
+
+2. Fly to point.
+Basic race map provided. Fly to each point, stop, fly to next.
+
+3. Fly to stationary targets (optionally stop), shoot them down.
+Big map with targets.
+
+4. Shoot down moving targets.
+Asteroids.
+http://playtechs.blogspot.se/2007/04/aiming-at-moving-target.html
+
+5. Avoid walls.
+Asteroids, targets or race?
+
+6. Dodge shots.
+Map lined with cannons. Shooting disabled.
+
+7. Combine into a single bot capable of flying to enemies, shooting them down, avoid walls, and basic shotdodging. Try them out against eachother.
+
+
+
+Expand the bot.
+*Make a team (old instructions)
+*Handle gravity. Spotgravity and/or general gravity.
+*Improve current capabilities.
+*Racing on different maps.
+*Handle balls in CTF.
+*Items (Missiles, mines, bonuses)
+*fuel
+*Wormholes
+*Asteroids
+*Navigation through maze.
+*Varying mapvalues (size,friction,shipmass,shotmass,shotspeed,shotlife,edgewrap, wallbounce)
+
 Mapfunktioner
-gravitation wells
-gravitation
-fuel
-wormholes
-cannon
-asteroids
-Race
 varying values on
 	mapsize
 	friction(?)
@@ -15,66 +47,3 @@ varying values on
 	shotlife
 	edgewrap
 	*wallbounce
-	
-	
-
-
-
-AI
-navigation
-Missiles
-Mines
-Bonuses (possible to detect in api?)
-CTF
-
-
-
-Tasks:
-1. Shoot down a nonmoving target
-1b. shoot down a moving target
-1c. (opt) Shoot down an unpredictably moving target.
-2. Move and stop within radius.
-2b. Move to and shoot down target.
-3. Avoid walls.
-3b. Get around objects.
-3c. Navigate trough maze.
-4. Avoid shots.
-
-
-Shoot down a still target.
-Shoot down a moving target.
-Move to within radius.
-Avoid crash.
-Dodge shots.
-
-Now combine the different bots to one bot with all the same functionalities.
-Move to a bot and shoot him down, avoiding his shots and not crashing into anything.
-
-
-After this the bot can be improved in numerous ways.
-Shoot down moving target http://playtechs.blogspot.se/2007/04/aiming-at-moving-target.html
-Introductory tasks
-Write a separate AI for each task.
-
-1. Shoot down stationary target
-Map: empty.xp
-AI: Continually changing spawnpoint, stationary
-
-2. Shoot down a moving target.
-http://playtechs.blogspot.se/2007/04/aiming-at-moving-target.html
-Map: Empty, edgewrap
-AI: Picking random direction and flying at semi-ranom constant speed, changing direction when dying
-
-3. Fly to enemy
-Map: Empty, edgdwrap, low friction, allowPlayercrashes: no
-AI: Same as 1.
-
-4. Avoid crashing
-Map: Simple.xp? Walls, low friction
-
-5. Dodge incoming shots.
-Map: Empty, edgewrap, low friction.
-
-Combine all these into one big AI preserving all functionality.
-
-After that add further functionality
