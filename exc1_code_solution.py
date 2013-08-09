@@ -27,7 +27,7 @@ class myai:
 
     def __init__(self):
         self.count = 0
-        self.mode = "aim"
+        self.mode = "init"
         self.targetId = -1
 
     def tick(self):
@@ -38,7 +38,7 @@ class myai:
             #
             if not ai.selfAlive():
                 self.count = 0
-                self.mode = "aim"
+                self.mode = "init"
                 return
 
             self.count += 1
@@ -46,6 +46,8 @@ class myai:
             #
             # Read the "sensors"
             #
+
+
             x = ai.selfX()
             y = ai.selfY()
             heading = ai.selfHeadingRad() 
@@ -54,63 +56,58 @@ class myai:
             numTargets = ai.numTargetServer()
             numTargetsAlive = 0
 
+
             for i in range(numTargets):
               if ai.targetAlive(i):
                 numTargetsAlive += 1
 
-            # For debugging use print statements, either here or further down.
-            # useful functions: , round(), ai.radToDeg, ai.degToRad, etc.
-            # os.system('clear') clears the terminal screen, which can be useful.
-
-            print(self.count, self.mode, round(ai.radToDeg(heading)), numTargetsAlive)
+            #os.system('clear')
 
 
-            if self.mode == "wait":
+            # Add more sensors readings here if they are needed
+
+            #print (ai.getLag(), self.count, self.mode, x, y, round(ai.radToDeg(heading)), self.targetId, numTargetsAlive)
+            #ai.setMaxTurn(10)
+
+
+            # avoid strange sensor values when starting by waiting
+            # three ticks until we go to ready
+            if self.mode == "init":
               if numTargetsAlive > 0:
                 self.mode = "aim"
-
             elif self.mode == "aim":
               if numTargetsAlive == 0:
                 self.mode = "init"
                 return
 
-              # Find a target that is alive
-              # useful function ai.targetAlive
+              for i in range(numTargets):
+                if ai.targetAlive(i):
+                  self.targetId = i
+                  break
 
-              """your code here"""
+              targetX = ai.targetX(self.targetId)
+              targetY = ai.targetY(self.targetId)
 
-              # Calculate the direction the target is in
-              # useful functions: math.atan2
+              wantedHeading = math.atan2(targetY-y, targetX-x)
+              
+              if self.count % 2 == 0:
+                ai.turnToRad(wantedHeading)
 
-              """your code here"""
-
-              # Turn to the direction of the target
-              # useful functions: turnRad, turnToRad
-
-              """your code here"""
-
-              # If the ship keeps oscillating between a few angles
-              # it may be due to latency. Only turning every second
-              # or third tick is a simple solution (use self.count and %)
-
-
-              # If you are finished aiming change mode to shoot
-              # useful function: ai.angleDiffRad
-
-              """your code here"""
+              if ai.angleDiff(wantedHeading, heading) < 2:
+                self.mode = "shoot"
 
             elif self.mode == "shoot":
+              targetX = ai.targetX(self.targetId)
+              targetY = ai.targetY(self.targetId)
+              wantedHeading = math.atan2(targetY-y, targetX-x)
+              if ai.angleDiffRad(wantedHeading, heading) > 0.06:
+                self.mode = "aim"
+                return
 
-              # Shoot the target
-              # useful functions: ai.fireShot
-
-              """your code here"""
-
-              # if the target is destroyed, change state
-              # useful functions: ai.targetAlive
-
-              """your code here"""
-
+              if ai.targetAlive(self.targetId):
+                ai.fireShot()
+              else:
+                self.mode = "aim"
         except:
             print(traceback.print_exc())
             print(sys.exc_info())
@@ -135,7 +132,7 @@ def AI_loop():
 (options, args) = parser.parse_args()
 
 port = 15345 + options.group
-name = "Exc. 1 skeleton"
+name = "Stub"
 
 #
 # Start the main loop. Callback are done to AI_loop.
@@ -143,6 +140,7 @@ name = "Exc. 1 skeleton"
 
 ai.start(AI_loop,["-name", name, 
                   "-join", 
+                  "-showHUD", "no",
                   "-turnSpeed", "64",
                   "-turnResistance", "0",
                   "-port", str(port)])

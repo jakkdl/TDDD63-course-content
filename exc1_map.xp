@@ -1,0 +1,35 @@
+# John litborn summer 2013
+
+mapwidth : 11
+mapheight : 11
+mapname : TDDD63 Target practice: Stationary
+mapauthor: johli603
+gravity : 0
+limitedlives : no
+worldlives : 0
+selfimmunity : yes
+friction : 1
+maxRobots : 0
+shotspeed : 20
+shotsWallBounce : no
+edgeBounce : no
+playerstartsshielded : no
+allowshields : no
+maxplayershots : 5
+firerepeatrate : 13
+edgewrap : no
+maxitemdensity : 0
+
+mapData: \multiline: EndOfMapdata
+  _______  
+ _________ 
+___________
+___________
+___________
+___________
+___________
+___________
+___________
+ _________ 
+  _______  
+EndOfMapdata
