@@ -59,7 +59,7 @@ class myai:
                 numTargetsAlive += 1
 
             # For debugging use print statements, either here or further down.
-            # useful functions: , round(), ai.radToDeg, ai.degToRad, etc.
+            # useful functions: round(), ai.radToDeg, ai.degToRad, etc.
             # os.system('clear') clears the terminal screen, which can be useful.
 
             print(self.count, self.mode, round(ai.radToDeg(heading)), numTargetsAlive)
@@ -92,10 +92,11 @@ class myai:
               # If the ship keeps oscillating between a few angles
               # it may be due to latency. Only turning every second
               # or third tick is a simple solution (use self.count and %)
+              # useful function: ai.getLag()
 
 
               # If you are finished aiming change mode to shoot
-              # useful function: ai.angleDiffRad
+              # useful function: ai.angleDiffRad, ai.angleDiffDeg, ai.angleDiff
 
               """your code here"""
 

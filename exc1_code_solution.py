@@ -27,7 +27,7 @@ class myai:
 
     def __init__(self):
         self.count = 0
-        self.mode = "init"
+        self.mode = "aim"
         self.targetId = -1
 
     def tick(self):
@@ -38,7 +38,7 @@ class myai:
             #
             if not ai.selfAlive():
                 self.count = 0
-                self.mode = "init"
+                self.mode = "aim"
                 return
 
             self.count += 1
@@ -64,15 +64,10 @@ class myai:
             #os.system('clear')
 
 
-            # Add more sensors readings here if they are needed
-
-            #print (ai.getLag(), self.count, self.mode, x, y, round(ai.radToDeg(heading)), self.targetId, numTargetsAlive)
-            #ai.setMaxTurn(10)
+            print (self.count, self.mode, self.targetId, numTargetsAlive)
 
 
-            # avoid strange sensor values when starting by waiting
-            # three ticks until we go to ready
-            if self.mode == "init":
+            if self.mode == "wait":
               if numTargetsAlive > 0:
                 self.mode = "aim"
             elif self.mode == "aim":
@@ -100,7 +95,7 @@ class myai:
               targetX = ai.targetX(self.targetId)
               targetY = ai.targetY(self.targetId)
               wantedHeading = math.atan2(targetY-y, targetX-x)
-              if ai.angleDiffRad(wantedHeading, heading) > 0.06:
+              if ai.angleDiff(wantedHeading, heading) > 2:
                 self.mode = "aim"
                 return
 
@@ -132,7 +127,7 @@ def AI_loop():
 (options, args) = parser.parse_args()
 
 port = 15345 + options.group
-name = "Stub"
+name = "Exc. 1 solution"
 
 #
 # Start the main loop. Callback are done to AI_loop.
@@ -140,7 +135,6 @@ name = "Stub"
 
 ai.start(AI_loop,["-name", name, 
                   "-join", 
-                  "-showHUD", "no",
                   "-turnSpeed", "64",
                   "-turnResistance", "0",
                   "-port", str(port)])

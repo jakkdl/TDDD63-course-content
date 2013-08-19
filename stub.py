@@ -59,11 +59,7 @@ class myai:
             print (self.mode, x, y, vx, vy, speed, heading)
 
 
-            # avoid strange sensor values when starting by waiting
-            # three ticks until we go to ready
-            if self.count == 3:
-                self.mode = "ready"
-            elif self.mode == "ready":
+            if self.mode == "init":
                 pass
 
 
@@ -98,6 +94,7 @@ name = "Stub"
 #
 
 ai.start(AI_loop,["-name", name, 
-                  "-turnSpeed", 64,
-                  "-turnResistance", 0,
+                  "-join",
+                  "-turnSpeed", "64",
+                  "-turnResistance", "0",
                   "-port", str(port)])

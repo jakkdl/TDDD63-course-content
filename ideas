@@ -1,30 +1,45 @@
+Project: Introductory Phase
 Introductory tasks
-Write a separate AI for each task.
+
+The introductory phase consists of 7 exercises, which should be done in order. These are only introductory and the aim is not to write a perfect solution, this can be done later in the main phase, you should therefore not spend too much time per exercise. Write one program per task.
+It is a good idea to play the maps manually to figure out how it works before starting to write the code.
 
 1. Shoot stationary targets.
-9x9 map with targets. Shoot them down. Skeleton code provided.
+Start with the provided code and fill in with your own code where told to. Recommended functions to use is provided in the comments in the code. The goal is to destroy all targets before they reappear.
 
 2. Fly to point.
-Basic race map provided. Fly to each point, stop, fly to next.
+This exercise introduces a new game mode, race (or timing as it is also called), which consists of flying through several checkpoints on time. On this map you will not crash if you fly into the wall. The goal is to be able to complete the course. The easiest way to do this is to fly towards the next checkpoint and then stop the ship (turn around and thrust). After stopping fly towards the next checkpoint and repeat until the race is finished.
+
+Useful functions: nextCheckPoint(), checkPointX(i), checkPointY(i), self functions and those introduced in exercise 1.
 
 3. Fly to stationary targets (optionally stop), shoot them down.
-Big map with targets.
+This exercise is very similar to the first exercise, but this time the map is bigger and the ship can move. The goal is to fly to each target and shoot it down. The easiest way is to stop the ship before starting to shoot, otherwise the ships movement may make you miss.
 
 4. Shoot down moving targets.
-Asteroids.
-http://playtechs.blogspot.se/2007/04/aiming-at-moving-target.html
+This exercise introduces asteroids, which are sometimes implemented on maps to introduce additional hazards to players, in addition to other ships.
+There are four different sizes of asteroid, which can take a different number of shots before exploding. Upon exploding they split into two smaller asteroids, unless they are of the smallest size, which simply disappear.
+The exercise also introduces fuel. You lose fuel (on this map) when shooting, thrusting or colliding with asteroids. If you collide with an asteroid with too little fuel you will die. The goal of this exercise is not to avoid asteroids, so offense is your best defense. The goal is to fly around and destroy asteroids, trying to get as much points as possible before running out of fuel.
+
+Useful functions: Asteroid functions and radar functions.
+
+Useful link: http://playtechs.blogspot.se/2007/04/aiming-at-moving-target.html
 
 5. Avoid walls.
-Asteroids, targets or race?
+This exercise introduces items. These are valuable powerups you either start with or obtain by flying over. In this exercise all items will be fuel, but other maps can support other types of items. On this map you will die if you fly into the wall, unless it's the back of the ship that touches the wall. The goal is to pick up the items without crashing.
 
 6. Dodge shots.
-Map lined with cannons. Shooting disabled.
+This map introduces cannons, which can be placed on the map trying to kill unsuspecting players. The cannons are equipped with flakbullets, which will explode into two bullets after a while making them more dangerous than normal bullets.
+The goal is to avoid dying for X seconds.
+Map lined with cannons. Shooting disabled. Avoid crashing into walls.
 
 7. Combine into a single bot capable of flying to enemies, shooting them down, avoid walls, and basic shotdodging. Try them out against eachother.
+Finally combine all the features of the previous exercises to write a bot that can fly to enemies, shoot them down, avoid their shots and not crash into walls.
+It is a good idea to test the bot against other groups' bots, yourself, or another instance of the bot.
 
+Main phase
+Your group should now have good insight into what you can do with xpilot, and in the main phase your group can decide to focus on the aspect of the game you liked the most. It can be a good idea to compete with another group on the same goal.
 
-
-Expand the bot.
+Ideas to expand the bot.
 *Make a team (old instructions)
 *Handle gravity. Spotgravity and/or general gravity.
 *Improve current capabilities.
@@ -35,15 +50,4 @@ Expand the bot.
 *Wormholes
 *Asteroids
 *Navigation through maze.
-*Varying mapvalues (size,friction,shipmass,shotmass,shotspeed,shotlife,edgewrap, wallbounce)
-
-Mapfunktioner
-varying values on
-	mapsize
-	friction(?)
-	shipmass
-	shotmass
-	shotspeed
-	shotlife
-	edgewrap
-	*wallbounce
+*Varying mapvalues (size,friction,shipmass,shotmass,shotspeed,shotlife,edgewrap, wallbounce, etc.)
