@@ -27,6 +27,8 @@ Useful link: http://playtechs.blogspot.se/2007/04/aiming-at-moving-target.html
 5. Avoid walls.
 This exercise introduces items. These are valuable powerups you either start with or obtain by flying over. In this exercise all items will be fuel, but other maps can support other types of items. On this map you will die if you fly into the wall, unless it's the back of the ship that touches the wall. The goal is to pick up the items without crashing.
 
+Useful functions: wallFeelerRad(), wallBetween()
+
 6. Dodge shots.
 This map introduces cannons, which can be placed on the map trying to kill unsuspecting players. The cannons are equipped with flakbullets, which will explode into two bullets after a while making them more dangerous than normal bullets.
 The goal is to avoid dying for X seconds.
