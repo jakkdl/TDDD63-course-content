@@ -10,7 +10,7 @@ Start with the provided code and fill in with your own code where told to. Recom
 2. Fly to point.
 This exercise introduces a new game mode, race (or timing as it is also called), which consists of flying through several checkpoints on time. On this map you will not crash if you fly into the wall. The goal is to be able to complete the course. The easiest way to do this is to fly towards the next checkpoint and then stop the ship (turn around and thrust). After stopping fly towards the next checkpoint and repeat until the race is finished.
 
-Useful functions: nextCheckPoint(), checkPointX(i), checkPointY(i), self functions and those introduced in exercise 1.
+Useful functions: nextCheckPoint(), checkPointX(i), checkPointY(i), ai.setPower, ai.getPower, ai.thrust, self functions and those introduced in exercise 1.
 
 3. Fly to stationary targets (optionally stop), shoot them down.
 This exercise is very similar to the first exercise, but this time the map is bigger and the ship can move. The goal is to fly to each target and shoot it down. The easiest way is to stop the ship before starting to shoot, otherwise the ships movement may make you miss.

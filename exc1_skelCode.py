@@ -27,18 +27,18 @@ class myai:
 
     def __init__(self):
         self.count = 0
-        self.mode = "aim"
+        self.mode = "wait"
         self.targetId = -1
 
     def tick(self):
         try:
 
             #
-            # If we die then restart the state machine in the state "init"
+            # If we die then restart the state machine in the state "aim"
             #
             if not ai.selfAlive():
                 self.count = 0
-                self.mode = "aim"
+                self.mode = "wait"
                 return
 
             self.count += 1
@@ -51,18 +51,18 @@ class myai:
             heading = ai.selfHeadingRad() 
             # 0-2pi, 0 in x direction, positive toward y
 
-            numTargets = ai.numTargetServer()
-            numTargetsAlive = 0
+            targetCount = ai.targetCountServer()
+            targetCountAlive = 0
 
-            for i in range(numTargets):
+            for i in range(targetCount):
               if ai.targetAlive(i):
-                numTargetsAlive += 1
+                targetCountAlive += 1
 
-            # For debugging use print statements, either here or further down.
+            # For debugging use print statements, either here or further down in the code.
             # useful functions: round(), ai.radToDeg, ai.degToRad, etc.
             # os.system('clear') clears the terminal screen, which can be useful.
 
-            print(self.count, self.mode, round(ai.radToDeg(heading)), numTargetsAlive)
+            print(self.count, self.mode, round(ai.radToDeg(heading)), targetCountAlive)
 
 
             if self.mode == "wait":
@@ -71,16 +71,16 @@ class myai:
 
             elif self.mode == "aim":
               if numTargetsAlive == 0:
-                self.mode = "init"
+                self.mode = "wait"
                 return
 
-              # Find a target that is alive
+              # Find a target that is alive and save it's index in self.targetId.
               # useful function ai.targetAlive
 
               """your code here"""
 
               # Calculate the direction the target is in
-              # useful functions: math.atan2
+              # useful functions: math.atan2, ai.targetX, ai.targetY
 
               """your code here"""
 
@@ -92,11 +92,10 @@ class myai:
               # If the ship keeps oscillating between a few angles
               # it may be due to latency. Only turning every second
               # or third tick is a simple solution (use self.count and %)
-              # useful function: ai.getLag()
 
 
               # If you are finished aiming change mode to shoot
-              # useful function: ai.angleDiffRad, ai.angleDiffDeg, ai.angleDiff
+              # useful functions: ai.angleDiffRad, ai.angleDiffDeg, ai.radToDeg, ai.degToRad
 
               """your code here"""
 
@@ -136,7 +135,7 @@ def AI_loop():
 (options, args) = parser.parse_args()
 
 port = 15345 + options.group
-name = "Exc. 1 skeleton"
+name = "Exc. 1 skeleton" #Feel free to change this
 
 #
 # Start the main loop. Callback are done to AI_loop.
