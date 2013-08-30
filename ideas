@@ -41,6 +41,37 @@ It is a good idea to test the bot against other groups' bots, yourself, or anoth
 Main phase
 Your group should now have good insight into what you can do with xpilot, and in the main phase your group can decide to focus on the aspect of the game you liked the most. It can be a good idea to compete with another group on the same goal.
 
+Suggestion 1:
+  Team bot, old instructions, slightly touched up.
+Suggestion 2: Racing
+  1. Go back to the bot you made in task 2, and improve it.
+  2. Change settings so the ship crashes if it touches the wall.
+  3. Add navigation.
+  4. Handle fuelstations: Limit the starting fuel, have many laps, limited lives.
+  5. Mario Kart: Add items. (phasing, missiles, mines, etc)
+  6. Advanced fighting, add shooting.
+  7. Handle ball racing. Crazy hard physics.
+Suggestion 3: Asteroids
+  1. Go back to the bot you made in task 4 and improve it.
+  2. Change settings so the ship crashes if it touches an asteroid. Can also increase asteroid density or similar.
+  3. Add walls/objects/navigation so you have to both avoid crashing into walls and asteroids (and kill them).
+  4. Missile Command: Add negative gravity at 90 degrees, ground and maybe more objects. Handle the gravity.
+  5. Write a very dumb ship you must protect. Either have it stationary or trying to race. You lose if it dies.
+      Another alternative is to do CTF, carry a heavy ball through a track while being bombarded with asteroids.
+  6. Items, crazy settings, anything!
+Suggestion 4: Terminator
+  Write the ultimate killer robot.
+  1. Improve on task 7. See if you can make it beat a human player, or the built-in bots.
+  2. Action-movie: Make it handle several enemies, can you make it beat 2 humans? 3? 10?
+  3. Don't crash. Walls and other obstacles.
+  4. Items. How should you shoot missiles? Where should you position mines?
+  5. Navigation. Fight in a maze?
+  6. Gravity!
+  7. Fuelstations, you need to refuel if you never die.
+  8. Wormholes: How awesome isn't it to kill somebody through a wormhole?
+  9. Make it capable of fighting on maps made for humans, such as newdarkhell.xp and newdarkhell2.xp
+
+    
 Ideas to expand the bot.
 *Make a team (old instructions)
 *Handle gravity. Spotgravity and/or general gravity.
