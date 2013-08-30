@@ -23,8 +23,6 @@ parser.add_option ("-g", "--group", action="store", type="int",
 #
 
 class myai:
-    """Simple Stub for a Bot"""
-
     def __init__(self):
         self.count = 0
         self.mode = "wait"
@@ -38,7 +36,7 @@ class myai:
             #
             if not ai.selfAlive():
                 self.count = 0
-                self.mode = "wait"
+                self.mode = "aim"
                 return
 
             self.count += 1
