@@ -53,7 +53,7 @@ class myai:
             heading = ai.selfHeadingRad() 
             # 0-2pi, 0 in x direction, positive toward y
 
-            numTargets = ai.numTargetServer()
+            numTargets = ai.targetCountServer()
             numTargetsAlive = 0
 
 
@@ -72,7 +72,7 @@ class myai:
                 self.mode = "aim"
             elif self.mode == "aim":
               if numTargetsAlive == 0:
-                self.mode = "init"
+                self.mode = "wait"
                 return
 
               for i in range(numTargets):
@@ -88,14 +88,14 @@ class myai:
               if self.count % 2 == 0:
                 ai.turnToRad(wantedHeading)
 
-              if ai.angleDiff(wantedHeading, heading) < 2:
+              if ai.angleDiffRad(wantedHeading, heading) < ai.xdegToRad(2):
                 self.mode = "shoot"
 
             elif self.mode == "shoot":
               targetX = ai.targetX(self.targetId)
               targetY = ai.targetY(self.targetId)
               wantedHeading = math.atan2(targetY-y, targetX-x)
-              if ai.angleDiff(wantedHeading, heading) > 2:
+              if ai.angleDiffRad(wantedHeading, heading) > ai.xdegToRad(2):
                 self.mode = "aim"
                 return
 

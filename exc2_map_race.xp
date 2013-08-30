@@ -2,7 +2,7 @@
 
 mapwidth : 22
 mapheight : 22
-mapname : Exc2, basic race
+mapname : TDDD63 exercise 2: race
 mapauthor : johli603
 timing : yes
 checkpointradius : 2.828427
@@ -21,6 +21,8 @@ maxitemdensity : 0
 maxunshieldedplayerwallbounceangle : 180
 maxunshieldedwallbouncespeed : 500
 wallbouncefueldrainmult : 0
+allowPlayerCrashes : no
+initialFuel : 2600
 
 
 mapData: \multiline: EndOfMapdata

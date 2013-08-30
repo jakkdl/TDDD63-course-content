@@ -54,18 +54,17 @@ class myai:
             vx = ai.selfVelX()
             vy = ai.selfVelY()
             mass = ai.selfMass()
-            block = ai.blockSize()
             tracking = ai.selfTrackingRad()
 
             shotDist = ai.getOption("shotlife") * ai.getOption("shotspeed")
 
-            print (self.mode, x, y, vx, vy, speed, heading)
+            print (self.mode)
 
 
             # avoid strange sensor values when starting by waiting
             # three ticks until we go to ready
             if self.mode == "acquire target":
-              for i in range(ai.numTargetServer()):
+              for i in range(ai.targetCountServer()):
                 if ai.targetAlive(i):
                   self.targetId = i
                   self.mode = "travel"
@@ -75,7 +74,6 @@ class myai:
               ty = ai.targetY(self.targetId)
               if ( (x - tx)**2 + (y - ty)**2 )**0.5 < 500:
                 self.mode = "stop"
-              ai.setPower(55)
               if self.count % 2 == 0:
                 ai.turnToRad(math.atan2(ty-y,tx-x))
               if speed < 20:
@@ -139,4 +137,5 @@ ai.start(AI_loop,["-name", name,
                   "-join",
                   "-turnSpeed", "64",
                   "-turnResistance", "0",
+                  "-power", "55",
                   "-port", str(port)])

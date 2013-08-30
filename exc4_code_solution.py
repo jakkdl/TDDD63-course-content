@@ -58,8 +58,8 @@ class myai:
 
             x = ai.selfX()
             y = ai.selfY()
-            vx = (ai.selfVelX() + 0.5)*1.1
-            vy = (ai.selfVelY() + 0.5)*1.1
+            vx = ai.selfVelX()
+            vy = ai.selfVelY()
             speed = (vx**2 + vy**2)**0.5
 
             rh = ai.radarHeight()
@@ -74,27 +74,9 @@ class myai:
             # Add more sensors readings here if they are needed
 
             #os.system('clear')
-            for i in range(0):#range(ai.asteroidCountScreen()):
-              fresh = ai.asteroidFresh(i)
-              print(ai.asteroidX(i))
-              print(ai.asteroidY(i))
-              print("size: ", ai.asteroidSize(i))
-              print("type: ", ai.asteroidType(i))
-              print("rotation: ", ai.asteroidRotation(i))
-              print("freshness: ", fresh)
-              if fresh:
-                print(ai.asteroidSpeed(i))
-                print(ai.asteroidTrackingRad(i))
-                print("velX: ", ai.asteroidVelX(i))
-                print("velY: ", ai.asteroidVelY(i))
-                print("alert: ", ai.asteroidAlert(i))
-              print("-------------------")
-            print(ai.asteroidCountScreen())
-            #print (self.mode, ai.numAsteroidScreen(), ai.numShipRadar())
+            print(self.mode, ai.asteroidCountScreen())
 
             numAsteroids = ai.asteroidCountScreen()
-            #print(numAsteroids, ai.asteroidTrackX(0), ai.asteroidX(0))
-            #return
             if ai.selfFuel() <= 10 and not self.destructing:
               ai.selfDestruct()
               self.destructing = 1
@@ -131,7 +113,7 @@ class myai:
               dist = -1
               id = -1
               for i in range(numAsteroids):
-                if not ai.asteroidFresh(i):
+                if not ai.asteroidAge(i):
                   continue
                 tempDist = ai.asteroidAlert(i);
                 if dist == -1 or tempDist < dist:

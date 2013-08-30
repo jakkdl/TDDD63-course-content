@@ -26,17 +26,17 @@ class myai:
 
     def __init__(self):
         self.count = 0
-        self.mode = "init"
+        self.mode = "ready"
 
     def tick(self):
         try:
 
             #
-            # If we die then restart the state machine in the state "init"
+            # If we die then restart the state machine in the state "ready"
             #
             if not ai.selfAlive():
                 self.count = 0
-                self.mode = "init"
+                self.mode = "ready"
                 return
 
             self.count += 1
@@ -59,7 +59,7 @@ class myai:
             print (self.mode, x, y, vx, vy, speed, heading)
 
 
-            if self.mode == "init":
+            if self.mode == "ready":
                 pass
 
 

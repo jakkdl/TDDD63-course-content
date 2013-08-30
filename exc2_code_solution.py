@@ -69,12 +69,11 @@ class myai:
               if ai.selfAlive():
                 self.mode = "acquire target"
             elif self.mode == "acquire target":
-              ai.setPower(55)
               self.targetId = ai.nextCheckPoint()
               self.mode = "travel"
             elif self.mode == "travel":
-              checkX = ai.checkPointX(self.targetId)*ai.blockSize()
-              checkY = ai.checkPointY(self.targetId)*ai.blockSize()
+              checkX = ai.checkPointX(self.targetId)
+              checkY = ai.checkPointY(self.targetId)
 
               dist = ( (checkX-x)**2 + (checkY-y)**2 ) ** 0.5
 
@@ -133,4 +132,5 @@ ai.start(AI_loop,["-name", name,
                   "-join",
                   "-turnSpeed", "64",
                   "-turnResistance", "0",
+                  "-power", "55",
                   "-port", str(port)])
