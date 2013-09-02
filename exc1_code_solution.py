@@ -1,111 +1,100 @@
 #
-# This is the file stub.py that can be used as a starting point for the bots
+# This file can be used as a starting point for the bot in exercise 1.
 #
 
-import libpyAI as ai
 
 import sys
 import traceback
 import math
 import os
-
+import libpyAI as ai
 from optparse import OptionParser
 
-parser = OptionParser()
-
-parser.add_option ("-g", "--group", action="store", type="int", 
-                   dest="group", default=0, 
-                   help="The group number. Used to avoid port collisions when" 
-                   " connecting to the server.")
 
 #
-# Create a class used to store the internal state of the bot
+# Create global variables that persist between calls to tick.
 #
+tickCount = 0
+mode = "aim"
+targetId = -1
 
-class myai:
-    """Simple Stub for a Bot"""
+def tick():
+    #
+    # The API won't print out exceptions, so we have to catch and print them ourselves.
+    #
+    try:
 
-    def __init__(self):
-        self.count = 0
-        self.mode = "aim"
-        self.targetId = -1
+        #
+        # If we die then restart the state machine in the state "init"
+        #
+        if not ai.selfAlive():
+            tickCount = 0
+            mode = "aim"
+            return
 
-    def tick(self):
-        try:
+        tickCount += 1
 
-            #
-            # If we die then restart the state machine in the state "init"
-            #
-            if not ai.selfAlive():
-                self.count = 0
-                self.mode = "aim"
-                return
+        #
+        # Read some "sensors"
+        #
+        selfX = ai.selfX()
+        selfY = ai.selfY()
+        heading = ai.selfHeadingRad() 
+        # 0-2pi, 0 in x direction, positive toward y
 
-            self.count += 1
-
-            #
-            # Read the "sensors"
-            #
-
-
-            x = ai.selfX()
-            y = ai.selfY()
-            heading = ai.selfHeadingRad() 
-            # 0-2pi, 0 in x direction, positive toward y
-
-            numTargets = ai.targetCountServer()
-            numTargetsAlive = 0
+        numTargets = ai.targetCountServer()
+        numTargetsAlive = 0
 
 
-            for i in range(numTargets):
-              if ai.targetAlive(i):
-                numTargetsAlive += 1
+        for i in range(numTargets):
+          if ai.targetAlive(i):
+            numTargetsAlive += 1
 
-            #os.system('clear')
-
-
-            print (self.count, self.mode, self.targetId, numTargetsAlive)
+        #os.system('clear')
 
 
-            if self.mode == "wait":
-              if numTargetsAlive > 0:
-                self.mode = "aim"
-            elif self.mode == "aim":
-              if numTargetsAlive == 0:
-                self.mode = "wait"
-                return
+        print (self.count, self.mode, self.targetId, numTargetsAlive)
 
-              for i in range(numTargets):
-                if ai.targetAlive(i):
-                  self.targetId = i
-                  break
 
-              targetX = ai.targetX(self.targetId)
-              targetY = ai.targetY(self.targetId)
+        if self.mode == "wait":
+          if numTargetsAlive > 0:
+            self.mode = "aim"
+        elif self.mode == "aim":
+          if numTargetsAlive == 0:
+            self.mode = "wait"
+            return
 
-              wantedHeading = math.atan2(targetY-y, targetX-x)
-              
-              if self.count % 2 == 0:
-                ai.turnToRad(wantedHeading)
+          for i in range(numTargets):
+            if ai.targetAlive(i):
+              self.targetId = i
+              break
 
-              if ai.angleDiffRad(wantedHeading, heading) < ai.xdegToRad(2):
-                self.mode = "shoot"
+          targetX = ai.targetX(self.targetId)
+          targetY = ai.targetY(self.targetId)
 
-            elif self.mode == "shoot":
-              targetX = ai.targetX(self.targetId)
-              targetY = ai.targetY(self.targetId)
-              wantedHeading = math.atan2(targetY-y, targetX-x)
-              if ai.angleDiffRad(wantedHeading, heading) > ai.xdegToRad(2):
-                self.mode = "aim"
-                return
+          wantedHeading = math.atan2(targetY-y, targetX-x)
+          
+          if self.count % 2 == 0:
+            ai.turnToRad(wantedHeading)
 
-              if ai.targetAlive(self.targetId):
-                ai.fireShot()
-              else:
-                self.mode = "aim"
-        except:
-            print(traceback.print_exc())
-            print(sys.exc_info())
+          if ai.angleDiffRad(wantedHeading, heading) < ai.xdegToRad(2):
+            self.mode = "shoot"
+
+        elif self.mode == "shoot":
+          targetX = ai.targetX(self.targetId)
+          targetY = ai.targetY(self.targetId)
+          wantedHeading = math.atan2(targetY-y, targetX-x)
+          if ai.angleDiffRad(wantedHeading, heading) > ai.xdegToRad(2):
+            self.mode = "aim"
+            return
+
+          if ai.targetAlive(self.targetId):
+            ai.fireShot()
+          else:
+            self.mode = "aim"
+    except:
+        print(traceback.print_exc())
+        print(sys.exc_info())
 
 #
 # Create an instace of the bot class myai.
@@ -123,6 +112,12 @@ def AI_loop():
 #
 # Parse the command line arguments
 #
+parser = OptionParser()
+
+parser.add_option ("-g", "--group", action="store", type="int", 
+                   dest="group", default=0, 
+                   help="The group number. Used to avoid port collisions when" 
+                   " connecting to the server.")
 
 (options, args) = parser.parse_args()
 
