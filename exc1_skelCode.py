@@ -11,31 +11,32 @@ from optparse import OptionParser
 
 
 #
-# Create variables that persist between ticks.
+# Create global variables that persist between ticks.
 #
 
 tickCount = 0
 mode = "wait"
 targetId = -1
 
-def tick(self):
+def tick():
     #
     # The API won't print out exceptions, so we have to catch and print them ourselves.
     #
     try:
 
         #
-        # Reset state if we die.
+        # Reset the state machine if we die.
         #
         if not ai.selfAlive():
-            self.count = 0
-            self.mode = "aim"
+            tickCount = 0
+            mode = "aim"
             return
         
-        self.count += 1
+        tickCount += 1
 
         #
-        # Read some "sensors" into local variable to avoid excessive calls to the API.
+        # Read some "sensors" into local variables to avoid excessive calls to the API
+        # and improve readability.
         #
         selfX = ai.selfX()
         selfY = ai.selfY()
@@ -57,13 +58,13 @@ def tick(self):
                 round(ai.radToDeg(heading)), "targets alive:", targetCountAlive)
 
 
-        if self.mode == "wait":
+        if mode == "wait":
           if numTargetsAlive > 0:
-            self.mode = "aim"
+            mode = "aim"
 
-        elif self.mode == "aim":
+        elif mode == "aim":
           if numTargetsAlive == 0:
-            self.mode = "wait"
+            mode = "wait"
             return
 
           # Loop through the indexes of targets and find one that is alive,
@@ -88,7 +89,7 @@ def tick(self):
 
           # If the ship keeps oscillating between a few angles
           # it may be due to latency. Only turning every second
-          # or third tick is a simple solution (use self.count and %)
+          # or third tick is a simple solution (use tickCount and %)
 
 
           # If you are finished aiming change mode to shoot
@@ -99,7 +100,7 @@ def tick(self):
 
           """your code here"""
 
-        elif self.mode == "shoot":
+        elif mode == "shoot":
 
           # Shoot the target
           # useful functions: ai.fireShot

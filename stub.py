@@ -1,5 +1,5 @@
 #
-# This file can be used as a starting point for the bots
+# This file can be used as a starting point for the bots.
 #
 
 import sys
@@ -8,42 +8,46 @@ import math
 import libpyAI as ai
 from optparse import OptionParser
 
-
 #
-# Create a class used to store the internal state of the bot
+# Global variables that persist between ticks
 #
 tickCount = 0
 mode = "ready"
+# add more if needed
 
-def tick(self):
+def tick():
+    #
+    # The API won't print out exceptions, so we have to catch and print them ourselves.
+    #
     try:
 
         #
-        # If we die then restart the state machine in the "ready" state
+        # Reset the state machine if we die.
         #
         if not ai.selfAlive():
             tickCount = 0
-            self.mode = "ready"
+            mode = "ready"
             return
 
-        self.count += 1
+        tickCount += 1
 
         #
-        # Read some "sensors" 
+        # Read some "sensors" into local variables, to avoid excessive calls to the API
+        # and improve readability.
         #
 
-        selfHeading = ai.selfHeadingRad() 
-        # 0-2pi, 0 in x direction, positive toward y
-
-        selfSpeed = ai.selfSpeed()
         selfX = ai.selfX()
         selfY = ai.selfY()
         selfVelX = ai.selfVelX()
         selfVelY = ai.selfVelY()
+        selfSpeed = ai.selfSpeed()
 
-        # Add more sensors readings here if they are needed
+        selfHeading = ai.selfHeadingRad() 
+        # 0-2pi, 0 in x direction, positive toward y
 
-        print (mode, selfX, selfY, selfVelX, selfVelY)
+        # Add more sensors readings here
+
+        print ("tick count:", tickCount, "mode", mode)
 
 
         if mode == "ready":
@@ -60,22 +64,21 @@ def tick(self):
 #
 parser = OptionParser()
 
-parser.add_option ("-g", "--group", action="store", type="int", 
-                   dest="group", default=0, 
-                   help="The group number. Used to avoid port collisions when" 
+parser.add_option ("-p", "-port", action="store", type="int", 
+                   dest="port", default=15345, 
+                   help="The port number. Used to avoid port collisions when" 
                    " connecting to the server.")
 
 (options, args) = parser.parse_args()
 
-port = 15345 + options.group
 name = "Stub"
 
 #
-# Start the main loop. Callback are done to AI_loop.
+# Start the AI
 #
 
-ai.start(AI_loop,["-name", name, 
-                  "-join",
-                  "-turnSpeed", "64",
-                  "-turnResistance", "0",
-                  "-port", str(port)])
+ai.start(tick,["-name", name, 
+               "-join",
+               "-turnSpeed", "64",
+               "-turnResistance", "0",
+               "-port", str(options.port)])
