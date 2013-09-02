@@ -472,7 +472,7 @@ step.</p>
 
 <p>So the bot code will get a call for each "tick" and you can then
 decide what to do. Exactly what should be done most probably depends
-on what have happened before so there must be some way to store the
+on what has happened before so there must be some way to store the
 information about what have happened before. One way to do that it to
 implement the bot code as
 a <a href="http://en.wikipedia.org/wiki/Finite-state_machine">state
