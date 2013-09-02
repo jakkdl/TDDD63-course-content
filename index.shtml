@@ -472,9 +472,8 @@ step.</p>
 
 <p>So the bot code will get a call for each "tick" and you can then
 decide what to do. Exactly what should be done most probably depends
-on what has happened before so there must be some way to store the
-information about what have happened before. One way to do that it to
-implement the bot code as
+on what has happened before, therefore that information must be stored.
+One way to do that is to implement the bot code as
 a <a href="http://en.wikipedia.org/wiki/Finite-state_machine">state
 machine</a> where the state in a sense encodes this history
 information.</p>
@@ -501,13 +500,12 @@ point for the bots that are going to be written in this project.
 <h3>Running a Bot</h3>
 
 <p>If you have used the Python stub given above the bot program is started by
-using the group flag in the following way (assuming your program is called robot1.py):</p>
-<pre class="sh_sh">  python3 stub.py --group 1
+using the group flag in the following way (assuming your program is called stub.py):</p>
+<pre class="sh_sh">  python3 stub.py -port 15346
 </pre>
 
 <p>Notice that is is possible to use the keyboard to control the spaceship when
 running the Python bot program.</p>
-
 
 <h2>Project: Introductory Phase</h2>
 
@@ -517,107 +515,42 @@ implemented in order.</p>
 
 <ol>
 
-<li><p>Aim the spaceship without moving it and try to shot down a
-target that is still. Use the ordinary xpilot client to start the
-target.  Use the map <b>emptyborder.xp</b>. Also use both the radar
-functions and the <code>closestShipId()</code> function.</p></li>
+    <li><p>
+    <h4>Shoot stationary targets</h4>
+    Destroy all targets before they reappear.<br>
+    Start with the provided <a href="exc1_code_skeleton.py">skeleton code</a>
+    which contains recommended functions.
+    For further instructions on the recommended functions read the relevant parts of the
+    <a href="library">library</a>. Tips: Search for the function names on the page with ctrl-f.
+    </li></p>
 
-<li><p>Fly so you fly over (inside a radius of 10) a specific position
-and stop applying thrust (the friction will slow down and stop the
-ship) when you are inside the radius. Use the map
-<b>emptyborder.xp</b> (bouncing border).  Note also that the applying
-of thrust might have to be "pulsed" since if thrust is applied a
-longer time the resulting speed will be too high.  Note also that the
-method with constant bearing described in the appendix can work as
-inspiration here. Let the program print out the map coordinates for
-the ship and for the goal so it is easy to see that the goal is
-reached.  </p></li>
+    <li><p>
+    <h4>Race</h4>
+    Goal: Complete all three laps.<br>
+    This exercise introduces a new game mode, race (or timing, as it's also called), which consists
+    of flying through several checkpoints on time, completing a set amount of laps. The easiest way
+    to do this is to fly towards the next checkpoint, start braking the ship (turn around and thrust)
+    at a certain distance and when still fly towards the next checkpoint. For that you need a minimum
+    of two states, "travel" and "stop", but it can be useful to have more.<br>
+    Start with the <a href="stub.py">stub</a> program.<br>
+    Recommended functions: <a href="library#race">checkpoint</a>,
+    <a href="library#movement">movement</a>,
+    <a href="library#self">self</a> and those introduced in exercise 1.
+    </li></p>
 
-<li><p>Move the spaceship and shoot down targets that are still. Use
-the ordinary xpilot client to start the targets. Use the map
-<b>emptyborder.xp</b>.  Do not fire until the spaceship is near the
-enemy. Use the radar functions to fly towards the enemy and when you
-are so near that <code>closestShipId()</code> works then first stop
-the ship (disabling thrust and wait for speed 0) and then use the id
-to get the information about the enemy that you need to shoot down the
-enemy.</p></li>
+    <li><p>
+    <h4>Distant stationary targets</h4>
+    Goal: Shoot down all four targets before they respawn.<br>
+    This exercise is very similar to the first one, except for the map being bigger and the ship being able to move.
+    Shots fired retains the velocity of your ship, so it is much easier to hit the targets
+    if you stop the ship.<br>
+    Recommended functions:
+    <a href="library#self">self</a>,
+    <a href="library#movement">movement</a>,
+    <a href="library#targets">targets</a> and those introduced in earlier exercises.
 
-<li><p>Fly to avoid being shot at. Use the ordinary xpilot client to
-manually control a spaceship and shoot at the robot player. Also test
-with the bot implemented in the previous task (move space ship and
-shoot down targets). Use the map <b>emptyborder.xp</b>. The robot
-player should detect dangerous shots being fired and fly the ship to
-avoid being hit if it is possible to do that.  It is enough to have a
-reactive behaviour and just detect if a shot will hit you and move to
-avoid it. This will work well if just one shot is fired at the
-time.</p></li>
 
-<li><p>Fly around and do not hit walls. Use the map
-<b>simple.xp</b>. The example program above (test2.py) bounces in
-walls plus that it will collide sooner or later. So the task here is
-to avoid hitting the wall at all.  One test case that is enough for
-this task is to use the keyboard to fly in a direction that will hit a
-wall (all direction in simple.xp, the map has 0 friction) and let the
-program handle the situation when we are near the wall. One possible
-strategy is to turn around and stop (apply thrust until speed is
-zero). Another is to turn around and fly in the opposite direction
-(apply thrust until the ship move in the heading direction).  If you
-want to put random flying in the program, add a new command line
-option controlling whether randomness is used or not, so that the
-program will work for the test case above. Also notice that you might
-have to use the function <code>setTurnSpeed()</code>.  </p> </li>
 
-<li><p>Shoot down targets that are moving, by just aiming the
-spaceship without moving it.  Use the ordinary xpilot client to
-manually control an enemy ship that moves around. Use the
-map <b>emptybordernofriction.xp</b>.  It is enough to use
-the <code>closestShipId()</code> function here. The enemy ship has to
-be near enough to see it on the map. There is an
-<code>aimdir()</code> function in the API but you should not use that
-function.  Instead the main new thing in this task is to write your
-own aimdir function. To write an aimdir function you have to know the
-enemy ship's speed, the direction it is moving in and the speed of a
-shot. With these inputs you can compute the angle to aim your
-ship.</p></li>
-
-<li><p>Move the spaceship and shoot down targets that are moving. Use the 
-ordinary xpilot client to manually control an enemy ship that moves around.
-Use the map <b>emptyborder.xp</b>. Do not fire until the spaceship is near the enemy.
-Use the radar functions to fly towards the enemy and
-when you are so near that <code>closestShipId()</code> works use the
-id to get the information about the enemy you need to shoot down the
-enemy.
-</p></li>
-
-<li><p>Move the spaceship and shoot down targets that are moving. Use the 
-ordinary xpilot client to manually control an enemy ship that moves around.
-Use the map <b>simple.xp</b> which means the walls have to be avoided. 
-Do not fire until the spaceship is near the enemy.</p></li>
-
-<li><p>Move the spaceship and shoot down targets that are moving and
-shooting back. Use the program from task number 7 as the enemy.  Use
-the map <b>emptyborder.xp</b>.  The task includes avoiding being hit
-by a shot from an enemy so that should be demonstraded (can be done
-with the ordinary xpilot client).</p></li>
-
-<li><p>Add functionality to "follow" another spaceship. Use the map
-<b>emptyborder.xp</b> to test this functionality. You can assume that
-the ship that is followed is moving away (does not turn around to move
-towards you, which could lead to a collision).  Then following the
-ship will require trying to be neither too close not too far away from
-the ship. This may not always succeed, so print out a message whenever
-the follower does come too near or too far according to reasonable
-min/max threshold distances. This will help you when you try to tune
-the acceleration / braking / turning parameters.  To avoid getting too
-near the ship must be able to turn and brake in order to handle the
-case when the followed ship stops.</p></li>
-
-<li><p>Add enough functionality to have a reasonable death match
-between two bot players (for example two instances of your own bot or
-try your bot against another group's bot). Use the
-map <b>emptyborder.xp</b>.  One possible extra functionality to add
-here is some strategy that moves the spaceship in a way suitable for
-winning a death match.</p></li>
 
 <!--
 <li><p>SEEMS TO BE HARD TO IMPLEMENT. SHOULD ALL TASKS WITH
@@ -628,14 +561,6 @@ at the specific position. Use the map obstacles.xp and use the
 obstacle.xp map is designed in a way that flying so you get nearer to
 the target while avoiding obstacles will finally get you to the
 target.</p></li>
--->
-
-<!-- Now included in main phase
-<li><p>MAYBE MOVED TO MAIN PHASE??? Move the spaceship and shoot down targets that are still. Use the
-enemy.py program or the ordinary xpilot client to start the
-targets. Use the map obstacle.xp which means that obstacles and walls
-have to be avoided.  Do not fire until the spaceship is near the
-enemy.</p></li>
 -->
 
 <!--
