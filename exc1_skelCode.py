@@ -20,18 +20,18 @@ targetId = -1
 
 def tick(self):
     #
-    # The API won't print out exceptions, so we have to catch and print them ourselves
+    # The API won't print out exceptions, so we have to catch and print them ourselves.
     #
     try:
 
         #
-        # If we die then restart the state machine in the "aim" state
+        # Reset state if we die.
         #
         if not ai.selfAlive():
             self.count = 0
             self.mode = "aim"
             return
-
+        
         self.count += 1
 
         #
@@ -50,7 +50,7 @@ def tick(self):
             targetCountAlive += 1
 
         # Use print statements for debugging, either here or further down in the code.
-        # useful functions: round(), ai.radToDeg, ai.degToRad, etc.
+        # Useful functions: round(), ai.radToDeg, ai.degToRad, etc.
         # os.system('clear') clears the terminal screen, which can be useful.
 
         print("tick count:", tickCount, "mode:", mode, "heading:",
@@ -66,13 +66,14 @@ def tick(self):
             self.mode = "wait"
             return
 
-          # Find a target that is alive and save the index in targetId.
+          # Loop through the indexes of targets and find one that is alive,
+          # save that index in targetId.
           # useful variables: targetCount, targetId
           # useful functions: ai.targetAlive
 
           """your code here"""
 
-          # Calculate what direction the target is in and save in
+          # Calculate what direction the target is in, save in
           # the variable targetDirection
           # useful variables: selfX, selfY
           # useful functions: math.atan2, ai.targetX, ai.targetY
@@ -91,8 +92,10 @@ def tick(self):
 
 
           # If you are finished aiming change mode to shoot
+          # Note that, due to how the game handles angles, the difference
+          # cannot be 0 for many angles.
           # useful variables: selfHeading, targetDirection, mode
-          # useful functions: ai.angleDiffRad, ai.angleDiffDeg, ai.radToDeg, ai.degToRad
+          # useful functions: ai.angleDiffRad, ai.radToDeg
 
           """your code here"""
 
@@ -110,6 +113,9 @@ def tick(self):
           """your code here"""
 
     except:
+        #
+        # If tick crashes, print debugging information
+        #
         print(traceback.print_exc())
         print(sys.exc_info())
 
@@ -126,7 +132,6 @@ parser.add_option ("-p", "-port", action="store", type="int",
 
 (options, args) = parser.parse_args()
 
-port = options.port
 name = "Exc. 1 skeleton" #Feel free to change this
 
 #
@@ -137,4 +142,4 @@ ai.start(tick, ["-name", name,
                 "-join", 
                 "-turnSpeed", "64",
                 "-turnResistance", "0",
-                "-port", str(port)])
+                "-port", str(options.port)])
