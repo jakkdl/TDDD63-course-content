@@ -31,7 +31,7 @@ def tick():
             tickCount = 0
             mode = "aim"
             return
-        
+
         tickCount += 1
 
         #
@@ -67,39 +67,39 @@ def tick():
                 mode = "wait"
                 return
 
-        # Loop through the indexes of targets and find one that is alive,
-          # save that index in targetId.
-          # useful variables: targetCount, targetId
-          # useful functions: ai.targetAlive
+            # Loop through the indexes of targets and find one that is alive,
+            # save that index in targetId.
+            # useful variables: targetCount, targetId
+            # useful functions: ai.targetAlive
 
-          """your code here"""
+            """your code here"""
 
-          # Calculate what direction the target is in, save in
-          # the variable targetDirection
-          # useful variables: selfX, selfY
-          # useful functions: math.atan2, ai.targetX, ai.targetY
+            # Calculate what direction the target is in, save in
+            # the variable targetDirection
+            # useful variables: selfX, selfY
+            # useful functions: math.atan2, ai.targetX, ai.targetY
 
-          """your code here"""
+            """your code here"""
 
-          # Turn to the direction of the target
-          # useful variables: targetDirection
-          # useful functions: turnRad, turnToRad
+            # Turn to the direction of the target
+            # useful variables: targetDirection
+            # useful functions: turnRad, turnToRad
 
-          """your code here"""
+            """your code here"""
 
-          # If the ship keeps oscillating between a few angles
-          # it may be due to latency. Only turning every second
-          # or third tick is a simple solution (use tickCount and %)
+            # If the ship keeps oscillating between a few angles
+            # it may be due to latency. Only turning every second
+            # or third tick is a simple solution (use tickCount and %)
 
 
-          # Check if you are aiming in the direction of the target,
-          # if so, change mode to shoot.
-          # Note that, due to how the game handles angles, the difference
-          # cannot be 0 for many angles.
-          # useful variables: selfHeading, targetDirection, mode
-          # useful functions: ai.angleDiffRad, ai.radToDeg
+            # Check if you are aiming in the direction of the target,
+            # if so, change mode to shoot.
+            # Note that, due to how the game handles angles, the difference
+            # cannot be 0 for many angles.
+            # useful variables: selfHeading, targetDirection, mode
+            # useful functions: ai.angleDiffRad, ai.radToDeg
 
-          """your code here"""
+            """your code here"""
 
         elif mode == "shoot":
 
@@ -127,9 +127,9 @@ def tick():
 parser = OptionParser()
 
 parser.add_option ("-p", "-port", action="store", type="int", 
-                   dest="port", default=15345, 
-                   help="The port to use. Used to avoid port collisions when" 
-                   " connecting to the server.")
+        dest="port", default=15345, 
+        help="The port to use. Used to avoid port collisions when" 
+        " connecting to the server.")
 
 (options, args) = parser.parse_args()
 
@@ -140,7 +140,7 @@ name = "Exc. 1 skeleton" #Feel free to change this
 #
 
 ai.start(tick, ["-name", name, 
-                "-join", 
-                "-turnSpeed", "64",
-                "-turnResistance", "0",
-                "-port", str(options.port)])
+    "-join", 
+    "-turnSpeed", "64",
+    "-turnResistance", "0",
+    "-port", str(options.port)])
