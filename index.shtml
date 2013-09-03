@@ -515,18 +515,22 @@ implemented in order.</p>
 
 <ol>
 
-    <li><p>
+    <li>
+    <p>
     <h4>Shoot stationary targets</h4>
-    Destroy all targets before they reappear.<br>
+    Goal: Destroy all targets before they reappear.<br>
+    Map: <a href="maps/exc1_map_targets.xp">exc1_map_targets</a><br>
     Start with the provided <a href="exc1_code_skeleton.py">skeleton code</a>
     which contains recommended functions.
     For further instructions on the recommended functions read the relevant parts of the
     <a href="library">library</a>. Tips: Search for the function names on the page with ctrl-f.
-    </li></p>
+    </p>
+    </li>
 
     <li><p>
     <h4>Race</h4>
     Goal: Complete all three laps.<br>
+    Map: <a href="maps/exc2_map_race.xp">exc2_map_race</a><br>
     This exercise introduces a new game mode, race (or timing, as it's also called), which consists
     of flying through several checkpoints on time, completing a set amount of laps. The easiest way
     to do this is to fly towards the next checkpoint, start braking the ship (turn around and thrust)
@@ -536,11 +540,13 @@ implemented in order.</p>
     Recommended functions: <a href="library#race">checkpoint</a>,
     <a href="library#movement">movement</a>,
     <a href="library#self">self</a> and those introduced in exercise 1.
-    </li></p>
+    </p></li>
 
-    <li><p>
-    <h4>Distant stationary targets</h4>
+    <li>
+    <p>
+    <h4>Distant targets</h4>
     Goal: Shoot down all four targets before they respawn.<br>
+    Map: <a href="maps/exc4_map_distantTargets.xp">exc4_map_distantTargets</a><br>
     This exercise is very similar to the first one, except for the map being bigger and the ship being able to move.
     Shots fired retains the velocity of your ship, so it is much easier to hit the targets
     if you stop the ship.<br>
@@ -548,11 +554,14 @@ implemented in order.</p>
     <a href="library#self">self</a>,
     <a href="library#movement">movement</a>,
     <a href="library#target">target</a> and those introduced in earlier exercises.
-    </li></p>
+    </p>
+    </li>
 
-    <li><p>
+    <li>
+    <p>
     <h4>Asteroids</h4>
     Goal: Reach 100 points before running out of fuel.<br> <!--TODO: how much?-->
+    Map: <a href="maps/exc4_map_asteroids.xp">exc4_map_asteroids</a><br>
     This exercise introduses asteroids, which are normally implemented as additional hazards on maps,
     but in this exercise there will only be asteroids, much like the classical game
     <a href="http://en.wikipedia.org/wiki/Asteroids_(video_game)">Asteroids</a>.<br>
@@ -565,7 +574,38 @@ implemented in order.</p>
     Recommended functions:
     <a href="library#asteroids">asteroid</a>,
     <a href="library#fuel">fuel</a> and those introduced in earlier exercises.
-    </li></p>
+    </p>
+    </li>
+
+    <li>
+    <p>
+    <h4>Wallfeeler</h4>
+    Goal: Pick up 10 items before crashing.<br>
+    Map: <a href="maps/exc5_map_wallfeeler.xp">exc6_map_wallfeeler</a><br>
+    This exercise introduces items. These are valueable powerups you either start with or obtain by flying
+    over. In this exercise all items will be fuel, but other maps can support
+    <a href="www.j-a-r-n-o.nl/Xpilot/Newbie/Unix/newbie007.shtml">more</a>. On this map you will die if you fly 
+    into the wall with the front of the ship, with the backside of the ship you will be unharmed.<br>
+    With use of <a href="library#timeLeftSec">timeLeftSec</a> you can calculate items/second.<br>
+    Recommended functions: <a href="library#items">item</a>, <a href="library#wall">wall</a> and those introduced
+    in earlier exercises.
+    </p>
+    </li>
+
+    <li>
+    <p>
+    <h4>Matrix</h4>
+    Goal: Survive 20 seconds<br>
+    Map: <a href="maps/exc6_map_matrix.xp">exc6_map_matrix</a><br>
+    This exercise introduces cannons, which can be placed on the map to kill unsuspecting players. Normally
+    cannons can be destroyed by shooting them, but shooting is disabled on this map. On this map the cannons
+    will shoot flak bullets, which will explode after a while.<br>
+    Recommended functions: <a href="library#cannon">cannon</a>, <a href="library#shot">shot</a> and those introduced
+    in earlier exercises.
+
+
+    
+
     
 
 
