@@ -547,9 +547,26 @@ implemented in order.</p>
     Recommended functions:
     <a href="library#self">self</a>,
     <a href="library#movement">movement</a>,
-    <a href="library#targets">targets</a> and those introduced in earlier exercises.
+    <a href="library#target">target</a> and those introduced in earlier exercises.
+    </li></p>
 
-
+    <li><p>
+    <h4>Asteroids</h4>
+    Goal: Reach 100 points before running out of fuel.<br> <!--TODO: how much?-->
+    This exercise introduses asteroids, which are normally implemented as additional hazards on maps,
+    but in this exercise there will only be asteroids, much like the classical game
+    <a href="http://en.wikipedia.org/wiki/Asteroids_(video_game)">Asteroids</a>.<br>
+    Fuel is also introduced in this map. You lose fuel when thrusting, shooting and colliding
+    with objects. If you collide with an asteroid with low fuel you will die. Avoiding asteroids
+    is not a part of this exercise, so shoot them before they can reach you.<br>
+    If you need help with the math on how to hit a moving target,
+    <a href="http://playtechs.blogspot.se/2007/04/aiming-at-moving-target.html">PlayTechs</a> explains
+    it thoroughly.<br>
+    Recommended functions:
+    <a href="library#asteroids">asteroid</a>,
+    <a href="library#fuel">fuel</a> and those introduced in earlier exercises.
+    </li></p>
+    
 
 
 <!--
