@@ -118,7 +118,6 @@ def tick():
         # If tick crashes, print debugging information
         #
         print(traceback.print_exc())
-        print(sys.exc_info())
 
 
 #

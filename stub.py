@@ -56,7 +56,6 @@ def tick():
 
     except:
         print(traceback.print_exc())
-        print(sys.exc_info())
 
 
 #
