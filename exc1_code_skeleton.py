@@ -92,7 +92,8 @@ def tick():
           # or third tick is a simple solution (use tickCount and %)
 
 
-          # If you are finished aiming change mode to shoot
+          # Check if you are aiming in the direction of the target,
+          # if so, change mode to shoot.
           # Note that, due to how the game handles angles, the difference
           # cannot be 0 for many angles.
           # useful variables: selfHeading, targetDirection, mode
