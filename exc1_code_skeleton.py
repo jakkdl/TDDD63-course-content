@@ -47,8 +47,8 @@ def tick():
         targetCountAlive = 0
 
         for i in range(targetCount):
-          if ai.targetAlive(i):
-            targetCountAlive += 1
+            if ai.targetAlive(i):
+                targetCountAlive += 1
 
         # Use print statements for debugging, either here or further down in the code.
         # Useful functions: round(), ai.radToDeg, ai.degToRad, etc.
@@ -59,15 +59,15 @@ def tick():
 
 
         if mode == "wait":
-          if numTargetsAlive > 0:
-            mode = "aim"
+            if targetCountAlive > 0:
+                mode = "aim"
 
         elif mode == "aim":
-          if numTargetsAlive == 0:
-            mode = "wait"
-            return
+            if targetCountAlive == 0:
+                mode = "wait"
+                return
 
-          # Loop through the indexes of targets and find one that is alive,
+        # Loop through the indexes of targets and find one that is alive,
           # save that index in targetId.
           # useful variables: targetCount, targetId
           # useful functions: ai.targetAlive
@@ -103,16 +103,16 @@ def tick():
 
         elif mode == "shoot":
 
-          # Shoot the target
-          # useful functions: ai.fireShot
+            # Shoot the target
+            # useful functions: ai.fireShot
 
-          """your code here"""
+            """your code here"""
 
-          # if the target is destroyed, change state to aim
-          # useful variables: targetId, mode
-          # useful functions: ai.targetAlive
+            # if the target is destroyed, change state to aim
+            # useful variables: targetId, mode
+            # useful functions: ai.targetAlive
 
-          """your code here"""
+            """your code here"""
 
     except:
         #
