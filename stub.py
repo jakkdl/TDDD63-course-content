@@ -22,6 +22,12 @@ def tick():
     try:
 
         #
+        # Declare global variables so we have access to them in the function
+        #
+        global tickCount
+        global mode
+
+        #
         # Reset the state machine if we die.
         #
         if not ai.selfAlive():
