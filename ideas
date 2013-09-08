@@ -29,14 +29,24 @@ This exercise introduces items. These are valuable powerups you either start wit
 
 Useful functions: wallFeelerRad(), wallBetween()
 
-6. Dodge shots.
+
+REMOVED: 6. Dodge shots.
 This map introduces cannons, which can be placed on the map trying to kill unsuspecting players. The cannons are equipped with flakbullets, which will explode into two bullets after a while making them more dangerous than normal bullets.
 The goal is to avoid dying for X seconds.
 Map lined with cannons. Shooting disabled. Avoid crashing into walls.
+##Initially I wanted only to change the exercise and remove the walls, due to the exercise being very hard to do, having to avoid 1. Shots, 2. Walls, and 3. Getting close to the cannon. ShotAlert() is buggy and needs to be looked upon. I'm also running out of time and need to focus on other things, so I deemed it better do ditch this exercise and focus on the main phase instead.
 
-7. Combine into a single bot capable of flying to enemies, shooting them down, avoid walls, and basic shotdodging. Try them out against eachother.
+REMOVED: 7. Terminator
+Combine into a single bot capable of flying to enemies, shooting them down, avoid walls, and basic shotdodging. Try them out against eachother.
 Finally combine all the features of the previous exercises to write a bot that can fly to enemies, shoot them down, avoid their shots and not crash into walls.
 It is a good idea to test the bot against other groups' bots, yourself, or another instance of the bot.
+##Removed due to not being possible to write specific goals and choose a good map. If people are interested in writing a fighting bot they can choose that in the main phase.
+
+PREVIOUSLY REMOVED:
+"Seems to be hard to implement. Should all tasks with obstacle.xp be moved to a milestone or extensoin in the main phase?
+Fly to a specific position while avoiding obstacles and walls and stop at the specific position. Use the map obstacles.xp and use the wallFeelerRad() function to detect walls and obstacles. The obstacle.xp map is designed ina way that flying so you get nearer ot teh target while avoiding obstacles will finally get you to the target."
+
+"Maybe moved to main phase??? Add enough functionality to have a reasonable death match with two bot players using the map obstacle.xp"
 
 Main phase
 Your group should now have good insight into what you can do with xpilot, and in the main phase your group can decide to focus on the aspect of the game you liked the most. It can be a good idea to compete with another group on the same goal.

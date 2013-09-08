@@ -12,586 +12,1094 @@
 <script type="text/javascript" src="highlight/sh_sh.js"></script>
 
 <style type="text/css">
-  PRE.sh_sh { margin-bottom: 1em; padding: 1ex; border-radius: 0.6ex;}
-  PRE.sh_python { margin-bottom: 1em; padding: 1ex; border-radius: 0.6ex; line-height: 110%;}
+PRE.sh_sh { margin-bottom: 1em; padding: 1ex; border-radius: 0.6ex;}
+PRE.sh_python { margin-bottom: 1em; padding: 1ex; border-radius: 0.6ex; line-height: 110%;}
 
-  .todo { background: #ffaaaa; margin-bottom: 1em; padding: 1ex; border-radius: 0.6ex; }
+.todo { background: #ffaaaa; margin-bottom: 1em; padding: 1ex; border-radius: 0.6ex; }
 
-  CODE, TT, PRE {
+CODE, TT, PRE {
     font-family: Lucida Sans Typewriter, monospace;
     font-size: 90%;
-  }
+}
 
-  DIV.one_column, DIV#content DIV.text {
+DIV.one_column, DIV#content DIV.text {
     max-width: 42em;
     line-height: 165%;
     font-size: 110%; /* Compensate for font being smaller than default */
     font-family: Georgia,Times New Roman,tahoma,verdana,sans-serif;
-  }
+}
 
-  PRE {
+PRE {
     font-size: 80%;
     margin-botton: 20
-  }
+}
 
-  PRE.sh_python {
+PRE.sh_python {
     width: 54em;
-  }
+}
 
 
 </style>
 </head>
 <body>
-
+<h1>XPilot-AI API Documentation</h1>
 <p>In Xpilot-AI, 0 degrees is to the right and 90 degrees is up.<br>
 Bool functions will return 0 for False and 1 for True.<br>
-The recommended way of dealing with angles is to use radians, due to python's built in trigonometric functions using it. You can choose to use [url=link to degrees]degrees[/url] or [url=link to xdegrees]Xdegrees[/url]<br>
+The recommended way of dealing with angles is to use radians, due to python's built in trigonometric functions using it. <a href="#xdegree">Xpilot degrees</a> can be used sometimes, as that is the angular measurement that the game uses. Use of <a href="#degree">Degrees</a> is deprecated, if you want to produce human readable output use the <a href="#angle_conversion">Angle conversion</a> functions instead.<br>
+Xpilot uses three different coordinate systems. Pixels, which is the most common, radar, which is very imprecise (for big levels) and only used by the <a href="#radar">Radar functions</a> and blocks, which is what is specified in the map file when constructing the level. Block functions can be found in <a href="#map">Map feature functions</a>.
 </p>
 
-<p>
-AI control functions<br>
-headlessMode() - Execute this before start to run windowless.<br>
-start(func, ["listof","args"]) - Initializes the AI interface and starts Xpilot<br>
-switchLoop(function) - Changes the main loop<br>
-quitAI() - Quits Xpilot.<br>
-pauseAI() - Pauses the game for the ship, does not affect other ships.<br>
-</p>
+<a name="TOC"></a>
+<a name="table_of_contents"></a>
+<h2>Functions</h2>
+<ul>
+    <li><a href="#control">API control</a></li>
+    <li><a href="#server">Server</a></li>
+    <li><a href="#chat">Chat</a></li>
+    <li><a href="#ship_functions">Ship functions</a>
+    <ul>
+        <li><a href="#ship_properties">Ship properties</a></li>
+        <li><a href="#ship_info">Ship info</a></li>
+        <li><a href="#movement">Movement</a></li>
+        <li><a href="#turn">Turn</a></li>
+        <li><a href="#shoot">Shoot</a></li>
+        <li><a href="#misc">Misc.</a></li>
+    </ul>
+    </li>
+    <li><a href="#sensor">Sensors</a>
+    <ul>
+        <li><a href="#radar">Radar</a></li>
+        <li><a href="#enemy">Enemy properties</a></li>
+        <li><a href="#enemy">Enemy info</a></li>
+        <li><a href="#lock">Lock</a></li>
+        <li><a href="#shot">Shot</a></li>
+        <li><a href="#asteroid">Asteroid</a></li>
+        <li><a href="#ball">Ball</a></li>
+    </ul>
+    </li>
+    <li><a href="#map">Map features</a>
+    <ul>
+        <li><a href="#map_properties">Map properties</a></li>
+        <li><a href="#wall">Wall</a></li>
+        <li><a href="#base">Base</a></li>
+        <li><a href="#fuel_station">Fuel Station</a></li>
+        <li><a href="#race">Race/Timing</a></li>
+        <li><a href="#target">Target</a></li>
+        <li><a href="#wormhole">Wormhole</a></li>
+        <li><a href="#cannon">Cannon</a></li>
+    </ul>
+    </li>
+    <li><a href="#angle_handling"</a>Angle handling
+    <ul>
+        <li><a href="#radian">Radian</a></li>
+        <li><a href="#xdegree">Xpilot degree</a></li>
+        <li><a href="#angle_conversion">Angle conversion</a></li>
+    </ul>
+    </li>
+    <li><a href="#item">Item functions</a>
+    <ul>
+        <li><a href="#powerup_tracking">Powerup tracking</a></li>
+        <li><a href="#fuel">Fuel/Tank</a></li>
+        <li><a href="#missile">Missile</a></li>
+        <li><a href="#laser">Laser</a></li>
+        <li><a href="#mine">Mine</a></li>
+        <li><a href="#shield">Shield</a></li>
+        <li><a href="#phasing">Phasing</a></li>
+        <li><a href="#ecm">ECM</a></li>
+        <li><a href="#other_item">Other items</a></li>
+        <li><a href="#modifier">Modifiers</a></li>
+    </ul>
+    </li>
+    <li><a href="#deprecated">Deprecated</a>
+    <ul>
+        <li><a href="#degree">Degree</a></li>
+    </ul>
+    </li>
+</ul>
 
-<p>
-double angleDiffRad(double angle1, double angle2) - Calculates the difference between two angles in radians, will always be positive.<br>
-double angleAddRad(double angle1, double angle2) - Calculates the sum of two angles. In radians.<br>
-</p>
 
+<a name="control"></a>
+<h3>API control functions</h3>
+<dl>
+    <dt><b>headlessMode()</b></dt>
+    <dd>Execute this before start to run windowless.</dd>
+    <dt><b>start(func, ["listof","args"])</b></dt>
+    <dd>Initializes the AI interface and starts Xpilot</dd>
+    <dt><b>switchLoop(function)</b></dt>
+    <dd>Changes the main loop</dd>
+    <dt><b>quitAI()</b></dt>
+    <dd>Quits Xpilot.</dd>
+    <dt><b>pauseAI()</b></dt>
+    <dd>Pauses the game for the ship, does not affect other ships.</dd>
+</dl>
 
+<a name="server"></a>
+<h3>Server functions</h3>
+<dl>
+    <dt><b>int timeLeftSec()</b></dt>
+    <dd>Returns the time left of the match.</dd>
+    <dt><b>int playerCountServer()</b></dt>
+    <dd>Returns the number of players (ships) on the server.</dd>
+    <dt><b>int otherCountServer()</b></dt>
+    <dd>Returns number of entities on the server, includes paused players and tanks.</dd>
+    <dt><b>int pausedCountServer()</b></dt>
+    <dd>Returns the number of paused ships on the server.</dd>
+    <dt><b>int tankCountServer()</b></dt>
+    <dd>Returns the number of fueltanks on the server.</dd>
+</dl>
+
+<a name="chat"></a>
+<h3>Chat options</h3>
+<dl>
+    <dt><b>setMaxMsgs(int i)</b></dt>
+    <dd>Sets maximum amount of messages to be displayed in the top left. Affects both talk messages (on the top) and game message (on the bottom) 1&lt;=i&lt;=15 </dd>
+    <dt><b>int getMaxMsgs()</b></dt>
+    <dd>Returns the maximum amount of messages to be displayed.</dd>
+    <dt><b>talk(char* talk_str)</b></dt>
+    <dd>Sends a message.</dd>
+    <dt><b>scanTalkMsg(int id)</b></dt>
+    <dd>Returns the specified talk message. ID 0 is the most recent occurring message.</dd>
+    <dt><b>removeTalkMsg(int i)</b></dt>
+    <dd>Removes the specified talk message. Useful for clearing up the screen if you have requested many options.</dd>
+    <dt><b>scanGameMsg(int id)</b></dt>
+    <dd>Returns the specified game message. ID 0 is the most recent occurring message.</dd>
+    <dt><b>toggleShowMessage()</b></dt>
+    <dd>Toggles messages on the bottom on the screen.</dd>
+    <dt><b>toggleUserName()</b></dt>
+    <dd>Toggles the displayed information on the HUD on the left of the screen between showing real names and showing the scoreboard.</dd>
+</dl>
+
+<a name="ship_functions"></a>
+<h2>Ship functions</h2>
+
+<a name="ship_properties"></a>
 <a name="self"></a>
-<h3>Self Properties</h3>
-<p>
-int selfX() - Returns the ship's X position on the map.<br>
-int selfY() - Returns the ship's Y position on the map.<br>
-int selfVelX() - Returns the ship's X velocity.<br>
-int selfVelY() - Returns the ship's Y velocity.<br>
-int selfMass() - Returns the ship's mass. This is increased as you pick up fuel and items.<br>
-double selfSpeed() - Returns the ship's speed.<br>
-double selfTrackingRad() - Returns the ship's tracking in radians. This is the direction the ship is travelling in.<br>
-double selfHeadingRad() - Returns the heading of the ship in radians. This is the direction the ship is pointing in.<br>
-<br>
-int selfID() - Returns the ID of the ship.<br>
-bool selfAlive() - Returns if the ship is alive.<br>
-int selfLives() - Returns how many lives are left for the ship.<br>
-string selfName() - Returns the ship's name.<br>
-double selfScore() - Returns the ship's score.<br>
-</p>
+<h3>Ship properties</h3>
+<dl>
+    <dt><b>int selfX()</b></dt>
+    <dd>Returns the ship's X position on the map.</dd>
+    <dt><b>int selfY()</b></dt>
+    <dd>Returns the ship's Y position on the map.</dd>
+    <dt><b>int selfVelX()</b></dt>
+    <dd>Returns the ship's X velocity.</dd>
+    <dt><b>int selfVelY()</b></dt>
+    <dd>Returns the ship's Y velocity.</dd>
+    <dt><b>int selfMass()</b></dt>
+    <dd>Returns the ship's mass. This is increased as you pick up fuel and items.</dd>
+    <dt><b>double selfSpeed()</b></dt>
+    <dd>Returns the ship's speed.</dd>
+    <dt><b>double selfTrackingRad()</b></dt>
+    <dd>Returns the ship's tracking in radians. This is the direction the ship is travelling in.</dd>
+    <dt><b>double selfHeadingRad()</b></dt>
+    <dd>Returns the heading of the ship in radians. This is the direction the ship is pointing in.</dd>
+</dl>
+
+<a name="ship_info"></a>
+<h3>Ship info</h3>
+<dl>
+    <dt><b>int selfID()</b></dt>
+    <dd>Returns the ID of the ship.</dd>
+    <dt><b>bool selfAlive()</b></dt>
+    <dd>Returns if the ship is alive.</dd>
+    <dt><b>int selfLives()</b></dt>
+    <dd>Returns how many lives are left for the ship.</dd>
+    <dt><b>string selfName()</b></dt>
+    <dd>Returns the ship's name.</dd>
+    <dt><b>double selfScore()</b></dt>
+    <dd>Returns the ship's score.</dd>
+    <dt><b>int selfTeam()</b></dt>
+    <dd>Returns the ship's team.</dd>
+</dl>
 
 <a name="movement"></a>
-<h3>Movement Methods</h3>
-<p>
-thrust() - Thrusts for one tick.<br>
-double getPower() - Returns the ship's power level.<br>
-setPower(double s) - Sets the amount of power the ship will use for thrusting. Valid values are in the range 5 to 55.<br>
-</p>
+<h3>Movement functions</h3>
+<dl>
+    <dt><b>thrust()</b></dt>
+    <dd>Thrusts for one tick.</dd>
+    <dt><b>double getPower()</b></dt>
+    <dd>Returns the ship's power level.</dd>
+    <dt><b>setPower(double s)</b></dt>
+    <dd>Sets the amount of power the ship will use for thrusting. Valid values are in the range 5 to 55.</dd>
+</dl>
 
 <a name="turn"></a>
 <h3>Turn functions</h3>
-<p>
-turnRad(double angle) - Turns the ship the specified number of radians.<br>
-turnToRad(double angle) <br>
-double getMaxTurnRad() - Returns the maximum allowed angle to turn, in radians.<br>
-setMaxTurnRad(double angle) - Sets the maximum angle, in radians, the ship is allowed to turn. If you try to turn a bigger angle with any of the (non-deprecated) turn functions it will turn the maximum allowed angle. Default is pi/4. The angle can be between 0 and pi.<br>
-</p>
+<dl>
+    <dt><b>turnRad(double angle)</b></dt>
+    <dd>Turns the ship the specified number of radians.</dd>
+    <dt><b>turnToRad(double angle)</b></dt>
+    <dd>Turns the ship to the specified angle.</dd>
+    <dt><b>double getMaxTurnRad()</b></dt>
+    <dd>Returns the maximum allowed angle to turn, in radians.</dd>
+    <dt><b>setMaxTurnRad(double angle)</b></dt>
+    <dd>Sets the maximum angle, in radians, the ship is allowed to turn. If you try to turn a bigger angle with any of the (non-deprecated) turn functions it will turn the maximum allowed angle. Default is pi/4. The angle can be between 0 and pi.</dd>
+</dl>
 
 <a name="shoot"></a>
-<h3>Shoot Methods</h3>
-<p>
-fireShot() - Fires a shot from the ship's main cannon.<br>
-int selfReload() - Returns the ship's reload time remaining. 0 means that the ship is able to fire again.<br>
-</p>
+<h3>Shoot functions</h3>
+<dl>
+    <dt><b>fireShot()</b></dt>
+    <dd>Fires a shot from the ship's main cannon.</dd>
+    <dt><b>int selfReload()</b></dt>
+    <dd>Returns the ship's reload time remaining. 0 means that the ship is able to fire again.</dd>
+</dl>
 
-<p>
-selfDestruct() - Triggers the ship's self destruct mechanism.
-</p>
+<a name="misc"></a>
+<h3>Misc. functions</h3>
+<dl>
+    <dt><b>selfDestruct()</b></dt>
+    <dd>Triggers the ship's self destruct mechanism</dd>
+</dl>
+
+<a name="sensor"></a>
+<h2>Sensors</h2>
 
 <a name="radar"></a>
 <h3>Radar Functions</h3>
 <p>
 The radar index is a separate index from those used by other types of functions. Radarindex 0 is always you (if you are alive), while other objects index change at random.<br>
 Several server options control what shows up on the radar.<br>
-The radar uses a separate coordinate system.<br>
-<br>
-int radarCount() - Returns the number of objects on the radar.<br>
-int closestRadarId() - Returns the closest object's radarId, not including you.<br>
-int radarX(int rID) - Returns the specified object's X radar coordinate. <br>
-int radarY(int rID) - Returns the specified object's Y radar coordinate.<br>
-int radarType(int rID) - Returns the type of the specified object.<br>
-2   ball<br>
-3   ship<br>
-130-133 asteroids. Bigger number, bigger size.<br>
-0 Missile<br>
-<br>
-Mines flash, with four ticks of 0 and two of 3.<br>
-Nuclear missiles flash, every tick switching between 0 and 3.<br>
-<br>
-int radarWidth() - Returns the width of the radar (always 256).<br>
-int radarHeight() - Returns the height of the radar.<br>
+The radar uses a separate coordinate system, which is much less precise than pixels. You should only use these when handling objects that are far away and not on your screen. Converting from an x radar coordinates to screen coordinate is done by diving with radarWidth() and multiplying with mapWidthPixels(). Converting an y coordinate is done similarly with height functions.
 </p>
+<dl>
+    <dt><b>int radarCount()</b></dt>
+    <dd>Returns the number of objects on the radar.</dd>
+    <dt><b>int closestRadarId()</b></dt>
+    <dd>Returns the closest object's radarId, not including you.</dd>
+    <dt><b>int radarX(int rID)</b></dt>
+    <dd>Returns the specified object's X radar coordinate. </dd>
+    <dt><b>int radarY(int rID)</b></dt>
+    <dd>Returns the specified object's Y radar coordinate.</dd>
+    <dt><b>int radarType(int rID)</b></dt>
+    <dd>Returns the type of the specified object.<br>
+    0 Missile<br>
+    2   ball<br>
+    3   ship<br>
+    130-133 asteroids. Bigger number, bigger size.<br>
+    Mines flash, with four ticks of 0 and two of 3.<br>
+    Nuclear missiles flash, every tick switching between 0 and 3.<br> </dd>
+    <dt><b>int radarWidth()</b></dt>
+    <dd>Returns the width of the radar.</dd>
+    <dt><b>int radarHeight()</b></dt>
+    <dd>Returns the height of the radar.</dd>
+</dl>
 
 <a name="enemy"></a>
-<h3>Enemy Functions</h3>
+<h3>Enemy properties</h3>
 <p>
 These functions only work if the enemy is on your screen.<br>
 Note that the index used here is different from other indexes. The ships in the buffer are sorted in ascending distance from you, so idx 0 should always be the closest ship.<br>
 All functions return -1 if the ship doesn't exist.<br>
-The speed and tracking of the enemy ship is approximated by the API and can therefore be slightly incorrect.<br>
-<br>
-int shipCountScreen() - Returns the number of ships on the screen. Note that you're most likely one of them.<br>
-int enemyId(int idx) - returns the server id of the specified ship. Returns -1 if ship doesn't exist.<br>
-int enemyX(int idx) - Returns the specified enemy's X coordinate on the map.<br>
-int enemyY(int idx) - Returns the specified enemy's Y coordinate on the map.<br>
-double enemyDistance(int idx) - Returns the distance between the ship and the specified enemy.<br>
-double enemyVelX(int idx) - Returns the x velocity of the specified enemy.<br>
-double enemyVelY(int idx) - Returns the y velocity of the specified enemy.<br>
-double enemySpeed(int idx) - Returns the speed of the specified enemy.<br>
-double enemyHeadingRad(int idx) - Returns the specified enemy's heading in radians.<br>
-double enemyTrackingRad(int idx) - Returns the specified enemy's tracking in radians.<br>
-<br>
-int enemyReload(int idx) - Returns the specified enemy's reload time remaining.<br>
-int enemyShield(int idx) - Returns the specified enemy's shield status.<br>
-int enemyLives(int idx) - Returns the specified enemy's remaining lives.<br>
-string enemyName(int idx) - Returns the specified enemy's name.<br>
-string enemyScore(int idx) - Returns the specified enemy's score.<br>
+The speed and tracking of the enemy ship is approximated by the API and can therefore be slightly incorrect.
 </p>
+<dl>
+    <dt><b>int shipCountScreen()</b></dt>
+    <dd>Returns the number of ships on the screen. Note that you're most likely one of them.</dd>
+    <dt><b>int enemyId(int idx)</b></dt>
+    <dd>returns the server id of the specified ship. Returns -1 if ship doesn't exist.</dd>
+    <dt><b>int enemyX(int idx)</b></dt>
+    <dd>Returns the specified enemy's X coordinate on the map.</dd>
+    <dt><b>int enemyY(int idx)</b></dt>
+    <dd>Returns the specified enemy's Y coordinate on the map.</dd>
+    <dt><b>double enemyDistance(int idx)</b></dt>
+    <dd>Returns the distance between the ship and the specified enemy.</dd>
+    <dt><b>double enemyHeadingRad(int idx)</b></dt>
+    <dd>Returns the specified enemy's heading in radians.</dd>
+</dl>
+<h4>Estimated by the API</h4>
+<dl>
+    <dt><b>double enemyVelX(int idx)</b></dt>
+    <dd>Returns the x velocity of the specified enemy.</dd>
+    <dt><b>double enemyVelY(int idx)</b></dt>
+    <dd>Returns the y velocity of the specified enemy.</dd>
+    <dt><b>double enemySpeed(int idx)</b></dt>
+    <dd>Returns the speed of the specified enemy.</dd>
+    <dt><b>double enemyTrackingRad(int idx)</b></dt>
+    <dd>Returns the specified enemy's tracking in radians.</dd>
+</dl>
+
+<h3>Enemy info</h3>
+<p>
+Uses the same index as Enemy properties
+</p>
+<dl>
+    <dt><b>int enemyReload(int idx)</b></dt>
+    <dd>Returns the specified enemy's reload time remaining.</dd>
+    <dt><b>int enemyShield(int idx)</b></dt>
+    <dd>Returns the specified enemy's shield status.</dd>
+    <dt><b>int enemyLives(int idx)</b></dt>
+    <dd>Returns the specified enemy's remaining lives.</dd>
+    <dt><b>string enemyName(int idx)</b></dt>
+    <dd>Returns the specified enemy's name.</dd>
+    <dt><b>string enemyScore(int idx)</b></dt>
+    <dd>Returns the specified enemy's score.</dd>
+    <dt><b>int enemyTeam(int idx)</b></dt>
+    <dd>Returns the specified enemy's team.</dd>
+</dl>
+
+<a name="lock"></a>
+<h3>Lock functions</h3>
+<p>
+You can only change lock once per tick<br>
+</p>
+<dl>
+    <dt><b>toggleCompass()</b></dt>
+    <dd>Toggles the name of the locked player, distance (or lives) and the dot on the hud.</dd>
+    <dt><b>int getLockId()</b></dt>
+    <dd>Returns the server ID of the locked-on ship.</dd>
+    <dt><b>double lockHeadingRad()</b></dt>
+    <dd>Returns in radians the direction of the ship's lock-on of an enemy.</dd>
+    <dt><b>int selfLockDist()</b></dt>
+    <dd>Returns the distance of the enemy that the ship has locked-on to.</dd>
+    <dt><b>lockNext()</b></dt>
+    <dd>Locks onto the next ship in the ship buffer.</dd>
+    <dt><b>lockPrev()</b></dt>
+    <dd>Locks onto the prev ship in the ship buffer.</dd>
+    <dt><b>lockClose()</b></dt>
+    <dd>Locks onto the closest ship.</dd>
+    <dt><b>lockNextClose()</b></dt>
+    <dd>Locks-on to the next closest ship.</dd>
+    <dt><b>loadLock(int i)</b></dt>
+    <dd>Loads the locked-on ship at the specified index. 1&lt;=i&lt;=4.</dd>
+    <dt><b>saveLock(int i)</b></dt>
+    <dd>Saves the locked-on ship at the specified index. 1&lt;=i&lt;=4.</dd>
+</dl>
 
 <a name="shot"></a>
 <h3>Shot Functions</h3>
-<p>
-int shotCountScreen() - Returns the number of shots on the screen.<br>
-int shotX(int idx) - Returns the X coordinate of a shot.<br>
-int shotY(int idx) - Returns the Y coordinate of a shot.<br>
-double shotDist(int idx) - Returns the distance of a shot from the ship.<br>
-int shotAge(int idx) - Returns for how many ticks the API have tracked a shot. With a value of two or more the data about a shot is correct. With a value of 1 the shot might not exist and with a value of 0 no velocity of the shot is known.<br>
-double shotVelX(int idx) - Returns the X velocity of a shot.<br>
-double shotVelY(int idx) - Returns the Y velocity of a shot.<br>
-double shotSpeed(int idx) - Returns the speed of a shot.<br>
-double shotTrackingRad(int idx) - Returns the direction of the velocity of a shot.<br>
-int shotAlert(int idx) - Returns a danger rating of a shot, the smaller the number the more likely the shot is to hit the ship. Note that this number is unreliable, it might be better to calculate this on your own.<br>
+<dl>
+    <dt><b>int shotCountScreen()</b></dt>
+    <dd>Returns the number of shots on the screen.</dd>
+    <dt><b>int shotX(int idx)</b></dt>
+    <dd>Returns the X coordinate of a shot.</dd>
+    <dt><b>int shotY(int idx)</b></dt>
+    <dd>Returns the Y coordinate of a shot.</dd>
+    <dt><b>double shotDist(int idx)</b></dt>
+    <dd>Returns the distance of a shot from the ship.</dd>
+</dl>
+<h4>Estimated by the API</h4>
+<dl>
+    <dt><b>int shotAge(int idx)</b></dt>
+    <dd>Returns for how many ticks the API have tracked a shot. With a value of two or more the data about a shot is correct. With a value of 1 the shot might not exist and with a value of 0 no velocity of the shot is known.</dd>
+    <dt><b>double shotVelX(int idx)</b></dt>
+    <dd>Returns the X velocity of a shot.</dd>
+    <dt><b>double shotVelY(int idx)</b></dt>
+    <dd>Returns the Y velocity of a shot.</dd>
+    <dt><b>double shotSpeed(int idx)</b></dt>
+    <dd>Returns the speed of a shot.</dd>
+    <dt><b>double shotTrackingRad(int idx)</b></dt>
+    <dd>Returns the direction of the velocity of a shot.</dd>
+    <dt><b>int shotAlert(int idx)</b></dt>
+    <dd>Returns a danger rating of a shot, the smaller the number the more likely the shot is to hit the ship. Note that this number is unreliable, it might be better to calculate this on your own.</dd>
+</dl>
+
+<a name="asteroid"></a>
+<h3>Asteroid functions</h3>
+<dl>
+    <dt><b>int asteroidCountScreen()</b></dt>
+    <dd>Returns the number of asteroids on the screen.</dd>
+    <dt><b>int asteroidX(int i)</b></dt>
+    <dd>Returns the x coordinate of the specified asteroid.</dd>
+    <dt><b>int asteroidY(int i)</b></dt>
+    <dd>Returns the y coordinate of the specified asteroid.</dd>
+    <dt><b>int asteroidType(int i)</b></dt>
+    <dd>Returns the type of the specified asteroid.</dd>
+    <dt><b>int asteroidSize(int i)</b></dt>
+    <dd>Returns the size of the specified asteroid.</dd>
+    <dt><b>int asteroidRotation(int i)</b></dt>
+    <dd>Returns the rotation of the specified asteroid.</dd>
+    <dt><b>double asteroidDist(int i)</b></dt>
+    <dd>Returns the distance to the specified asteroid.</dd>
+</dl>
+<h4>Estimated by the API</h4>
+<dl>
+    <dt><b>int asteroidAge(int i)</b></dt>
+    <dd>Returns for how many ticks the specified asteroid have been on the screen. Because the velocity of an asteroid is approximated by the API the data returned by other functions may be wrong. With age=0 the functions approximated will return an error. With age=1 the functions may return asteroids that may not exist. You should normally ignore asteroids with age less than 2 unless you are paranoid.</dd>
+    <dt><b>int asteroidVelX(int i)</b></dt>
+    <dd>Returns the X velocity of the specified asteroid. Approximated by the API.</dd>
+    <dt><b>int asteroidVelY(int i)</b></dt>
+    <dd>Returns the Y velocity of the specified asteroid. Approximated by the API.</dd>
+    <dt><b>double asteroidSpeed(int i)</b></dt>
+    <dd>Returns the speed of the specififed asteroid. Approximated by the API.</dd>
+    <dt><b>double asteroidTrackingRad(int i)</b></dt>
+    <dd>Returns the tracking, in radians, of the specified asteroid. Approximated by the API.</dd>
+    <dt><b>int asteroidAlert(int i)</b></dt>
+    <dd>Returns a danger rating of the specified asteroid. Approximated by the API.</dd>
+</dl>
+
+<a name="ball"></a>
+<h3>Ball functions</h3>
+<dl>
+    <dt><b>connector()</b></dt>
+    <dd>Connects the ship to the ball in Capture the Flag Mode.</dd>
+    <dt><b>dropBall()</b></dt>
+    <dd>Drops the ball in Capture the Flag Mode.</dd>
+    <dt><b>int ballCountScreen()</b></dt>
+    <dd>Returns the number of balls on the screen.</dd>
+    <dt><b>int ballX(int i)</b></dt>
+    <dd>Returns the x position of the specified ball.</dd>
+    <dt><b>int ballY(int i)</b></dt>
+    <dd>Returns the y position of the specified ball.</dd>
+    <dt><b>int connectorCountScreen()</b></dt>
+    <dd>Returns the number of connectors on the screen. A connector is the wire going from a player to a ball.</dd>
+    <dt><b>int connectorX0(int i)</b></dt>
+    <dd>Returns the x0 position of the specified connector.</dd>
+    <dt><b>int connectorX1(int i)</b></dt>
+    <dd>Returns the x1 position of the specified connector.</dd>
+    <dt><b>int connectorY0(int i)</b></dt>
+    <dd>Returns the y0 position of the specified connector.</dd>
+    <dt><b>int connectorY1(int i)</b></dt>
+    <dd>Returns the y1 position of the specified connector.</dd>
+    <dt><b>int connectorTractor(int i)</b></dt>
+    <dd>Returns the tractor of the specified connec</dd>
+</dl>
+
 
 <a name="map"></a>
-<h3>Map Functions</h3>
+<h2>Map features</h2>
+<a name="map_properties"></a>
+<h3>Map properties</h3>
+<dl>
+    <dt><b>int blockSize()</b></dt>
+    <dd>Returns the the width/height of a block, in pixels.</dd>
+    <dt><b>int mapWidthBlocks()</b></dt>
+    <dd>Returns the width of the map, in blocks.</dd>
+    <dt><b>int mapHeightBlocks()</b></dt>
+    <dd>Returns the height of the map, in blocks.</dd>
+    <dt><b>int mapWidthPixels()</b></dt>
+    <dd>Returns the height of the map, in pixels.</dd>
+    <dt><b>int mapHeightPixels</b></dt>
+    <dd>Returns the height of the map, in pixels.</dd>
+    <a name="mapData"></a>
+    <dt><b>int mapData(int x, int y) </b></dt>
+    <dd>Returns the type of block at the specified block coordinate. See common/setup.h for output.</dd>
+    <dt><b>getOption(string option)</b></dt>
+    <dd>Returns the value of the specified option. The API gets this information by requesting it with "/get" for most options. If you are gonna recieve many options using setMaxMsgs(15) or similar is recommended.<br>
+    When this function is called with an option that haven't been fetched yet it will return the string "queued", which means the option is queued up. If you call the function again later* you will recieve the value of the option.<br>
+    The function will return 0 or 1 for booleans, and int/string/double for the respective options.<br>
+    The option Gravitypoint is unsupported due to a serverbug.<br>
+    *Depends on the value of maxMsgs and how many options you have queued up. Most of the time it will be available in less than five ticks.
+    </dd>
+</dl>
+
+<a name="wall"></a>
 <h3>Wall functions</h3>
-<p>
-double wallFeelerRad(double dist, double rad) - Returns the distance to a wall in the specified angle. If no wall is found within the specified distance it returns -1.<br>
-double wallBetween(double x1, double y1, double x2, double y2) - Returns the distance from point 1 to the wall, or -1 if there is no wall.<br>
-Note: These wall functions treats triangle blocks as squares and can therefore give false positives.<br>
-<br>
-int playerCountServer() - Returns the number of players (ships) on the server.<br>
-int otherCountServer() - Returns number of entities on the server, includes paused players and tanks.<br>
-int pausedCountServer() - Returns the number of paused ships on the server.<br>
-int tankCountServer() - Returns the number of fueltanks on the server.<br>
-<br>
-<h3>Map options</h3>
-<p>
-int blockSize() - Returns the the width/height of a block, in pixels.<br>
-int mapWidthBlocks() - Returns the width of the map, in blocks.<br>
-int mapHeightBlocks() - Returns the height of the map, in blocks.<br>
-int mapWidthPixels() - Returns the height of the map, in pixels.<br>
-int mapHeightPixels - Returns the height of the map, in pixels.<br>
-int mapData(int x, int y)  - Returns the type of block at the specified block coordinate. See common/setup.h for output.<br>
-<br>
-getOption(string option) - Returns the value of the specified option. The API gets this information by requesting it with "/get" for most options. If you are gonna recieve many options using setMaxMsgs(15) or similar is recommended.<br>
-When this function is called with an option that haven't been fetched yet it will return the string "queued", which means the option is queued up. If you call the function again later* you will recieve the value of the option.<br>
-The function will return 0 or 1 for booleans, and int/string/double for the respective options.<br>
-<br>
-The option Gravitypoint is unsupported due to a serverbug.<br>
-<br>
-*Depends on the value of maxMsgs and how many options you have queued up. Most of the time it will be available in less than five ticks.
-</p>
-
-<a name="item"></a>
-<h3>Item Functions:</h3>
-<p>
-toggleShowItems() - Toggles whether items are displayed on the left side of the ship on the HUD. Items will still show right after you picked them up.<br>
-<br>
-int itemCountScreen() - Returns the number of items on the screen.<br>
-int closestItemId() - Returns the closest item's id.<br>
-int itemX(int id) - Returns the X coordinate of the specified item.<br>
-int itemY(int id) - Returns the Y coordinate of the specified item.<br>
-int itemType(int id) - See table for output. If the item is 'random' it's type will cycle through all available types.<br>
-<br>
-int selfItem(int i) - 0&lt;=i&lt;=20, return amount of the specified item.<br>
-<br>
-type  item<br>
-0     energypack/fuel<br>
-1     wideangle<br>
-2     rearshot<br>
-3     afterburner<br>
-4     cloak<br>
-5     sensor<br>
-6     transporter<br>
-7     tank<br>
-8     mine<br>
-9     missile<br>
-10    ecm<br>
-11    laser<br>
-12    emergencythrust<br>
-13    tractorbeam<br>
-14    autopilot<br>
-15    emergencyshield<br>
-16    itemdeflector<br>
-17    hyperjump<br>
-18    phasing<br>
-19    mirror<br>
-20    armor<br>
-</p>
-
-<a name="item_usage"></a>
-<h3>Item Usage Methods</h3>
-<p>
-selectItem() - Selects the ship's item to be dropped.<br>
-loseItem() - Drops the ship's selected item.<br>
-</p>
-
-<a name="fuel"></a>
-<a name="tank"></a>
-<h3>Fuel and Tank Methods</h3>
-<p>
-int selfFuel() - Returns the total amount of fuel in all tanks.<br>
-int selfFuelMax() - Returns the max amount of fuel you can take. This is increased if you pick up more tanks.<br>
-int selfFuelCurrent() - Returns the currently selected tank.<br>
-tankDetach() - Detaches a fuel tank from the ship.<br>
-nextTank() - Switches to the ship's next fuel tank.<br>
-prevTank() - Switches to the ship's previous fuel tank.
-</p>
-
-<a name="missile"></a>
-<h3>Missile Methods</h3>
-<p>
-fireMissile() - Fires a missile from the ship.<br>
-fireTorpedo() - Fires a torpedo from the ship.<br>
-fireHeat() - Fires a heat seeking missile from the ship.<br>
-<br>
-int missileCountScreen() - Returns the number of missiles on the screen.<br>
-int missileX(int i) - Returns the x coordinate of the specified missile.<br>
-int missileY(int i) - Returns the y coordinate of the specified missile.<br>
-int missileHeadingRad(int i) - Returns the direction of the specified missile in radians.<br>
-int missileLen(int i) - Returns the length of the specified missile.
-</p>
-
-<a name="laser"></a>
-<h3>Laser Functions</h3>
-<p>
-fireLaser() - Fires a laser from the ship.<br>
-int laserCountScreen() - Returns the number of lasers on the screen.<br>
-int laserX(int i) - Returns the x coordinate of the specified laser.<br>
-int laserY(int i) - Returns the y coordinate of the specified laser.<br>
-double laserHeadingRad(int i) - Returns the direction of the specified laser.<br>
-int laserLen(int i) - Returns the length of the specified laser.<br>
-</p>
-
-<a name="mine"></a>
-<h3>Mine functions</h3>
-<p>
-dropMine() - Drops a stationary mine from the ship.<br>
-detachMine() - Releases a mine from the ship with the same velocity as the ship.<br>
-detonateMines() - Detonates mines previously released from the ship.<br>
-<br>
-int mineCountScreen() - Returns the number of mines on the screen.<br>
-int mineX(int i) - Returns the x coordinate of the specified mine.<br>
-int mineY(int i) - Returns the y coordinate of the specified mine.<br>
-bool mineFriendly(int i) - Returns whether a mine is friendly or not.<br>
-int mineId(int i) - If close enough, returns the id of the player dropping the mine.
-</p>
-
-<a name="shield"></a>
-<h3>Shield functions</h3>
-<p>
-int selfShield() - Returns the ship's shield status.<br>
-shield() - Turn on the ship's Shield. Note that you cannot shield and shoot at the same time.
-</p>
-
-<a name="phasing"></a>
-<h3> Phasing functions</h3>
-<p>
-phasing() - Uses the phasing item to allow the ship to pass through walls.<br>
-int phasingTime() - Returns time left on the current phasing item. Only returns sensible number if it has been activated.
-</p>
-
-<a name="ecm"></a>
-<h3>ECM functions</h3>
-<p>
-ecm() - Launches an ECM to temporarily blind opponents.<br>
-int ecmCountScreen() - Returns the number of ECM's on the screen.<br>
-int ecmX(int i) - Returns the x coordinate of the specified ECM.<br>
-int ecmY(int i) - Returns the y coordinate of the specified ECM.
-</p>
-
-<a name="transporter"></a>
-<h3>Transporter functions</h3>
-<p>
-transporter() - Uses the transporter item to steal an opponent's item or fuel supply.
-</p>
-
-<a name="other_item"></a>
-<h3>Other item functions</h3>
-<p>
-cloak() - Cloaks the ship from sight.<br>
-tractorBeam() - Uses the ship's tractor beam to pull in enemy ships.<br>
-pressorBeam() - Uses the ship's pressor beam to push away enemy ships.<br>
-emergencyShield() - Uses the emergency shield item to protect your ship from damage for a period of time.<br>
-hyperjump() - Uses the hyper jump item to warp the ship to a random location on the map.<br>
-toggleAutopilot() - Uses the autopilot item to stop the ship's movement.<br>
-emergencyThrust() - Uses the emergency thrust item to increase the ship's movement speed for a period of time.<br>
-deflector() - Uses the deflector item to push everything away from the ship.
-</p>
-
-<a name="modifier"></a>
-<h3>Modifier Methods</h3>
-<p>
-toggleCluster() - Toggles the option to have the ship fire Cluster weapons instead of regular weapons.<br>
-toggleMini() - Toggles the option to have the ship fire Mini weapons instead of regular weapons.<br>
-toggleNuclear() - Toggles the option to have the ship fire Nuclear weapons instead of regular weapons, takes up five mines or seven missiles per shot.<br>
-toggleVelocity() - Modifies the explosion velocity of mines and missiles.<br>
-togglePower() - Toggles the power levels of the ship's weapons.<br>
-toggleSpread() - Toggles the option to have the ship fire Spread weapons instead of regular weapons.<br>
-toggleLaser() - Toggles between the LS stun laser and the LB blinding laser.<br>
-toggleImplosion() - Toggle the option to have mines and missiles implode instead of exlode, the explosion will draw in players instead of blowing them away.<br>
-<br>
-loadModifiers(int i) - Loads Modifiers at the specified index. 1&lt;=i&lt;=4<br>
-saveModifiers(int i) - saves Modifiers at the specified index. 1&lt;=i&lt;=4<br>
-</p>
-
-<a name="other_gamemode"></a>
-<h3>Other gamemode functions</h3>
-<p>
-int selfTeam() - Returns the ship's team.<br>
-int enemyTeam(int idx) - Returns the specified enemy's team.<br>
-int timeLeftSec() - Returns the time left of the match.<br>
-</p>
+<dl>
+    <dt><b>double wallFeelerRad(double dist, double rad)</b></dt>
+    <dd>Returns the distance to a wall in the specified angle. If no wall is found within the specified distance it returns -1.</dd>
+    <dt><b>double wallBetween(double x1, double y1, double x2, double y2)</b></dt>
+    <dd>Returns the distance from point 1 to the wall, or -1 if there is no wall.<br>
+    Note: These wall functions treats triangle blocks as squares and can therefore give false positives.
+    </dd>
+</dl>
 
 <a name="base"></a>
 <h3>Base functions</h3>
+<dl>
+    <dt><b>keyHome()</b></dt>
+    <dd>Changes the ship's home base or respawn location.</dd>
+    <dt><b>int baseCount()</b></dt>
+    <dd>Returns the number of bases.</dd>
+    <dt><b>int baseX(int i)</b></dt>
+    <dd>Returns the x coordinate of the specified base.</dd>
+    <dt><b>int baseY(int i)</b></dt>
+    <dd>Returns the y coordinate of the specified base.</dd>
+    <dt><b>int baseTeam(int i)</b></dt>
+    <dd>Returns the team of the specified base.</dd>
+    <dt><b>int baseId(int i)</b></dt>
+    <dd>Returns the id of the specified base. Probably the player's server id. </dd>
+</dl>
+
+<a name="fuel_station"></a>
+<h3>Fuel station functions</h3>
+<dl>
+    <dt><b>refuel()</b></dt>
+    <dd>Refuels the ship. Needs to be continusly called to keep refueling.</dd>
+    <dt><b>int fuelStationCountServer()</b></dt>
+    <dd>Returns the number of fuel stations on the server.</dd>
+    <dt><b>int fuelStationX(int i)</b></dt>
+    <dd>Returns the x coordinate of the specified fuel station.</dd>
+    <dt><b>int fuelStationY(int i)</b></dt>
+    <dd>Returns the y coordinate of the specified fuel station.</dd>
+    <dt><b>int fuelStationBlockX(int i)</b></dt>
+    <dd>Returns the x block of the specified fuel station.</dd>
+    <dt><b>int fuelStationBlockY(int i)</b></dt>
+    <dd>Returns the y block of the specified fuel station.</dd>
+    <dt><b>int fuelStationFuel(int i)</b></dt>
+    <dd>Returns the amount of fuel in the specified fuel station.</dd>
+    <dt><b>int fuelStationTeam(int i)</b></dt>
+    <dd>Returns which team the fuel station is closest to.</dd>
+</dl>
+
+<a name="race"></a>
+<a name="timing"></a>
+<h3>Race/timing functions</h3>
+<dl>
+    <dt><b>int nextCheckPoint()</b></dt>
+    <dd>Returns the index of the next checkpoint, for timing mode.</dd>
+    <dt><b>int checkPointX(idx)</b></dt>
+    <dd>Returns the x coordinate of the specified checkpoint. Returns 0 if checkpoint doesn't exist.</dd>
+    <dt><b>int checkPointY(idx)</b></dt>
+    <dd>Returns the y coordinate of the specified checkpoint. Returns 0 if the checkpoint doesn't exist.</dd>
+    <dt><b>int checkPointBlockX(idx)</b></dt>
+    <dd>Returns the x block of the specified checkpoint. Returns 0 if checkpoint doesn't exist. </dd>
+    <dt><b>int checkPointBlockY(idx)</b></dt>
+    <dd>Returns the y block of the specified checkpoint. Returns 0 if the checkpoint doesn't exist.</dd>
+</dl>
+
+<a name="target"></a>
+<h3>Target functions</h3>
+<dl>
+    <dt><b>repair()</b></dt>
+    <dd>Repairs a target.</dd>
+    <dt><b>int targetCountServer()</b></dt>
+    <dd>Returns the number of targets (int) on the server.</dd>
+    <dt><b>int targetX(int i)</b></dt>
+    <dd>Returns the x coordinate of the specified target.</dd>
+    <dt><b>int targetY(int i)</b></dt>
+    <dd>Returns the y coordinate of the specified target.</dd>
+    <dt><b>int targetAlive(int i)</b></dt>
+    <dd>Returns whether the specified target is dead.</dd>
+    <dt><b>int targetDamage(int i)</b></dt>
+    <dd>Returns the damage on the specified target.</dd>
+    <dt><b>int targetTeam(int i)</b></dt>
+    <dd>Returns the closest team base to the specified target.</dd>
+</dl>
+
+<a name="wormhole"></a>
+<h3>Wormhole functions</h3>
+<dl>
+<dt><b>int wormholeCountScreen(int i)</b></dt>
+<dd>Returns the number of wormholes on the screen.</dd>
+<dt><b>int wormholeX(int i)</b></dt>
+<dd>Returns the x coordinate of the specified wormhole.</dd>
+<dt><b>int wormholeY(int i)</b></dt>
+<dd>Returns the y coordinate of the specified wormhole.</dd>
+</dl>
+
+<a name="cannon"></a>
+<h3>Cannon functions</h3>
+<dl>
+<dt><b>int cannonCountServer()</b></dt>
+<dd>Returns the amount of cannons on the server.</dd>
+<dt><b>int cannonX(int i)</b></dt>
+<dd>Returns the x coordinate of the specified cannon.</dd>
+<dt><b>int cannonY(int i)</b></dt>
+<dd>Returns the y coordinate of the specified cannon.</dd>
+<dt><b>int cannonBlockX(int i)</b></dt>
+<dd>Returns the x coordinate of the specified cannon.</dd>
+<dt><b>int cannonBlockY(int i)</b></dt>
+<dd>Returns the y coordinate of the specified cannon.</dd>
+<dt><b>int cannonAlive(int i)</b></dt>
+<dd>Returns whether the specified cannon is dead.</dd>
+<dt><b>int cannonTeam(int i)</b></dt>
+<dd>Returns which base is closest to the specified cannon.</dd>
+</dl>
+
+<a name="angle_handling"></a>
+<h2>Angle handling</h2>
+
+<a name="radian"></a>
+<h3>Radian functions</h3>
 <p>
-keyHome() - Changes the ship's home base or respawn location.<br>
-int baseCount() - Returns the number of bases.<br>
-int baseX(int i) - Returns the x coordinate of the specified base.<br>
-int baseY(int i) - Returns the y coordinate of the specified base.<br>
-int baseTeam(int i) - Returns the team of the specified base.<br>
-int baseId(int i) - Returns the id of the specified base. Probably the player's server id.<br>
+The default unit for handling angles is radians, so most functions dealing with it can be found in the rest of the documentation.
 </p>
+<dl>
+    <dt><b>double angleDiffRad(double angle1, double angle2)</b></dt>
+    <dd>Calculates the difference between two angles in radians, will always be positive.</dd>
+    <dt><b>double angleAddRad(double angle1, double angle2)</b></dt>
+    <dd>Calculates the sum of two angles. In radians.</dd>
+</dl>
+
+<a name="xdegree"></a>
+<h3>Xpilot degree functions.</h3>
+<p>
+Xpilot degrees is the angular measurement that xpilot uses, ranging from 0 to 127. It is only possible to turn (and turn to) whole xpilot degrees. For example you cannot turn 5 degrees (1.422 xdeg), so the API will turn 2.8125 (1 xdeg) degrees instead. This is not noticeable most of the time and the API will do all the necessary rounding behind the scenes.
+</p>
+<dl>
+<dt><b>int selfHeadingXdeg()</b></dt>
+<dd>Returns the heading of the ship in xpilot-degrees.</dd>
+<dt><b>turnXdeg(double xdeg)</b></dt>
+<dd>Turns the ship in the specified number of xdegrees.</dd>
+<dt><b>turnToXdeg(double xdeg)</b></dt>
+<dd>Turns the ship towards the specified heading, in xdegrees.</dd>
+<dt><b>setMaxTurnXdeg(double i)</b></dt>
+<dd>Sets the maximum angle, in xpilot degrees, the ship is allowed to turn. If you try to turn a bigger angle with any of the turn functions it will turn the maximum allowed angle. 0&lt;=i&lt;=64</dd>
+<dt><b>double getMaxTurnXdeg()</b></dt>
+<dd>Returns the maximum allowed angle to turn, in xpilot degrees.</dd>
+<dt><b>int enemyHeadingXdeg(int idx)<br>
+int lockHeadingXdeg()<br>
+double angleDiffXdeg(double angle1, double angle2)</b></dt>
+<dd>Calculates the difference between two angles in xdegrees.</dd>
+<dt><b>double angleAddXdeg(double angle1, double angle2)</b></dt>
+<dd>Calculates the sum of two anglesin xdegrees.</dd>
+<dt><b>double missileHeadingXdeg(int i)</b></dt>
+<dd>Returns the direction of the specified missile in xpilot degrees.</dd>
+<dt><b>int laserHeadingXdeg(int i)</b></dt>
+<dd>Returns the direction of the specified laser.</dd>
+</dl>
+
+<a name="angle_conversion"></a>
+<h3>Angle conversion functions.</h3>
+<dl>
+    <dt><b>double xdegToDeg(int xdeg)</b></dt>
+    <dd>Converts xpilot degrees to degrees.</dd>
+    <dt><b>double xdegToRad(int xdeg)</b></dt>
+    <dd>Converts xpilot degrees to radians.</dd>
+    <dt><b>int degToXdeg(double deg)</b></dt>
+    <dd>Convers degrees to xpilot degrees.</dd>
+    <dt><b>double degToRad(double deg)</b></dt>
+    <dd>Converts degrees to radians.</dd>
+    <dt><b>int radToXdeg(double rad)</b></dt>
+    <dd>Converts radians to xpilot degrees.</dd>
+    <dt><b>double radToDeg(double rad)</b></dt>
+    <dd>Converts radians to degrees.</dd>
+</dl>
+
+
+<a name="item"></a>
+<h2>Item Functions</h2>
+<dl>
+    <dt><b>toggleShowItems()</b></dt>
+    <dd>Toggles whether items are displayed on the left side of the ship on the HUD. Items will still show right after you picked them up.</dd>
+    <dt><b>selectItem()</b></dt>
+    <dd>Selects the ship's item to be dropped.</dd>
+    <dt><b>loseItem()</b></dt>
+    <dd>Drops the ship's selected item.</dd>
+    <dd>Returns the number of items on the screen.</dd>
+    <dt><b>int selfItem(int i)</b></dt>
+    <dd>0&lt;=i&lt;=20, return amount of the specified item. See table for which input yields what item.</dd>
+</dl>
+<table>
+    <tr>
+        <td><b>Type&nbsp;&nbsp;</b></td>
+        <td><b>Item</b></td>
+    </tr>
+    <tr>
+        <td>0</td>
+        <td>energypack/fuel</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>wideangle</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>rearshot</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>afterburner</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>cloak</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>sensor</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>transporter</td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>tank</td>
+    </tr>
+    <tr>
+        <td>8</td>
+        <td>mine</td>
+    </tr>
+    <tr>
+        <td>9</td>
+        <td>missile</td>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td>ecm</td>
+    </tr>
+    <tr>
+        <td>11</td>
+        <td>laser</td>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td>emergencythrust</td>
+    </tr>
+    <tr>
+        <td>13</td>
+        <td>tractorbeam</td>
+    </tr>
+    <tr>
+        <td>14</td>
+        <td>autopilot</td>
+    </tr>
+    <tr>
+        <td>15</td>
+        <td>emergencyshield</td>
+    </tr>
+    <tr>
+        <td>16</td>
+        <td>itemdeflector</td>
+    </tr>
+    <tr>
+        <td>17</td>
+        <td>hyperjump</td>
+    </tr>
+    <tr>
+        <td>18</td>
+        <td>phasing</td>
+    </tr>
+    <tr>
+        <td>19</td>
+        <td>mirror</td>
+    </tr>
+    <tr>
+        <td>20</td>
+        <td>armor</td>
+    </tr>
+</table>
+
+<a name="powerup_tracking"></a>
+<h3>Powerup tracking functions</h3>
+<dl>
+    <dt><b>int itemCountScreen()</b></dt>
+    <dd>Returns the number of items on the screen.</dd>
+    <dt><b>int closestItemId()</b></dt>
+    <dd>Returns the closest item's index.</dd>
+    <dt><b>int itemX(int i)</b></dt>
+    <dd>Returns the X coordinate of the specified item.</dd>
+    <dt><b>int itemY(int i)</b></dt>
+    <dd>Returns the Y coordinate of the specified item.</dd>
+    <dt><b>int itemType(int i)</b></dt>
+    <dd>See table for output. If the item is 'random' it's type will cycle through all available types.</dd>
+    <dt><b>int itemDist(int i></b></dt>
+    <dd>Returns the distance to the specified item.</dd>
+</dl>
+<h4>Approximated by the API.</h4>
+<dl>
+    <dt><b>int itemAge(int i)</b></dt>
+    <dd>Returns for how many ticks the specified item have been on the screen. Because the velocity of an item is approximated by the API the data returned by other functions may be wrong. With age=0 the functions approximated will return an error. With age=1 the functions may return items that may not exist. You should normally ignore items with age less than 2.</dd>
+    <dt><b>int itemVelX(int i)</b></dt>
+    <dd>Returns the X velocity of the specified asteroid. Approximated by the API.</dd>
+    <dt><b>int itemVelY(int i)</b></dt>
+    <dd>Returns the Y velocity of the specified asteroid. Approximated by the API.</dd>
+    <dt><b>double itemSpeed(int i)</b></dt>
+    <dd>Returns the speed of the specififed asteroid. Approximated by the API.</dd>
+    <dt><b>double itemTrackingRad(int i)</b></dt>
+    <dd>Returns the tracking, in radians, of the specified asteroid. Approximated by the API.</dd>
+    <dt><b>bool itemRandom(int i)</b></dt>
+    <dd>Returns whether the item is 'random'</dd>
+</dl>
 
 <a name="fuel"></a>
-<h3>Fuel functions</h3>
+<a name="tank"></a>
+<h3>Fuel and Tank functions</h3>
+<dl>
+    <dt><b>int selfFuel()</b></dt>
+    <dd>Returns the total amount of fuel in all tanks.</dd>
+    <dt><b>int selfFuelMax()</b></dt>
+    <dd>Returns the max amount of fuel you can take. This is increased if you pick up more tanks.</dd>
+    <dt><b>int selfFuelCurrent()</b></dt>
+    <dd>Returns the currently selected tank.</dd>
+    <dt><b>tankDetach()</b></dt>
+    <dd>Detaches a fuel tank from the ship.</dd>
+    <dt><b>nextTank()</b></dt>
+    <dd>Switches to the ship's next fuel tank.</dd>
+    <dt><b>prevTank()</b></dt>
+    <dd>Switches to the ship's previous fuel tank.</dd>
+</dl>
+
+<a name="missile"></a>
+<h3>Missile Methods</h3>
+<dl>
+    <dt><b>fireMissile()</b></dt>
+    <dd>Fires a missile from the ship.</dd>
+    <dt><b>fireTorpedo()</b></dt>
+    <dd>Fires a torpedo from the ship.</dd>
+    <dt><b>fireHeat()</b></dt>
+    <dd>Fires a heat seeking missile from the ship.</dd>
+    <dt><b>int missileCountScreen()</b></dt>
+    <dd>Returns the number of missiles on the screen.</dd>
+    <dt><b>int missileX(int i)</b></dt>
+    <dd>Returns the x coordinate of the specified missile.</dd>
+    <dt><b>int missileY(int i)</b></dt>
+    <dd>Returns the y coordinate of the specified missile.</dd>
+    <dt><b>int missileHeadingRad(int i)</b></dt>
+    <dd>Returns the direction of the specified missile in radians.</dd>
+    <dt><b>int missileLen(int i)</b></dt>
+    <dd>Returns the length of the specified missile.</dd>
+</dl>
+
+<a name="laser"></a>
+<h3>Laser Functions</h3>
+<dl>
+    <dt><b>fireLaser()</b></dt>
+    <dd>Fires a laser from the ship.</dd>
+    <dt><b>int laserCountScreen()</b></dt>
+    <dd>Returns the number of lasers on the screen.</dd>
+    <dt><b>int laserX(int i)</b></dt>
+    <dd>Returns the x coordinate of the specified laser.</dd>
+    <dt><b>int laserY(int i)</b></dt>
+    <dd>Returns the y coordinate of the specified laser.</dd>
+    <dt><b>double laserHeadingRad(int i)</b></dt>
+    <dd>Returns the direction of the specified laser.</dd>
+    <dt><b>int laserLen(int i)</b></dt>
+    <dd>Returns the length of the specified laser.</dd>
+</dl>
+
+<a name="mine"></a>
+<h3>Mine functions</h3>
+<dl>
+    <dt><b>dropMine()</b></dt>
+    <dd>Drops a stationary mine from the ship.</dd>
+    <dt><b>detachMine()</b></dt>
+    <dd>Releases a mine from the ship with the same velocity as the ship.</dd>
+    <dt><b>detonateMines()</b></dt>
+    <dd>Detonates mines previously released from the ship.</dd>
+    <dt><b>int mineCountScreen()</b></dt>
+    <dd>Returns the number of mines on the screen.</dd>
+    <dt><b>int mineX(int i)</b></dt>
+    <dd>Returns the x coordinate of the specified mine.</dd>
+    <dt><b>int mineY(int i)</b></dt>
+    <dd>Returns the y coordinate of the specified mine.</dd>
+    <dt><b>bool mineFriendly(int i)</b></dt>
+    <dd>Returns whether a mine is friendly or not.</dd>
+    <dt><b>int mineId(int i)</b></dt>
+    <dd>If close enough, returns the id of the player dropping the mine.</dd>
+</dl>
+
+<a name="shield"></a>
+<h3>Shield functions</h3>
+<dl>
+    <dt><b>int selfShield()</b></dt>
+    <dd>Returns the ship's shield status.</dd>
+    <dt><b>shield()</b></dt>
+    <dd>Turn on the ship's Shield. Note that you cannot shield and shoot at the same time.</dd>
+</dl>
+
+<a name="phasing"></a>
+<h3> Phasing functions</h3>
+<dl>
+    <dt><b>phasing()</b></dt>
+    <dd>Uses the phasing item to allow the ship to pass through walls.</dd>
+    <dt><b>int phasingTime()</b></dt>
+    <dd>Returns time left on the current phasing item. Only returns sensible number if it has been activated.</dd>
+</dl>
+
+<a name="ecm"></a>
+<h3>ECM functions</h3>
+<dl>
+    <dt><b>ecm()</b></dt>
+    <dd>Launches an ECM to temporarily blind opponents.</dd>
+    <dt><b>int ecmCountScreen()</b></dt>
+    <dd>Returns the number of ECM's on the screen.</dd>
+    <dt><b>int ecmX(int i)</b></dt>
+    <dd>Returns the x coordinate of the specified ECM.</dd>
+    <dt><b>int ecmY(int i)</b></dt>
+    <dd>Returns the y coordinate of the specified ECM.</dd>
+</dl>
+
+<a name="cloak"></a>
+<a name="tractor"></a>
+<a name="pressor"></a>
+<a name="emergency_shield"></a>
+<a name="hyper_jump"></a>
+<a name="auto_pilot"></a>
+<a name="emergency_thrust"></a>
+<a name="deflector"></a>
+<a name="transporter"></a>
+<a name="other_item"></a>
+<h3>Other item functions</h3>
+<dl>
+    <dt><b>cloak()</b></dt>
+    <dd>Cloaks the ship from sight.</dd>
+    <dt><b>tractorBeam()</b></dt>
+    <dd>Uses the ship's tractor beam to pull in enemy ships.</dd>
+    <dt><b>pressorBeam()</b></dt>
+    <dd>Uses the ship's pressor beam to push away enemy ships.</dd>
+    <dt><b>emergencyShield()</b></dt>
+    <dd>Uses the emergency shield item to protect your ship from damage for a period of time.</dd>
+    <dt><b>hyperjump()</b></dt>
+    <dd>Uses the hyper jump item to warp the ship to a random location on the map.</dd>
+    <dt><b>toggleAutopilot()</b></dt>
+    <dd>Uses the autopilot item to stop the ship's movement.</dd>
+    <dt><b>emergencyThrust()</b></dt>
+    <dd>Uses the emergency thrust item to increase the ship's movement speed for a period of time.</dd>
+    <dt><b>deflector()</b></dt>
+    <dd>Uses the deflector item to push everything away from the ship.</dd>
+    <dt><b>transporter()</b></dt>
+    <dd>Uses the transporter item to steal an opponent's item or fuel supply</dd>
+</dl>
+
+<a name="modifier"></a>
+<h3>Modifier Methods</h3>
+<dl>
+    <dt><b>toggleCluster()</b></dt>
+    <dd>Toggles the option to have the ship fire Cluster weapons instead of regular weapons.</dd>
+    <dt><b>toggleMini()</b></dt>
+    <dd>Toggles the option to have the ship fire Mini weapons instead of regular weapons.</dd>
+    <dt><b>toggleNuclear()</b></dt>
+    <dd>Toggles the option to have the ship fire Nuclear weapons instead of regular weapons, takes up five mines or seven missiles per shot.</dd>
+    <dt><b>toggleVelocity()</b></dt>
+    <dd>Modifies the explosion velocity of mines and missiles.</dd>
+    <dt><b>togglePower()</b></dt>
+    <dd>Toggles the power levels of the ship's weapons.</dd>
+    <dt><b>toggleSpread()</b></dt>
+    <dd>Toggles the option to have the ship fire Spread weapons instead of regular weapons.</dd>
+    <dt><b>toggleLaser()</b></dt>
+    <dd>Toggles between the LS stun laser and the LB blinding laser.</dd>
+    <dt><b>toggleImplosion()</b></dt>
+    <dd>Toggle the option to have mines and missiles implode instead of exlode, the explosion will draw in players instead of blowing them away.</dd>
+    <dt><b>loadModifiers(int i)</b></dt>
+    <dd>Loads Modifiers at the specified index. 1&lt;=i&lt;=4</dd>
+    <dt><b>saveModifiers(int i)</b></dt>
+    <dd>saves Modifiers at the specified index. 1&lt;=i&lt;=4</dd>
+</dl>
+
+<a name="faq"></a>
+<a name="quirks"></a>
+<a name="tips"></a>
+<h3>FAQ/quirks/tips</h3>
+<p>If your ship starts oscillating (rapidly switching between two or more angles) when you try to turn to a specified direction,
+it may be due to latency. Turning is done serverside, so the only thing the client does is send how much the ship should turn. If the server
+takes two (or more) ticks to update your heading the client will have sent the instruction to turn the difference to that angle twice, making it overshoot.<br>
+The easy solution is to only turn every second (or more) ticks. A more complicated version would be that your bot keeps track on what turn instructions it sends.
+</p>
 <p>
-refuel() - Refuels the ship. Needs to be continusly called to keep refueling.<br>
-int fuelStationCountServer() - Returns the number of fuel stations on the server.<br>
-int fuelStationX(int i) - Returns the x coordinate of the specified fuel station.<br>
-int fuelStationY(int i) - Returns the y coordinate of the specified fuel station.<br>
-int fuelStationBlockX(int i) - Returns the x block of the specified fuel station.<br>
-int fuelStationBlockY(int i) - Returns the y block of the specified fuel station.<br>
-int fuelStationFuel(int i) - Returns the amount of fuel in the specified fuel station.<br>
-int fuelStationTeam(int i) - Returns which team the fuel station is closest to.<br>
+Use <a href="library.html#timeLeftSec">timeLeftSec</a> together with enabling the serveroption "gameDuration" to calculate average items/deaths/kills per second. This makes it easier to evaluate the performance of your bot, and compete with your friends!
 </p>
 
-<h3>Race/timing functions</h3>
-<p>
-int nextCheckPoint() - Returns the index of the next checkpoint, for timing mode.<br>
-int checkPointX(idx) - Returns the x coordinate of the specified checkpoint. Returns 0 if checkpoint doesn't exist.<br>
-int checkPointY(idx) - Returns the y coordinate of the specified checkpoint. Returns 0 if the checkpoint doesn't exist.<br>
-int checkPointBlockX(idx) - Returns the x block of the specified checkpoint. Returns 0 if checkpoint doesn't exist. <br>
-int checkPointBlockY(idx) - Returns the y block of the specified checkpoint. Returns 0 if the checkpoint doesn't exist.<br>
-</p>
-
-<h3>Capture the Flag</h3>
-<p>
-connector() - Connects the ship to the ball in Capture the Flag Mode.<br>
-dropBall() - Drops the ball in Capture the Flag Mode.<br>
-int ballCountScreen() - Returns the number of balls on the screen.<br>
-int ballX(int i) - Returns the x position of the specified ball.<br>
-int ballY(int i) - Returns the y position of the specified ball.<br>
-int connectorCountScreen() - Returns the number of connectors on the screen. A connector is the wire going from a player to a ball.<br>
-int connectorX0(int i) - Returns the x0 position of the specified connector.<br>
-int connectorX1(int i) - Returns the x1 position of the specified connector.<br>
-int connectorY0(int i) - Returns the y0 position of the specified connector.<br>
-int connectorY1(int i) - Returns the y1 position of the specified connector.<br>
-int connectorTractor(int i) - Returns the tractor of the specified connector.<br>
-</p>
-
-<h3>Targets</h3>
-<p>
-repair() - Repairs a target.<br>
-int targetCountServer() - Returns the number of targets on the server.<br>
-int targetX(int i) - Returns the x coordinate of the specified target.<br>
-int targetY(int i) - Returns the y coordinate of the specified target.<br>
-int targetAlive(int i) - Returns whether the specified target is dead.<br>
-int targetDamage(int i) - Returns the damage on the specified target.<br>
-int targetTeam(int i) - Returns the closest team base to the specified target.<br>
-</p>
-
-<h3>Asteroids</h3>
-<p>
-int asteroidCountScreen() - Returns the number of asteroids on the screen.<br>
-int asteroidX(int i) - Returns the x coordinate of the specified asteroid.<br>
-int asteroidY(int i) - Returns the y coordinate of the specified asteroid.<br>
-int asteroidType(int i) - Returns the type of the specified asteroid.<br>
-int asteroidSize(int i) - Returns the size of the specified asteroid.<br>
-int asteroidRotation(int i) - Returns the rotation of the specified asteroid.<br>
-double asteroidDist(int i) - Returns the distance to the specified asteroid.<br>
-int asteroidAge(int i) - Returns for how many ticks the specified asteroid have been on the screen. Because the velocity of an asteroid is approximated by the API the data returned by other functions may be wrong. With age=0 the functions approximated will return an error. With age=1 the functions may return asteroids that may not exist. You should normally ignore asteroids with age less than 2 unless you are paranoid.<br>
-int asteroidVelX(int i) - Returns the X velocity of the specified asteroid. Approximated by the API.<br>
-int asteroidVelY(int i) - Returns the Y velocity of the specified asteroid. Approximated by the API.<br>
-double asteroidSpeed(int i) - Returns the speed of the specififed asteroid. Approximated by the API.<br>
-double asteroidTrackingRad(int i) - Returns the tracking, in radians, of the specified asteroid. Approximated by the API.<br>
-int asteroidAlert(int i) - Returns a danger rating of the specified asteroid. Approximated by the API.<br>
-</p>
-
-<h3>Wormhole functions</h3>
-<p>
-int wormholeCountScreen(int i) - Returns the number of wormholes on the screen.<br>
-int wormholeX(int i) - Returns the x coordinate of the specified wormhole.<br>
-int wormholeY(int i) - Returns the y coordinate of the specified wormhole.<br>
-</p>
-
-<h3>Cannon functions</h3>
-<p>
-int cannonCountServer() - Returns the amount of cannons on the server.<br>
-int cannonX(int i) - Returns the x coordinate of the specified cannon.<br>
-int cannonY(int i) - Returns the y coordinate of the specified cannon.<br>
-int cannonBlockX(int i) - Returns the x coordinate of the specified cannon.<br>
-int cannonBlockY(int i) - Returns the y coordinate of the specified cannon.<br>
-int cannonAlive(int i) - Returns whether the specified cannon is dead.<br>
-int cannonTeam(int i) - Returns which base is closest to the specified cannon.<br>
-</p>
-
-<h3>Lock Methods</h3>
-<p>
-You can only change lock once per tick<br>
-toggleCompass() - Toggles the name of the locked player, distance (or lives) and the dot on the hud.<br>
-int getLockId() - Returns the server ID of the locked-on ship.<br>
-double lockHeadingRad() - Returns in radians the direction of the ship's lock-on of an enemy.<br>
-int selfLockDist() - Returns the distance of the enemy that the ship has locked-on to.<br>
-lockNext() - Locks onto the next ship in the ship buffer.<br>
-lockPrev() - Locks onto the prev ship in the ship buffer.<br>
-lockClose() - Locks onto the closest ship.<br>
-lockNextClose() - Locks-on to the next closest ship.<br>
-loadLock(int i) - Loads the locked-on ship at the specified index. 1&lt;=i&lt;=4<br>
-saveLock(int i) - Saves the locked-on ship at the specified index. 1&lt;=i&lt;=4<br>
-</p>
-
-
-<h3>Chat options</h3>
-<p>
-setMaxMsgs(int i) - Sets maximum amount of messages to be displayed in the top left. Affects both talk messages (on the top) and game message (on the bottom) 1&lt;=i&lt;=15 <br>
-int getMaxMsgs() - Returns the maximum amount of messages to be displayed.<br>
-<br>
-talk(char* talk_str) - Sends a message.<br>
-scanTalkMsg(int id) - Returns the specified talk message. ID 0 is the most recent occurring message.<br>
-removeTalkMsg(int i) - Removes the specified talk message. Useful for clearing up the screen if you have requested many options.<br>
-<br>
-scanGameMsg(int id) - Returns the specified game message. ID 0 is the most recent occurring message.<br>
-toggleShowMessage() - Toggles messages on the bottom on the screen.<br>
-<br>
-toggleUserName() - Toggles the displayed information on the HUD on the left of the screen between showing real names and showing the scoreboard.
-</p>
-
-
-
-
-
-
-<h3>Angle handling for degrees</h3>
-<p>
-double selfTrackingDeg() - Returns the ship's tracking in degrees.<br>
-double selfHeadingDeg() - Returns the heading of the ship in degrees. The heading is the direction the ship is pointing to.<br>
-turnDeg(double deg) - Turns the ship in the specified number of degrees.<br>
-turnToDeg(double deg) - Turns the ship towards the specified heading in degrees.<br>
-setMaxTurnDeg(double i) - Sets the maximum angle, in degrees, the ship is allowed to turn. If you try to turn a bigger angle with any of the turn functions it will turn the maximum allowed angle. 0&lt;=i&lt;=180<br>
-double getMaxTurnDeg() - Returns the maximum allowed angle to turn, in degrees.<br>
-double lockHeadingDeg() - Returns in degrees the direction of the ship's lock-on of an enemy.<br>
-double enemyHeadingDeg(int idx) - Returns the specified enemy's heading in degrees.<br>
-double enemyTrackingDeg(int idx) - Returns the specified enemy's tracking in degrees.<br>
-double shotTrackingDeg(int idx) - Returns the direction of the velocity of a shot.<br>
-double angleDiffDeg(double angle1, double angle2) - Calculates the difference between two angles in degrees<br>
-double angleAddDeg(double angle1, double angle2) - Calculates the sum of two angles in degrees.<br>
-double wallFeelerDeg(double dist, double deg) - Returns if there is a wall or not at the specified angle within the specified distance of the ship. Returns -1 if no wall.<br>
-double missileHeadingDeg(int i) - Returns the direction of the specified missile in degrees.<br>
-double laserHeadingDeg(int i) - Returns the direction of the specified laser.<br>
-double asteroidTrackingDeg(int i) - Returns the tracking, in degrees, of the specified asteroid. Approximated by the API.<br>
-</p>
-
-<h3>Angle handling for xpilot degrees.</h3>
-<p>
-This is the angular measurement the game itself uses, and it is only possible to turn (and turn to) a whole number of xpilot degrees. It is therefore impossible to turn to certain angles.<br>
-int selfHeadingXdeg() - Returns the heading of the ship in xpilot-degrees.<br>
-turnXdeg(double xdeg) - Turns the ship in the specified number of xdegrees.<br>
-turnToXdeg(double xdeg) - Turns the ship towards the specified heading, in xdegrees.<br>
-setMaxTurnXdeg(double i) - Sets the maximum angle, in xpilot degrees, the ship is allowed to turn. If you try to turn a bigger angle with any of the turn functions it will turn the maximum allowed angle. 0&lt;=i&lt;=64<br>
-double getMaxTurnXdeg() - Returns the maximum allowed angle to turn, in xpilot degrees.<br>
-int enemyHeadingXdeg(int idx)<br>
-int lockHeadingXdeg()<br>
-double angleDiffXdeg(double angle1, double angle2) - Calculates the difference between two angles in xdegrees.<br>
-double angleAddXdeg(double angle1, double angle2) - Calculates the sum of two anglesin xdegrees.<br>
-double missileHeadingXdeg(int i) - Returns the direction of the specified missile in xpilot degrees.<br>
-int laserHeadingXdeg(int i) - Returns the direction of the specified laser.<br>
-</p>
-
-<h3>Functions for converting between different angular measurements.</h3>
-<p>
-double xdegToDeg(int xdeg) - Converts xpilot degrees to degrees.<br>
-double xdegToRad(int xdeg) - Converts xpilot degrees to radians.<br>
-int degToXdeg(double deg) - Convers degrees to xpilot degrees.<br>
-double degToRad(double deg) - Converts degrees to radians.<br>
-int radToXdeg(double rad) - Converts radians to xpilot degrees.<br>
-double radToDeg(double rad) - Converts radians to degrees.
-</p>
-
-
-
-
+<a name="deprecated"></a>
 <h3>Deprecated functions</h3>
-<p>You can still use these but it's recommended not to as they may be removed in future releases. If you see a reason these should not be removed send a mail to johli603@student.liu.se with your arguments and intended use.</p>
-
-<p>Due to all turn functions requiring turnResistance 0 and turnSpeed 64 to work as expected, functions dealing with those are deprecated.<br>
-double getTurnSpeed() - Returns the ship's turn speed.<br>
-setTurnSpeed(double s) - Sets the speed the ship will turn by. The minimum power level is 4.0 and the maximum power level is 64.0.<br>
-double getTurnResistance() - Returns the ship's turn speed.<br>
-setTurnResistance(double s) - Makes turning smoother for human players, should be 0 for bots. 0.0&lt;=s&lt;=1.0
+<p>You can still use these but it's recommended not to as they may be removed in future releases. If you see a reason these should not be removed send a mail to johli603@student.liu.se with your arguments and intended use.<br>
 </p>
 
-
-<p>Use of turnLeft and turnRight is deprecated simply because it's much easier to use turn() and turnTo() functions. Also because they depend on turnSpeed, which both are deprecated.<br>
-turnLeft() - Turns the ship left. Will turn 'turnSpeed' number of xpilot degrees.<br>
-turnRight() - Turns the ship right. Will turn 'turnSpeed' number of xpilot degrees.
-</p>
+<a name="degree"></a>
+<h3>Degree functions</h3>
+<dl>
+    <dt><b>double selfTrackingDeg()</b></dt>
+    <dd>Returns the ship's tracking in degrees.</dd>
+    <dt><b>double selfHeadingDeg()</b></dt>
+    <dd>Returns the heading of the ship in degrees. The heading is the direction the ship is pointing to.</dd>
+    <dt><b>turnDeg(double deg)</b></dt>
+    <dd>Turns the ship in the specified number of degrees.</dd>
+    <dt><b>turnToDeg(double deg)</b></dt>
+    <dd>Turns the ship towards the specified heading in degrees.</dd>
+    <dt><b>setMaxTurnDeg(double i)</b></dt>
+    <dd>Sets the maximum angle, in degrees, the ship is allowed to turn. If you try to turn a bigger angle with any of the turn functions it will turn the maximum allowed angle. 0&lt;=i&lt;=180</dd>
+    <dt><b>double getMaxTurnDeg()</b></dt>
+    <dd>Returns the maximum allowed angle to turn, in degrees.</dd>
+    <dt><b>double lockHeadingDeg()</b></dt>
+    <dd>Returns in degrees the direction of the ship's lock-on of an enemy.</dd>
+    <dt><b>double enemyHeadingDeg(int idx)</b></dt>
+    <dd>Returns the specified enemy's heading in degrees.</dd>
+    <dt><b>double enemyTrackingDeg(int idx)</b></dt>
+    <dd>Returns the specified enemy's tracking in degrees.</dd>
+    <dt><b>double shotTrackingDeg(int idx)</b></dt>
+    <dd>Returns the direction of the velocity of a shot.</dd>
+    <dt><b>double angleDiffDeg(double angle1, double angle2)</b></dt>
+    <dd>Calculates the difference between two angles in degrees</dd>
+    <dt><b>double angleAddDeg(double angle1, double angle2)</b></dt>
+    <dd>Calculates the sum of two angles in degrees.</dd>
+    <dt><b>double wallFeelerDeg(double dist, double deg)</b></dt>
+    <dd>Returns if there is a wall or not at the specified angle within the specified distance of the ship. Returns -1 if no wall.</dd>
+    <dt><b>double missileHeadingDeg(int i)</b></dt>
+    <dd>Returns the direction of the specified missile in degrees.</dd>
+    <dt><b>double laserHeadingDeg(int i)</b></dt>
+    <dd>Returns the direction of the specified laser.</dd>
+    <dt><b>double asteroidTrackingDeg(int i)</b></dt>
+    <dd>Returns the tracking, in degrees, of the specified asteroid. Approximated by the API.</dd>
+</dl>
 
 <p>
-In previous versions of the API there was support for handling enemies by their server id. In order to easily translate these programs to newer versions a function for translating server id to 'idx' is offered.<br>
-int enemyIdx(int id) - returns the index of the specified ship. Returns -1 if ship doesn't exist.
+Due to all turn functions requiring turnResistance 0 and turnSpeed 64 to work as expected, functions dealing with those are deprecated.
 </p>
+<dl>
+    <dt><b>double getTurnSpeed()</b></dt>
+    <dd>Returns the ship's turn speed.</dd>
+    <dt><b>setTurnSpeed(double s)</b></dt>
+    <dd>Sets the speed the ship will turn by. The minimum power level is 4.0 and the maximum power level is 64.0.</dd>
+    <dt><b>double getTurnResistance()</b></dt>
+    <dd>Returns the ship's turn speed.</dd>
+    <dt><b>setTurnResistance(double s)</b></dt>
+    <dd>Makes turning smoother for human players, should be 0 for bots. 0.0&lt;=s&lt;=1.0</dd>
+</dl>
+
+<br>
+
+<p>Use of turnLeft and turnRight is deprecated simply because it's much easier to use turn() and turnTo() functions. Also because they depend on turnSpeed, which both are deprecated. They will also bypass maxTurn.</p>
+<dl>
+    <dt><b>turnLeft()</b></dt>
+    <dd>Turns the ship left. Will turn 'turnSpeed' number of xpilot degrees.</dd>
+    <dt><b>turnRight()</b></dt>
+    <dd>Turns the ship right. Will turn 'turnSpeed' number of xpilot degrees.</dd>
+</dl>
+
+<br>
 
 <p>
-Deprecated simply because it currently always return 0 (or -1).<br>
-int closestShipIdx() - Returns the closest ship's index in the internal buffer.
+In previous versions of the API there was support for handling enemies by their server id. In order to easily translate these programs to newer versions a function for translating server id to 'idx' is offered.
 </p>
+<dl>
+<dt><b>int enemyIdx(int id)</b></dt>
+<dd>returns the index of the specified ship. Returns -1 if ship doesn't exist.</dd>
+</dl>
+
+<br>
 
 <p>
-Using talk() is the recommended (and only sensible) way of chatting.<br>
-talkKey() - Opens up the chat window.
+Deprecated simply because it currently always return 0 (or -1).
 </p>
+<dl>
+    <dt><b>int closestShipIdx()</b></dt>
+    <dd>Returns the closest ship's index in the internal buffer.</dd>
+</dl>
+
+<br>
 
 <p>
-Worthless as a bot can easily set a specific turnrate and thrustpower.<br>
-swapSettings() - Swaps between the ship's settings for turn rate and thrusting power.
+Using talk() is the recommended (and only sensible) way of chatting.
 </p>
+<dl>
+<dt><b>talkKey()</b></dt>
+<dd>Opens up the chat window.</dd>
+</dl>
+
+<br>
 
 <p>
-These values may be useful for a human but kind of worthless for a bot. If it turns out this is useful information the index should be transformed so it's sensible. Atm index 0 can return nothing while index 19 can contain a message, forcing you to loop through all index until you find one that's non-empty.<br>
-string hud(int i) - Returns the name on the bottom of the HUD, index working in a weird way. Is often who killed you or if you just killed somebody. Includes the score.<br>
-string hudScore(int i) - Returns the score on the bottom of the HUD. This is (always?) the score change the people getting killed/killin got.<br>
-int hudTimeLeft(int i) - Returns for how much longer the specified message will be shown.<br>
+Worthless as a bot can easily set a specific turnrate and thrustpower.
 </p>
+<dl>
+    <dt><b>swapSettings()</b></dt>
+    <dd>Swaps between the ship's settings for turn rate and thrusting power.</dd>
+</dl>
+
+<br>
 
 <p>
-Savemodifiers and savelock implemented instead.<br>
-reprogram() - Reprograms a modifier or lock bank.
+These values may be useful for a human but kind of worthless for a bot. If it turns out this is useful information the index should be transformed so it's sensible. Atm index 0 can return nothing while index 19 can contain a message, forcing you to loop through all index until you find one that's non-empty.
 </p>
+<dl>
+<dt><b>string hud(int i)</b></dt>
+<dd>Returns the name on the bottom of the HUD, index working in a weird way. Is often who killed you or if you just killed somebody. Includes the score.</dd>
+<dt><b>string hudScore(int i)</b></dt>
+<dd>Returns the score on the bottom of the HUD. This is (always?) the score change the people getting killed/killin got.</dd>
+<dt><b>int hudTimeLeft(int i)</b></dt>
+<dd>Returns for how much longer the specified message will be shown.</dd>
+</dl>
+
+<br>
+
+<p>
+Savemodifiers and savelock implemented instead.
+</p>
+<dl>
+    <dt><b>reprogram()</b></dt>
+    <dd>Reprograms a modifier or lock bank.</dd>
+</dl>
 </body>
 </html>
 <!--#include virtual="$PAGE_FOOTER" -->

@@ -2,9 +2,9 @@
 
 # John litborn summer 2013
 
-mapwidth : 31
-mapheight : 31
-mapname : TDDD63 exercise 6: dodge
+mapwidth : 42
+mapheight : 42
+mapname : TDDD63 exercise 6: matrix
 mapauthor : johli603
 gameDuration : 9999
 limitedlives : no
@@ -13,42 +13,55 @@ friction : 0
 shotspeed : 20
 shotlife : 600
 maxplayershots : 0
+maxRobots : 0
 edgebounce : no
-edgewrap : no
+edgewrap : yes
 allowShields : no
 playersStartsShielded : no
-cannonsmartness : 3
+cannonsmartness : 2
+cannonDeadTime : 0
 
 mapData: \multiline: EndOfMapdata
-                               
-                               
-                               
-                               
-                               
-                               
-                               
-                               
-                               
-                               
-                               
-                               
-      qxxxxxxxxxxxxxxxxxw      
-     qs        _        aw     
-     x         $         x     
-     x                   x     
-     x                   x     
-     aw                 qs     
-      aw               qs      
-       aw             qs       
-        aw           qs        
-         aw         qs         
-          aw       qs          
-           aw     qs           
-            aw r qs            
-             axxxs             
-                               
-                               
-                               
-                               
-                               
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+          r                    r          
+         dxf                  dxf         
+          c                    c          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+                    $$                    
+                    __                    
+                    __                    
+                    $$                    
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+          r                    r          
+         dxf                  dxf         
+          c                    c          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
 EndOfMapdata

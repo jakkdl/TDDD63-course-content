@@ -272,11 +272,13 @@ familiar with it and explore its functionality.</p>
 <pre class="sh_sh">    xpilots -noQuit +reportToMetaServer -port 15346
 </pre>
 
+<a name="reportToMetaServer"></a>
+<a name="reportMeta"></a>
 <p>The flag <code>+reportToMetaServer</code> means that your locally
   started server will NOT report to the central meta server that keeps
   track of all currently running XPilot servers across the Internet.
   This is to avoid having other players around the world joining your
-  game.
+  game. You can also use +reportMeta, which is a shorter alias.
 </p>
 
 <p>The flag <code>-noQuit</code> will make the server stay alive after
@@ -412,53 +414,6 @@ throw an exception (signal an error).</p>
 </p>
 
 
-<p>
-  The main coordinate system uses pixels. Most functions use it, unless specifically noted.
-  The size of the map in pixels can be retrieved with <code>int mapWidthPixels()</code> and
-  <code>int mapHeightPixels()</code>.
-</p>
-
-<p>
-  The radar (top left) functions uses different coordinates, which are much less
-  precise than pixels. This should only be used when handling objects that are far away
-  and not on you screen. The size of the map is given by <code>int radarWidth()</code>
-  and <code>int radarHeight()</code>.
-  You can convert an X radar coordinate to pixel coordinates by dividing with
-  <code>int radarWidth()</code> and multiplying with <code>int mapWidthPixels()</code>,
-  and with the respective height functions if handling a Y coordinate.
-</p>
-
-<p>
-  The last coordinate system is blocks. This is what the mapfile uses when specifying
-  how the map should be. Dimensions of the map in blocks can be retrieved with 
-  <code>int mapWidthBlocks()</code> and <code>int mapHeightBlocks()</code>.
-  Converting a block coordinate to pixels is done by multiplying with <code>int blockSize()</code>
-</p>
-
-<p>
-  The API supports three different angular measurements: radians, degrees and xdegrees.
-  Radians is recommended to use most of the time, as that is what python's trigonometric
-  functions uses by default.
-  Degrees is useful for human readability, and it's recommended that you use it when
-  debugging and printing.
-  Xpilot degrees is the angular measurement that xpilot uses, ranging from 0 to 127. It
-  is only possible to turn (and turn to) whole xpilot degrees. For example you cannot turn
-  5 degrees (1.422 xdeg), so the ship will turn 2.8125 (1 xdeg) instead. This is not noticeable
-  most of the time and the API will do all necessary rounding behind the scenes so you will 
-  probably never have to use the xdeg functions.
-</p>
-
-<p>
-  There are many functions in the API to ease the handling of angles:
-  <code>double radToDeg(double rad)</code> and similar functions will
-  convert between them.
-  <code>angleDiffRad(double angle1, double angle2)</code> will
-  return the absolute difference between two angles. This is useful
-  to know if you are heading towards your desired direction.
-  <code>angleAddRad(double angle1, double angle2)</code>. Will add
-  two angles to eachother.
-  There are similar functions for degrees and xdegrees.
-</p>
 
 
 
@@ -516,97 +471,114 @@ implemented in order.</p>
 <ol>
 
     <li>
-    <p>
     <h4>Shoot stationary targets</h4>
-    Goal: Destroy all targets before they reappear.<br>
-    Map: <a href="maps/exc1_map_targets.xp">exc1_map_targets</a><br>
-    Start with the provided <a href="exc1_code_skeleton.py">skeleton code</a>
-    which contains recommended functions.
-    For further instructions on the recommended functions read the relevant parts of the
-    <a href="library.html">library</a>. Tips: Search for the function names on the page with ctrl-f.
+    <p>
+    <b>Goal:</b> Destroy all targets before they reappear.<br>
+    <b>Map:</b> <a href="maps/exc1_map_targets.xp">exc1_map_targets.xp</a><br>
+    <b>Provided code:</b> <a href="exc1_code_skeleton.py">exc1_code_skeleton.py</a><br>
+    <b>Description:</b> In this exercise you will be guided by the skeleton code provided and you should follow
+    the inscructions in it. You should only have to enter code where it is said. The skeleton code also provides you with
+    useful functions, if you need to look up how they work you can find links to them in the recommended functions.<br>
+    <b>Recommended functions:</b>
+    <a href="library.html#control">API control</a>,
+    <a href="library.html#self">Ship properties</a>,
+    <a href="library.html#target">Target</a>,
+    <a href="library.html#turn">Turn</a>,
+    <a href="library.html#angle_handling">Angle handling</a>,
+    <a href="library.html#shoot">Shoot</a> and
+    <a href="http://docs.python.org/2/library/math.html#trigonometric-functions">Python's built in trigonometric functions</a>,
+    especially
+    <a href="http://docs.python.org/2/library/math.html#math.atan2">math.atan2</a> .
+    
     </p>
     </li>
 
-    <li><p>
+    <a name="race"></a>
+    <li>
     <h4>Race</h4>
-    Goal: Complete all three laps.<br>
-    Map: <a href="maps/exc2_map_race.xp">exc2_map_race</a><br>
-    This exercise introduces a new game mode, race (or timing, as it's also called), which consists
+    <p>
+    <b>Goal:</b> Complete all three laps.<br>
+    <b>Map:</b> <a href="maps/exc2_map_race.xp">exc2_map_race.xp</a><br>
+    <b>Provided code:</b> <a href="stub.py">stub.py</a><br>
+    <b>Description:</b> This exercise introduces a new game mode, race (or timing, as it's also called), which consists
     of flying through several checkpoints on time, completing a set amount of laps. The easiest way
     to do this is to fly towards the next checkpoint, start braking the ship (turn around and thrust)
     at a certain distance and when still fly towards the next checkpoint. For that you need a minimum
     of two states, "travel" and "stop", but it can be useful to have more.<br>
-    Start with the <a href="stub.py">stub</a> program.<br>
-    Recommended functions: <a href="library.html#race">checkpoint</a>,
-    <a href="library.html#movement">movement</a>,
-    <a href="library.html#self">self</a> and those introduced in exercise 1.
+    <b>Recommended functions:</b> <a href="library.html#race">Checkpoint</a>,
+    <a href="library.html#movement">Movement</a> and those introduced in exercise 1.
     </p></li>
 
     <li>
-    <p>
     <h4>Distant targets</h4>
-    Goal: Shoot down all four targets before they respawn.<br>
-    Map: <a href="maps/exc4_map_distantTargets.xp">exc4_map_distantTargets</a><br>
-    This exercise is very similar to the first one, except for the map being bigger and the ship being able to move.
+    <p>
+    <b>Goal:</b> Shoot down all four targets before they respawn.<br>
+    <b>Map:</b> <a href="maps/exc4_map_distantTargets.xp">exc4_map_distantTargets.xp</a><br>
+    <b>Description:</b>This exercise is very similar to the first one, except for the map being bigger and the ship being able to move.
     Shots fired retains the velocity of your ship, so it is much easier to hit the targets
     if you stop the ship.<br>
-    Recommended functions:
-    <a href="library.html#self">self</a>,
-    <a href="library.html#movement">movement</a>,
-    <a href="library.html#target">target</a> and those introduced in earlier exercises.
+    <b>Recommended functions:</b> All recommended functions have been introduced in earlier exercises.
     </p>
     </li>
 
+    <a name="asteroids"></a>
     <li>
-    <p>
     <h4>Asteroids</h4>
-    Goal: Reach 100 points before running out of fuel.<br> <!--TODO: how much?-->
-    Map: <a href="maps/exc4_map_asteroids.xp">exc4_map_asteroids</a><br>
-    This exercise introduses asteroids, which are normally implemented as additional hazards on maps,
+    <p>
+    <b>Goal:</b> Reach 100 points before running out of fuel.<br> <!--TODO: how much?-->
+    <b>Map:</b> <a href="maps/exc4_map_asteroids.xp">exc4_map_asteroids.xp</a><br>
+    <b>Provided code:</b> <a href="stub.py">stub.py</a><br>
+    <b>Description:</b> This exercise introduses asteroids, which are normally implemented as additional hazards on maps,
     but in this exercise there will only be asteroids, much like the classical game
     <a href="http://en.wikipedia.org/wiki/Asteroids_(video_game)">Asteroids</a>.<br>
     Fuel is also introduced in this map. You lose fuel when thrusting, shooting and colliding
     with objects. If you collide with an asteroid with low fuel you will die. Avoiding asteroids
     is not a part of this exercise, so shoot them before they can reach you.<br>
-    If you need help with the math on how to hit a moving target,
-    <a href="http://playtechs.blogspot.se/2007/04/aiming-at-moving-target.html">PlayTechs</a> explains
-    it thoroughly.<br>
-    Recommended functions:
+    <b>Recommended reading:</b> <a href="http://playtechs.blogspot.se/2007/04/aiming-at-moving-target.html">PlayTechs</a> explains
+    the math behind hitting a moving target.<br>
+    <b>Recommended functions:</b>
     <a href="library.html#asteroids">asteroid</a>,
     <a href="library.html#fuel">fuel</a> and those introduced in earlier exercises.
     </p>
     </li>
 
     <li>
-    <p>
     <h4>Wallfeeler</h4>
-    Goal: Pick up 10 items before crashing.<br>
-    Map: <a href="maps/exc5_map_wallfeeler.xp">exc6_map_wallfeeler</a><br>
-    This exercise introduces items. These are valueable powerups you either start with or obtain by flying
+    <p>
+    <b>Goal:</b> Pick up 10 items before crashing.<br>
+    <b>Map:</b> <a href="maps/exc5_map_wallfeeler.xp">exc6_map_wallfeeler</a><br>
+    <b>Provided code:</b> <a href="stub.py">stub.py</a><br>
+    <b>Description:</b> This exercise introduces items. These are valueable powerups you either start with or obtain by flying
     over. In this exercise all items will be fuel, but other maps can support
     <a href="www.j-a-r-n-o.nl/Xpilot/Newbie/Unix/newbie007.shtml">more</a>. On this map you will die if you fly 
     into the wall with the front of the ship, with the backside of the ship you will be unharmed.<br>
-    With use of <a href="library.html#timeLeftSec">timeLeftSec</a> you can calculate items/second.<br>
-    Recommended functions: <a href="library.html#items">item</a>, <a href="library.html#wall">wall</a> and those introduced
+    <b>Recommended functions:</b> <a href="library.html#items">item</a>, <a href="library.html#wall">wall</a> and those introduced
     in earlier exercises.
     </p>
     </li>
 
+    <!--<p>I have removed this exercise for several reasons.
+    1. shotAlert is inconsistent and needs to be looked upon.
+    2. I recently changed it not to have walls, and it needs further testing to figure
+        out good numbers, goal and other tweaks.
+        2a. Reason I changed it was because it was super hard to avoid shots, walls, and getting close to the cannon.
+    3. Lack of time.
+
     <li>
     <p>
     <h4>Matrix</h4>
-    Goal: Survive 20 seconds<br>
-    Map: <a href="maps/exc6_map_matrix.xp">exc6_map_matrix</a><br>
-    This exercise introduces cannons, which can be placed on the map to kill unsuspecting players. Normally
+    <b>Goal:</b> Survive 20 seconds<br>
+    <b>Map:</b> <a href="maps/exc6_map_matrix.xp">exc6_map_matrix</a><br>
+    <b>Provided code:</b> <a href="stub.py">stub.py</a><br>
+    <b>Description:</b> This exercise introduces cannons, which can be placed on the map to kill unsuspecting players. Normally
     cannons can be destroyed by shooting them, but shooting is disabled on this map. On this map the cannons
     will shoot flak bullets, which will explode after a while.<br>
-    Recommended functions: <a href="library.html#cannon">cannon</a>, <a href="library.html#shot">shot</a> and those introduced
+    <b>Recommended functions:</b> <a href="library.html#cannon">cannon</a>, <a href="library.html#shot">shot</a> and those introduced
     in earlier exercises.
+    </li>
+    -->
 
 
-    
-
-    
 
 
 <!--
@@ -631,57 +603,11 @@ obstacle.xp.</p></li>
 
 <h2>Project Main Phase</h2>
 
-<p>In the main phase you have the option of choosing the project
-described below, with cooperating bots, or inventing your own project
-which then should be on a similar level as the pre-defined one. For
-the pre-defined project most of the functionality you implemented in
-the introductory phase will be useful. If you design your own project
-it has to be approved by the assistant.</p>
-
-<p>Also remember that it is possible to design your own maps using the map
-editor and use them in the project. For some type of testing that might be
-the best thing to do. And you can also design new maps to be used
-if you choose to invent your own project.</p>
-
-<!--
-<p>Choose at least 2 of the bigger projects below to implement.???</p>
-
-<h3>Racing</h3>
-<p>Use the map gp.xp. The map contains pass points that are "visible"
-from the previous pass point. So the problem is to fly to the sequence
-of pass points as fast as possible and avoid colliding with things
-that slow down the flying. The bot program should read the map file
-and parse it to get the pass points. It is also allowed to parse the
-file to get the walls. It is also allowed to use the radar during
-flight.</p>
-
-<p>Possibility to have a competition between groups.</p>
--->
-
-<h3>Project: Bots Cooperating in Teams</h3>
-
-<p>If you choose this project, you will implement a bot that works in
-a team with other instances of the same bot. This project includes
-inventing your own very simple communication language and implementing
-the parsing of it.</p>
-
-<p>To help with the communication code a help class <a
-href="botcom.py">BotCom</a> have been written and documentaion can be
-found <a href="botcom.html">here</a>. The <a href="teamstub.py">team stub
-program</a> shown in the appendix shows how to use the BotCom class.
-</p>
-
-<p>The milestones should during development at least be tested with a
-  team size of 3 but the program should work for bigger team sizes so
-  it is good to test with for example team sizes 5 and 7
-  sometimes. Remember to start the server with the flag <code>-maxClientsPerIP</code> specifying
-  for example 10 as the maximum.
-</p>
-
 <p>
-  Below is a list of milestones specified as a list of team activities
-  that the cooperating bot programs should be able to handle.
-  Implement them in the order they are specified.
+    You should now have good insight into what is possible to do with xpilot
+    and have been introduced to most of the functionality of it. Now you may choose
+    between one of the three projects described below, or specify your own. If you
+    specify your own main phase it must be approved by the assistant.
 </p>
 
 <p>
@@ -693,13 +619,256 @@ program</a> shown in the appendix shows how to use the BotCom class.
   your progress during the progress report sessions!
 </p>
 
+<p>
+    The milestones are very loosely defined and sometimes doesn't even supply
+    a map. You are then expected to supply this on your own and decide when you're
+    finished with it. The easiest way to create maps is to copy the ones supplied and
+    modify them, either with a text editor or with <code>xp-mapedit</code>.
+</p>
+
+<h4>Available projects</h4>
+<dl>
+    <dt><b><a href="#fighter">Fighter bot</a></b></dt>
+    <dd>Improve on the bot you wrote in exc. 3, but this time it should fight
+    against enemy ships. In later milestones you add support for walls, dodging enemy bullets,
+    multiple enemies, items, navigation, gravity, fuelstations and many other server options and
+    map features.
+    <dt><b><a href="#racing">Racing</a></b></dt>
+    <dd>Improve on the bot you wrote in exc. 2 and add support for different maps.
+    Milestones include being able to handle walls, navigation, fuelstations, items,
+    fighting while racing and racing with a ball.</dd>
+    <dt><b><a href="#team">Bots cooperating in teams</a></b></dt>
+    <dd>Implement a bot that works in a team with other instances of the
+    same bot. This project includes inventing your own very simple
+    communication language and implementing the parsing of it.</dd>
+</dl>
+
+<a name="fighter"></a>
+<h3>Project: Fighter bot</h3>
+
+<p>
+    By choosing this project you've decided to write the ultimate killer robot. It is not very
+    hard to write a bot capable of beating a human, but a human is much more adaptable and can
+    adjust and learn to play with almost every possible combination of settings and maps. It is
+    also very good to maintain contact with other groups that chooses to write a fighter bot and
+    compete with them.
+</p>
+
+<p>
+    Try to preserve the support for previous maps when moving onto later. This is best done by
+    using <a href="library#getOption">getOption</a> to support as many changing map options as
+    possible. This is entirely optional, and if you find it too hard you can make a separate program
+    for each milestone. You can also adjust the difficulty by changing options in the maps, making
+    it easier or harder depending on how you're faring.
+</p>
+
+<p>
+    If you've fallen in love with fighting asteroids you can change almost all of the exercises
+    to include asteroids instead of enemies. To make it harder you can either have very high
+    asteroid density, forcing you to fight for your life, or have very low, forcing you to track
+    them down via the radar.
+</p>
+
+<ol>
+    <li>
+    <h4>Patience, young apprentice</h4>
+    <p>
+    <b>Description:</b> Go back to exercise 4, <a href="#asteroids">asteroids</a>, and improve on
+    it using what you've learned in later exercises. 
+    </p>
+    </li>
+
+    <li>
+    <h4>The beginning of a Legend</h4>
+    <p>
+    <b>Map:</b> <a href="maps/main_fighter_2_TB.xp">main_fighter_2_TB.xp</a><br>
+    <b>Description:</b> Take your bot from the previous task and replace the
+    <a href="library#asteroid">asteroid functions</a> with the respective
+    <a href="library#enemy">enemy functions</a>. Try it out vs human players, started with the xpilot
+    client, and/or vs other bots. You can either launch several copies of your own bot, invite another group
+    to join your server or launch the server without <a href="#reportMeta">reportToMetaServer</a> letting bots
+    and players roaming the internet join. You can restrict the number of internet bots by changing
+    <a href="http://www.j-a-r-n-o.nl/xpilotserver.html#maxrobots">maxRobots</a> in the mapfile.
+    </p>
+    </li>
+
+    <li>
+    <h4>Use your <s>senses</s> sensors</h4>
+    <b>Maps:</b> <a href="maps/simple.xp">simple.xp</a> and <a href="maps/obstacle.xp">obstacle.xp</a><br>
+    <b>Description:</b> Add support for fighting around walls and basic navigating.<br>
+    <b>Recommended functions:</b> <a href="library#wall">wall</a> and <a href="library#map">map</a>
+    </li>
+
+    <li>
+    <h4>Quick reflexes</h4>
+    <p>
+    <b>Map:</b> <a href="maps/matrix.xp">matrix.xp</a><br>
+    <b>Description:</b> Avoid enemy bullets to stay alive longer.<br>
+    <b>Recommended functions:</b> <a href="library#shot">shot</a>.
+    </p>
+    </li>
+
+    <li>
+    <h4>Use the tools at your disposal</h4>
+    <p>
+    <b>Description:</b> Start with the map of your choice and edit it to enable items. Use either
+    <a href="http://www.j-a-r-n-o.nl/xpilotserver.html#itemenergypackprob">item*Prob</a> changing how
+    often certain items spawn, or
+    <a href="http://www.j-a-r-n-o.nl/xpilotserver.html#initialfuel">initial*</a> to determine how many you start with.
+    Many other options change the the behaviour of items and modifiers.<br>
+    It's suggested you start with only mines and/or missiles, and then move on to add more.<br>
+    You can also disable shooting altogether by setting
+    <a href="http://www.j-a-r-n-o.nl/xpilotserver.html#maxPlayerShots">maxPlayerShots</a> to 0 and forcing players to
+    only use items.
+    </p>
+    </li>
+
+    <li>
+    <h4>Be aware of your environment</h4>
+    <p>
+    <b>Description:</b> Add support for map features. If you run low on fuel, locate a fuel station and
+    stop to refuel at it. If a cannon is hostile, shoot it or avoid it. Learn where wormholes can take you
+    and use that if you need to travel long distances.
+    </p>
+    </li>
+
+    <a name="HTD"></a>
+    <a name="HuntThemDown"</a>
+    <li>
+    <h4>Hunt them down. Every single one.</h4>
+    <p>
+    <b>Description:</b> Make your bot able to navigate to your enemies using data gained with
+    <a href="library#mapData">mapData</a>.<br>
+    <b>Suggested maps:</b>
+    <a href="maps/obstacle.xp">obstacle.xp</a>,
+    <a href="maps/default/lifeless.xp">lifeless.xp</a>,
+    <a href="maps/default/newdarkhell.xp">newdarkhell.xp</a>,
+    <a href="maps/default/newdarkhell2.xp">newdarkhell2.xp</a> and maps you construct on your own.
+    </p>
+    </li>
+
+</ol>
+
+<a name="racing"></a>
+<h3>Project: Racing</h3>
+
+<ol>
+    <li>
+    <h4>Go-cart</h4>
+    <p>
+    <b>Description:</b> Go back to exercise 2, <a href="#race">race</a>, and improve on
+    it using what you've learned in later exercises. 
+    </p>
+    </li>
+
+    <li>
+    <h4>No seat belt</h4>
+    <p>
+    <b>Map:</b> <a href="maps/main_race_2.xp">main_race_2.xp</a><br>
+    <b>Description:</b> This is the same map as in the previous task, except that you will lose
+    the race if you die once, and touching the wall will kill you.
+    </p>
+    </li>
+
+    <li>
+    <h4>Co-driver</h4>
+    <p>
+    <b>Maps:</b> <a href="maps/default/grandprix.xp">grandprix,xp</a>,
+    <a href="maps/other/RaceInSpace.map">RaceInSpace.map</a> and maps you construct on your own.<br>
+    <b>Description:</b> Similar to <a href="#HTD">Hunt them down</a>, implement an algorithm for navigating
+    to the next point.
+    </p>
+    </li>
+
+    <li>
+    <h4>Pit stop</h4>
+    <p>
+    <b>Maps:</b> <a href="maps/default/grandprix.xp">grandprix.xp</a>,
+    <a href="maps/other/RaceInSpace.map">RaceInSpace.map</a> and maps you construct on your own.<br>
+    <b>Description:</b> On maps with limited amounts of fuel, lives and many laps, you will have to refuel
+    at fuel stations to complete the course. How often you should stop to refuel and for how long depends
+    greatly on the map settings.
+    </p>
+    </li>
+
+    <li>
+    <h4>Podracing</h4>
+    <p>
+    <b>Description:</b> Add support for enemy ships. Depending on map settings it might be a good
+    idea to run over them, avoid them, or try to bump them into walls. Shooting them comes later in
+    <a href="#GTA">Grand Theft Auto</a> and using items in <a href="Mario Kart">Mario Kart</a>.
+    </p>
+    </li>
+
+    <li>
+    <h4>Mario Kart</h4>
+    <p>
+    <b>Description:</b> Add item concentrators and allow different items. Implement strategies on
+    where to place mines, when to shoot missiles, how to use phasing and more.
+    </p>
+    </li>
+
+    <li>
+    <h4>Grand Theft Auto</h4>
+    <p>
+    <b>Description:</b> Enable shooting and combine racing and fighting.
+    </p>
+    </li>
+
+    <li>
+    <h4>Tow Truck Racing</h4>
+    <p>
+    <b>Description:</b> Enable <a href="http://www.j-a-r-n-o.nl/xpilotserver.html#ballrace">ballRace</a>
+    and race with a ball.
+    </p>
+    </li>
+
+    <!-- Xpilot doesn't support teamplay and racing at the same time
+    <li>
+    <h4>Common enemy</h4>
+    <p>
+    <b>Description:</b> Do several exercises in <a href="#team">Co-op Bots</a> and then make your
+    racers team up against enemy teams in the race.
+    </p>
+    </li>
+    -->
+
+
+</ol>
+
+
+<a name="team"></a>
+<h3>Project: Bots Cooperating in Teams</h3>
+
+<p>If you choose this project, you will implement a bot that works in
+a team with other instances of the same bot. This project includes
+inventing your own very simple communication language and implementing
+the parsing of it.</p>
+
+<p>To help with the communication code a help class <a
+href="botcom.py">BotCom</a> have been written and documentaion can be
+found <a href="botcom.html">here</a>.
+</p>
+
+<p>Here is the code for a <a href="teamstub.py">stub program</a> that can be used as a starting
+point for the cooperating bots that are going to be written in this project. This file also shows
+how to use BotCom.</p>
+
+<p>The milestones should during development at least be tested with a
+  team size of 3 but the program should work for bigger team sizes so
+  it is good to test with for example team sizes 5 and 7
+  sometimes. Remember to start the server with the flag <code>-maxClientsPerIP</code> specifying
+  for example 10 as the maximum.
+</p>
+
+
 <ol>
 
 <li><p>Fly in formation. Communicate among the leader and members of the team
 to decide which position a spaceship should
 assume and so on. Implement different formations and
-change between them while flying around. Use for example the
-<b>emptyborderlarge.xp</b> map to test with.  Note that the  way
+change between them while flying around. Use for example
+<a href="maps/empyborderlarge.xp">emptyborderlarge.xp</a> map to test with.  Note that the  way
 to get the position of the other ships in the team fast enough is to use the
 BotCom based communication.
 </p></li>
@@ -710,14 +879,14 @@ spaceship have a radar to find the enemies and only the other
 spaceships can fire and destroy the enemy. In this milestone the enemies can be single
 ships that do not cooperate and do not fire back.</p></li>
 
-<li><p>The <b>obstacle.xp</b> is 32x32 in size. Each wall element
+<li><p><a href="maps/obstacle.xp">obstacle.xp</a> is 32x32 in size. Each wall element
 corresponds to one square. Read in the map file and build up a data
 structure representing the world with the walls. Use that map to fly the spaceship
 to specific positions in the world.
 </p></li>
 
-<li><p>Given that all bots in the team have read in the map <b>obstacle.xp</b>.
-The task here is to have moving and non-moving enemies in the <b>obstacle.xp</b> world
+<li><p>Given that all bots in the team have read in the map <a href="maps/obstacle.xp">obstacle.xp</a>.
+The task here is to have moving and non-moving enemies in the <a href="maps/obstacle.xp">obstacle.xp</a> world
 and cooperate as a team to decide who will kill who and then kill all the enemies.
 </p></li>
 
@@ -738,7 +907,7 @@ functionality that has been implemented.</p></li>
 <li><p>Build a map of the environment by letting different members of
 the team explore different parts of the world and communicate the
 result between the team members continuously. The code should work for
-the <b>obstacle.xp</b> map but feel free to test it with other maps
+the <a href="maps/obstacle.xp">obstacle.xp</a> map but feel free to test it with other maps
 also. Use the <code>wallFeeler()</code> function to create the map
 the environment.</p></li>
 
@@ -752,29 +921,6 @@ partial map of the environment.</p></li>
 </ol>
 
 
-<h2>Appendix</h2>
-
-<p>The appendix collects information that can be useful in solving the
-project tasks. Do not feel that you have to use the things presented
-here if you have some other ideas about how to solve the problem
-tasks.
-</p>
-
-<h3>teamstub.py</h3>
-
-<p>Here is the code for a <a href="teamstub.py">stub program</a> that can be used as a starting
-point for the cooperating bots that are going to be written in this project:</p>
-
-
-<h3>Geometry</h3>
-
-<p>The <a href="http://en.wikipedia.org/wiki/Atan2">atan2</a> function is very useful to compute
-a direction and is useful in a lot of the project tasks. For exampe suppose we have
-ship S0 and S1 and we want to compute the heading that ship S0 should have to point towards
-S1:</p>
-<pre class="sh_python">
-     heading = (int (math.degrees (math.atan2 (y1-y0, x1-x0))) + 360) % 360
-</pre>
 
 
 
