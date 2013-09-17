@@ -64,7 +64,7 @@ def tick():
         # os.system('clear') clears the terminal screen, which can be useful.
 
         print("tick count:", tickCount, "mode:", mode, "heading:",
-                round(ai.radToDeg(heading)), "targets alive:", targetCountAlive)
+                round(ai.radToDeg(selfHeading)), "targets alive:", targetCountAlive)
 
 
         if mode == "wait":
@@ -135,7 +135,7 @@ def tick():
 #
 parser = OptionParser()
 
-parser.add_option ("-p", "-port", action="store", type="int", 
+parser.add_option ("-p", "--port", action="store", type="int", 
         dest="port", default=15345, 
         help="The port to use. Used to avoid port collisions when" 
         " connecting to the server.")
