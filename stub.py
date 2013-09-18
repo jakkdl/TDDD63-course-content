@@ -69,7 +69,7 @@ def tick():
 #
 parser = OptionParser()
 
-parser.add_option ("-p", "-port", action="store", type="int", 
+parser.add_option ("-p", "--port", action="store", type="int", 
                    dest="port", default=15345, 
                    help="The port number. Used to avoid port collisions when" 
                    " connecting to the server.")

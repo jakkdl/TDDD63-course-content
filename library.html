@@ -46,7 +46,9 @@ PRE.sh_python {
 <p>In Xpilot-AI, 0 degrees is to the right and 90 degrees is up.<br>
 Bool functions will return 0 for False and 1 for True.<br>
 The recommended way of dealing with angles is to use radians, due to python's built in trigonometric functions using it. <a href="#xdegree">Xpilot degrees</a> can be used sometimes, as that is the angular measurement that the game uses. Use of <a href="#degree">Degrees</a> is deprecated, if you want to produce human readable output use the <a href="#angle_conversion">Angle conversion</a> functions instead.<br>
-Xpilot uses three different coordinate systems. Pixels, which is the most common, radar, which is very imprecise (for big levels) and only used by the <a href="#radar">Radar functions</a> and blocks, which is what is specified in the map file when constructing the level. Block functions can be found in <a href="#map">Map feature functions</a>.
+Xpilot uses three different coordinate systems. Pixels, which is the most common, radar, which is very imprecise (for big levels) and only used by the <a href="#radar">Radar functions</a> and blocks, which is what is specified in the map file when constructing the level. Block functions can be found in <a href="#map">Map feature functions</a>.<br>
+
+All coordinate systems have origo (x=0, y=0) in the bottom left.
 </p>
 
 <a name="TOC"></a>
@@ -643,9 +645,9 @@ double angleDiffXdeg(double angle1, double angle2)</b></dt>
 <h3>Angle conversion functions.</h3>
 <dl>
     <dt><b>double xdegToDeg(int xdeg)</b></dt>
-    <dd>Converts xpilot degrees to degrees.</dd>
+    <dd>Converts <a href="#xdegree">xpilot degrees</a> to degrees.</dd>
     <dt><b>double xdegToRad(int xdeg)</b></dt>
-    <dd>Converts xpilot degrees to radians.</dd>
+    <dd>Converts <a href="#xdegree">xpilot degrees</a> to radians.</dd>
     <dt><b>int degToXdeg(double deg)</b></dt>
     <dd>Convers degrees to xpilot degrees.</dd>
     <dt><b>double degToRad(double deg)</b></dt>
