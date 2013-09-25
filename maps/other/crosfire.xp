@@ -1,0 +1,286 @@
+# Created by xplts/editors/xmapedit on Sun May 25 04:19:04 1997
+
+robotteam:0
+restrictrobots:true
+reserverobotteam:true
+cloakedexhaust:no
+cloakedshield:yes
+cannonsmartness:1
+cannonspickupitems:no
+ecmsreprogramrobots:yes
+wreckagecollisionmaykill:yes
+gravityvisible:true
+wormholevisible:true
+itemconcentratorvisible:true
+allowsmartmissiles:True
+allowheatseekers:True
+allowtorpedoes:True
+maxminesperpack:2
+minelife:0
+missilelife:0
+baseminerange:5
+shotkillscoremult:1.0
+torpedokillscoremult:1.0
+smartkillscoremult:1.0
+heatkillscoremult:1.0
+clusterkillscoremult:1.0
+laserkillscoremult:1.0
+tankkillscoremult:0.44
+runoverkillscoremult:0.33
+ballkillscoremult:1.0
+explosionkillscoremult:0.33
+shovekillscoremult:0.5
+crashscoremult:0.33
+minescoremult:0.17
+itemdeflectorprob:0.00001
+itemhyperjumpprob:0
+itemphasingprob:0
+initialdeflectors:0
+initialhyperjumps:0
+initialphasings:0
+maxfuel:9533
+maxtanks:8
+maxecms:300
+maxmines:300
+maxmissiles:300
+maxcloaks:300
+maxsensors:300
+maxwideangles:300
+maxrearshots:300
+maxafterburners:15
+maxtransporters:300
+maxdeflectors:300
+maxphasings:300
+maxhyperjumps:300
+maxemergencythrusts:300
+maxlasers:5
+maxtractorbeams:4
+maxautopilots:300
+maxemergencyshields:300
+allowviewing:false
+rounddelay:0
+maxroundtime:0
+
+mapname : > Cross Fire (race/combat)
+mapauthor : Vincent (www.xmission.com/~edco/xpmaps/)
+mapwidth : 150
+mapheight : 75
+extraborder : no
+edgewrap : no
+edgebounce : yes
+losemass : no
+gravity : 0
+gravitypoint : 0,0
+gravityangle : 90
+gravitypointsource : no
+gravityclockwise : no
+gravityanticlockwise : no
+shotsgravity : no
+limitedvisibility : no
+minvisibilitydistance : 0
+maxvisibilitydistance : 0
+shotswallbounce : no
+ballswallbounce : yes
+mineswallbounce : no
+itemswallbounce : yes
+missileswallbounce : no
+sparkswallbounce : yes
+debriswallbounce : yes
+playerwallbouncebrakefactor : 0.5
+objectwallbouncebrakefactor : 0.7
+maxrobots : 0
+robotstalk : no
+robotsleave : yes
+robotleavelife : 50
+robotleavescore : -90
+robotleaveratio : -5
+allowshipshapes : yes
+shipmass : 15
+shotmass : 0
+shotspeed : 40
+shotlife : 15
+firerepeatrate : 2
+maxplayershots : 15
+maxoffensiveitems : 50
+maxdefensiveitems : 50
+loseitemdestroys : no
+initialfuel : 1000
+initialtanks : 0
+initialecms : 0
+initialmines : 0
+initialmissiles : 0
+initialcloaks : 0
+initialsensors : 0
+initialwideangles : 0
+initialrearshots : 0
+initialafterburners : 5
+initialtransporters : 0
+initiallasers : 0
+initialemergencythrusts : 0
+initialtractorbeams : 0
+initialautopilots : 5
+initialemergencyshields : 0
+allowshields : no
+shieldeditempickup : no
+shieldedmining : no
+playerstartsshielded : yes
+wallbouncefueldrainmult : 1
+wallbouncedestroyitemprob : 0
+maxshieldedwallbouncespeed : 500
+maxunshieldedwallbouncespeed : 400
+maxshieldedplayerwallbounceangle : 180
+maxunshieldedplayerwallbounceangle : 180
+destroyitemincollisionprob : 0
+dropitemonkillprob : 0.5
+detonateitemonkillprob : 0.5
+allownukes : no
+allowclusters : no
+nukeclusterdamage : 1
+allowmodifiers : yes
+allowlasermodifiers : no
+laserisstungun : no
+ecmsreprogrammines : yes
+missilesonradar : yes
+minesonradar : no
+nukesonradar : yes
+distinguishmissiles : yes
+identifymines : yes
+minefusetime : 0
+maxmissilesperpack : 4
+nukeminsmarts : 7
+nukeminmines : 4
+movingitemprob : 1
+maxobjectwallbouncespeed : 500
+objectwallbouncelifefactor : 0.99
+itemconcentratorradius : 1
+itemconcentratorprob : 1
+itemprobmult : 1
+maxitemdensity : 0.000346021
+itemenergypackprob : 4.01323e-09
+itemtankprob : 2.40292e-09
+itemecmprob : 1.92426e-09
+itemmineprob : 6.40779e-09
+roguemineprob : 0
+itemmissileprob : 1.92426e-09
+rogueheatprob : 0
+itemcloakprob : 1.60596e-09
+itemsensorprob : 1.60596e-09
+itemwideangleprob : 2.70371e-09
+itemrearshotprob : 2.94386e-09
+itemafterburnerprob : 2.7462e-09
+itemtransporterprob : 1.60596e-09
+itemlaserprob : 1.60596e-09
+itememergencythrustprob : 1.60596e-09
+itemtractorbeamprob : 2.7462e-09
+itemautopilotprob : 1.60596e-09
+itememergencyshieldprob : 1.60596e-09
+oneplayeronly : no
+allowplayerkilling : yes
+allowplayercrashes : yes
+allowplayerbounces : yes
+limitedlives : no
+worldlives : 0
+playersonradar : yes
+teamplay : no
+teamassign : yes
+teamimmunity : yes
+reset : yes
+lockotherteam : yes
+targetkillteam : no
+targetteamcollision : yes
+targetsync : no
+treasurekillteam : no
+treasurecollisiondestroys : yes
+treasurecollisionmaykill : no
+treasuresonradar : no
+timing : yes
+racelaps : 3
+checkpointradius : 10
+friction : 0
+framespersecond : 12
+reporttometaserver : yes
+idlerun : yes
+noquit : yes
+gameduration : 0
+contactport : 15345
+denyhosts : no
+plockserver : no
+scoretablefilename : False
+
+mapData: \multiline: EndOfMapdata
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxs           axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxs           axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxs                axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxs                axxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxs                     axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxs                     axxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxs                         axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxs                         axxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxs                              axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxs                             axxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxs                                  axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxs                                  axxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxs                                       axxxxxxxxxxxxxxxxxxxxxxxxxxxxs                                       axxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxs                                           axxxxxxxxxxxxxxxxxxxxxxxxs                                           axxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxs                                               axxxxxxxxxxxxxxxxxxxxs                                               axxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxs                                                  axxxxxxxxxxxxxxxxxxs                                                  axxxxxxxxxxxxxx
+xxxxxxxxxxxxxs                        G                           axxxxxxxxxxxxxxxxs                           B                        axxxxxxxxxxxxx
+xxxxxxxxxxxxx                                                      axxxxxxxxxxxxxxs                                                      xxxxxxxxxxxxx
+xxxxxxxxxxxxx                                                       axxxxxxxxxxxxs                                                       xxxxxxxxxxxxx
+xxxxxxxxxxxxs                                                        axxxxxxxxxxs                                                        axxxxxxxxxxxx
+xxxxxxxxxxxx                                                          axxxxxxxxs                                                          xxxxxxxxxxxx
+xxxxxxxxxxxx                                                           xxxxxxxx                                                           xxxxxxxxxxxx
+xxxxxxxxxxxs                                                           axxxxxxs                                                           axxxxxxxxxxx
+xxxxxxxxxxx                                                             xxxxxx                                                             xxxxxxxxxxx
+xxxxxxxxxxx                                                             axxxxs                                                             xxxxxxxxxxx
+xxxxxxxxxxs                                                              axxs                                                              axxxxxxxxxx
+xxxxxxxxxx                                                                                                                                  xxxxxxxxxx
+xxxxxxxxxx                     qxxxxw   qxxxw                                                            qxxxw   qxxxxw                     xxxxxxxxxx
+xxxxxxxxxs                    qxxxx<x   x>xxxxw                                                        qxxxx<x   x>xxxxw                    axxxxxxxxx
+xxxxxxxxx                    qxxxxxxx   xxxxxxxxw                                                    qxxxxxxxx   xxxxxxxw                    xxxxxxxxx
+xxxxxxxxx                   qxxxxxxxx   xxxxxxxxxw                                                  qxxxxxxxxx   xxxxxxxxw                   xxxxxxxxx
+xxxxxxxxs                  qxxxxxxxxx   xxxxxxxxxxxw               F              A               qxxxxxxxxxxx   xxxxxxxxxw                  axxxxxxxx
+xxxxxxxx                  qxxxxxxxxxx   xxxxxxxxxxxxxw                                          qxxxxxxxxxxxxx   xxxxxxxxxxw                  xxxxxxxx
+xxxxxxxx                 qxxxxxxxxxxx   xxxxxxxxxxxxxxxw                                      qxxxxxxxxxxxxxxx   xxxxxxxxxxxw                 xxxxxxxx
+xxxxxxxs                 xxxxxxxxxxxs   axxxxxxxx######xw                                    qx######xxxxxxxxs   axxxxxxxxxxx                 axxxxxxx
+xxxxxxx                  xxxxxxxxxxs     axxxxxx#s    a#xxw                                qxx#s    a#xxxxxxs     axxxxxxxxxx                  xxxxxxx
+xxxxxxx                  x>xxxxxxxs+     +axxx<#s      a#<xxw                            qxx>#s      a#>xxxs+     +axxxxxxx<x                  xxxxxxx
+xxxxxxs                  axxxxxxxs  + % +  axxxx        axxxx                            xxxxs        xxxxs  + % +  axxxxxxxs                  axxxxxx
+xxxxxx                               + +                                                                      + +                               xxxxxx
+xxxxxx        H                     % ! %                                                                    % ! %                    C         xxxxxx
+xxxxxx                               + +                                                                      + +                               xxxxxx
+xxxxxxw                  qxxxxxxxw  + % +  qxxxx        qxxxx                            xxxxw        xxxxw  + % +  qxxxxxxxw                  qxxxxxx
+xxxxxxx                  x<xxxxxxxw+     +qxxx>#w      q#>xxs                            axx<#w      q#<xxxw+     +qxxxxxxx>x                  xxxxxxx
+xxxxxxx                  xxxxxxxxxxw     qxxxxxx#w    q#xxs                                axx#w    q#xxxxxxw     qxxxxxxxxxx                  xxxxxxx
+xxxxxxxw                 xxxxxxxxxxxw   qxxxxxxxx######xs                                    ax######xxxxxxxxw   qxxxxxxxxxxx                 qxxxxxxx
+xxxxxxxx                 axxxxxxxxxxx   xxxxxxxxxxxxxxxs                                      axxxxxxxxxxxxxxx   xxxxxxxxxxxs                 xxxxxxxx
+xxxxxxxx                  axxxxxxxxxx   xxxxxxxxxxxxxs                                          axxxxxxxxxxxxx   xxxxxxxxxxs                  xxxxxxxx
+xxxxxxxxw                  axxxxxxxxx   xxxxxxxxxxxs               J              E               axxxxxxxxxxx   xxxxxxxxxs                  qxxxxxxxx
+xxxxxxxxx                   axxxxxxxx   xxxxxxxxxs                                                  axxxxxxxxx   xxxxxxxxs                   xxxxxxxxx
+xxxxxxxxx                    axxxxxxx   xxxxxxxxs                                                    axxxxxxxx   xxxxxxxs                    xxxxxxxxx
+xxxxxxxxxw                    axxxx>x   x<xxxxs                                                        axxxx>x   x<xxxxs                    qxxxxxxxxx
+xxxxxxxxxx                     axxxxs   axxxs                                                            axxxs   axxxxs                     xxxxxxxxxx
+xxxxxxxxxx                                                                                                                                  xxxxxxxxxx
+xxxxxxxxxxw                                                              qx_                                                               qxxxxxxxxxx
+xxxxxxxxxxx                                                             qxxx_                                                              xxxxxxxxxxx
+xxxxxxxxxxx                                                             xxxxx_                                                             xxxxxxxxxxx
+xxxxxxxxxxxw                                                           qxxxxxx_                                                           qxxxxxxxxxxx
+xxxxxxxxxxxx                                                           xxxxxxxx                                                           xxxxxxxxxxxx
+xxxxxxxxxxxx                                                          qxxxxxxxxw                                                          xxxxxxxxxxxx
+xxxxxxxxxxxxw                                                        qxxxxxxxxxxw                                                        qxxxxxxxxxxxx
+xxxxxxxxxxxxx                                                       qxxxxxxxxxxxxw                                                       xxxxxxxxxxxxx
+xxxxxxxxxxxxx                                                      qxxxxxxxxxxxxxxw                                                      xxxxxxxxxxxxx
+xxxxxxxxxxxxxw                        I                           qxxxxxxxxxxxxxxxxw                           D                        qxxxxxxxxxxxxx
+xxxxxxxxxxxxxxw                                                  qxxxxxxxxxxxxxxxxxxw                                                  qxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxw                                               qxxxxxxxxxxxxxxxxxxxxw                                               qxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxw                                           qxxxxxxxxxxxxxxxxxxxxxxxxw                                           qxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxw                                       qxxxxxxxxxxxxxxxxxxxxxxxxxxxxw                                       qxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxw                                  qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxw                                  qxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxw                              qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxw                              qxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxw                         qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxw                         qxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxw                     qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxw                     qxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxw                qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxw                qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxw           qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxw           qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+EndOfMapdata
