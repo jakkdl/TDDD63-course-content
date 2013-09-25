@@ -60,7 +60,7 @@ def tick():
                 targetCountAlive += 1
 
         # Use print statements for debugging, either here or further down in the code.
-        # Useful functions: round(), ai.radToDeg, ai.degToRad, etc.
+        # Useful functions: round(), math.degrees(), math.radians(), etc.
         # os.system('clear') clears the terminal screen, which can be useful.
 
         print("tick count:", tickCount, "mode:", mode, "heading:",
