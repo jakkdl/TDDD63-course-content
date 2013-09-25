@@ -138,7 +138,15 @@ others the hybrid deliberate/reactive paradigm are needed.  </p>
 <ul>
 <li>Official XPilot site: <a href="http://xpilot.org/">http://xpilot.org/</a></li>
 <li>XPilot-AI fork: <a href="https://bitbucket.org/hatten/xpilot-ai-fork/">https://bitbucket.org/hatten/xpilot-ai-fork/</a></li>
+<a name"server_options"></a>
+<a name"serveroptions"></a>
+<a name"serverOptions"></a>
+<li>List of server options/map settings: <a href="http://www.j-a-r-n-o.nl/xpilotserver.html">http://www.j-a-r-n-o.nl/xpilotserver.html</a></li>
+<li>Original XPilot-AI: <a href="http://xpilot-ai.org">http://xpilot-ai.org</a>
 </ul>
+
+
+<p>
 
 <h2>Installation and Running Programs</h2>
 
@@ -206,7 +214,7 @@ file when XPilot-AI is installed in /home/tompe/pkg/xpilot-ai:</p>
   then log in to the <code>remote-und</code> server at IDA using SSH.  If
   you are using Linux, you do the following:</p>
 
-<pre class="sh_sh">ssh -X fffnn123@remote-und
+<pre class="sh_sh">ssh -X LiuId123@remote-und.ida.liu.se
 </pre>
 
 <p>This gives you a command prompt on <code>remote-und</code>, where
@@ -219,7 +227,7 @@ file when XPilot-AI is installed in /home/tompe/pkg/xpilot-ai:</p>
 
 <h3>Virtual Ubuntu Machine</h3>
 
-<p>
+<p><!--TODO: Check that it works on newer ubuntu versions-->
   XPilot-AI currently does not work natively on Windows.  If you still
   want to run the project locally on a Windows machine, one possible
   solution is to install Ubuntu 12.04 in a virtual machine. One way to
@@ -231,7 +239,7 @@ file when XPilot-AI is installed in /home/tompe/pkg/xpilot-ai:</p>
 
 
 <h2>Different Python versions</h2>
-
+<!--TODO: Update-->
 <p>Here is a list giving the default python3 version on different systems:</p>
 <ul>
 <li>Sun System: Python 3.2.2</li>
@@ -240,7 +248,7 @@ file when XPilot-AI is installed in /home/tompe/pkg/xpilot-ai:</p>
 <li>Mac Mountain Lion 10.8: Seems not to be installed. If installing it yourself: Python 3.3.0</li>
 <li>Windows: No Python installed as default. If installing it yourself: Python 3.3.0</li>
 </ul>
-
+<!--TODO: Update-->
 <p>The assistant uses Debian Stable and will use this to test against
 when getting email questions, so the best thing is <b>not to use Python
     language constructs that only exist in 3.2 or higher!</b></p>
@@ -388,7 +396,7 @@ if no thrust is applied. This makes it much easier to control the spaceship.</p>
 <p>The Python API
   (<a href="http://en.wikipedia.org/wiki/Application_programming_interface">Application
   Programming Interface</a>) for XPilot-AI
-  is <a href="http://xpilot-ai.org/docs/library.html">briefly
+  is <a href="library.html">briefly
   documented</a>.</p>
 
 <p>Note that if the documentation for example says:</p>
@@ -486,10 +494,11 @@ implemented in order.</p>
     <a href="library.html#target">Target</a>,
     <a href="library.html#turn">Turn</a>,
     <a href="library.html#angle_handling">Angle handling</a>,
-    <a href="library.html#shoot">Shoot</a> and
-    <a href="http://docs.python.org/2/library/math.html#trigonometric-functions">Python's built in trigonometric functions</a>,
+    <a href="library.html#shoot">Shoot</a> and 
+    Python's built-in <a href="http://docs.python.org/2/library/math.html#angular-conversion">angular conversion</a> and
+    <a href="http://docs.python.org/2/library/math.html#trigonometric-functions">trigonometric functions</a>,
     especially
-    <a href="http://docs.python.org/2/library/math.html#math.atan2">math.atan2</a> .
+    <a href="http://docs.python.org/2/library/math.html#math.atan2">math.atan2</a>.
     
     </p>
     </li>
@@ -501,12 +510,21 @@ implemented in order.</p>
     <b>Goal:</b> Complete all three laps.<br>
     <b>Map:</b> <a href="maps/exc2_map_race.xp">exc2_map_race.xp</a><br>
     <b>Provided code:</b> <a href="stub.py">stub.py</a><br>
-    <b>Description:</b> This exercise introduces a new game mode, race (or timing, as it's also called), which consists
-    of flying through several checkpoints on time, completing a set amount of laps. The easiest way
-    to do this is to fly towards the next checkpoint, start braking the ship (turn around and thrust)
-    at a certain distance and when still fly towards the next checkpoint. For that you need a minimum
-    of two states, "travel" and "stop", but it can be useful to have more.<br>
-    <b>Recommended functions:</b> <a href="library.html#race">Checkpoint</a>,
+    <b>Description:</b> This exercise introduces a new game mode, race (or timing, as it's also called). Racing
+    consist of flying by several checkpoints, predefined in the map file, completing a set amount of laps. The game
+    restarts when the first person have completed all laps. Different maps have different settings on how close
+    to a checkpoint you have to be to "get" it.<br>
+    <br>
+    The easiest way to solve this exercise is to:<br>
+    1. Save the or coordinates of the next checkpoint using nextCheckPoint, checkPointX and checkPointY.<br>
+    2. Fly towards the checkpoint.<br>
+    3. When close enough, brake the ship (turn around and thrust).<br>
+    4. Goto 1<br>
+    <br>
+    For this you need a minimum of two states, "travel" and "stop", but it can be useful to have more.<br>
+    
+    <b>Recommended functions:</b>
+    <a href="library.html#race">Checkpoint</a>,
     <a href="library.html#movement">Movement</a> and those introduced in exercise 1.
     </p></li>
 
@@ -514,11 +532,13 @@ implemented in order.</p>
     <h4>Distant targets</h4>
     <p>
     <b>Goal:</b> Shoot down all four targets before they respawn.<br>
-    <b>Map:</b> <a href="maps/exc4_map_distantTargets.xp">exc4_map_distantTargets.xp</a><br>
+    <b>Map:</b> <a href="maps/exc3_map_distantTargets.xp">exc3_map_distantTargets.xp</a><br>
     <b>Description:</b>This exercise is very similar to the first one, except for the map being bigger and the ship being able to move.
     Shots fired retains the velocity of your ship, so it is much easier to hit the targets
-    if you stop the ship.<br>
-    <b>Recommended functions:</b> All recommended functions have been introduced in earlier exercises.
+    if you slow down the ship. With no friction it is almost impossible to stop the ship completely, so your solution
+    should not rely on that.<br>
+    <b>Recommended functions:</b>
+    All recommended functions have been introduced in earlier exercises.
     </p>
     </li>
 
@@ -535,10 +555,12 @@ implemented in order.</p>
     Fuel is also introduced in this map. You lose fuel when thrusting, shooting and colliding
     with objects. If you collide with an asteroid with low fuel you will die. Avoiding asteroids
     is not a part of this exercise, so shoot them before they can reach you.<br>
-    <b>Recommended reading:</b> <a href="http://playtechs.blogspot.se/2007/04/aiming-at-moving-target.html">PlayTechs</a> explains
+    <b>Recommended reading:</b>
+    <a href="http://playtechs.blogspot.se/2007/04/aiming-at-moving-target.html">PlayTechs</a> explains
     the math behind hitting a moving target.<br>
     <b>Recommended functions:</b>
-    <a href="library.html#asteroids">asteroid</a>,
+    <a href="library.html#asteroid">asteroid</a>,
+    <a href="library.html#radar">radar</a>,
     <a href="library.html#fuel">fuel</a> and those introduced in earlier exercises.
     </p>
     </li>
@@ -546,15 +568,16 @@ implemented in order.</p>
     <li>
     <h4>Wallfeeler</h4>
     <p>
-    <b>Goal:</b> Pick up 10 items before crashing.<br>
-    <b>Map:</b> <a href="maps/exc5_map_wallfeeler.xp">exc6_map_wallfeeler</a><br>
+    <b>Goal:</b> Pick up 10 items without crashing.<br><!--TODO: how much?-->
+    <b>Map:</b> <a href="maps/exc5_map_wallfeeler.xp">exc5_map_wallfeeler</a><br>
     <b>Provided code:</b> <a href="stub.py">stub.py</a><br>
     <b>Description:</b> This exercise introduces items. These are valueable powerups you either start with or obtain by flying
     over. In this exercise all items will be fuel, but other maps can support
     <a href="www.j-a-r-n-o.nl/Xpilot/Newbie/Unix/newbie007.shtml">more</a>. On this map you will die if you fly 
     into the wall with the front of the ship, with the backside of the ship you will be unharmed.<br>
-    <b>Recommended functions:</b> <a href="library.html#items">item</a>, <a href="library.html#wall">wall</a> and those introduced
-    in earlier exercises.
+    <b>Recommended functions:</b>
+    <a href="library.html#item">item</a>,
+    <a href="library.html#wall">wall</a> and those introduced in earlier exercises.
     </p>
     </li>
 
@@ -623,9 +646,12 @@ obstacle.xp.</p></li>
 <p>
     The milestones are very loosely defined and sometimes doesn't even supply
     a map. You are then expected to supply this on your own and decide when you're
-    finished with it. The easiest way to create maps is to copy the ones supplied and
+    finished with it. The assistant will therefore not grade you based on the number
+    of tasks you have accomplished, but rather on how much time and work your group have
+    laid down. The easiest way to create maps is to copy the ones supplied and
     modify them, either with a text editor or with <code>xp-mapedit</code>.
 </p>
+
 
 <h4>Available projects</h4>
 <dl>
@@ -649,7 +675,8 @@ obstacle.xp.</p></li>
 
 <p>
     By choosing this project you've decided to write the ultimate killer robot. It is not very
-    hard to write a bot capable of beating a human, but a human is much more adaptable and can
+    hard to write a bot capable of beating a human with some specific map options, but a human
+    is much more adaptable and can
     adjust and learn to play with almost every possible combination of settings and maps. It is
     also very good to maintain contact with other groups that chooses to write a fighter bot and
     compete with them.
@@ -674,8 +701,9 @@ obstacle.xp.</p></li>
     <li>
     <h4>Patience, young apprentice</h4>
     <p>
-    <b>Description:</b> Go back to exercise 4, <a href="#asteroids">asteroids</a>, and improve on
-    it using what you've learned in later exercises. 
+    <b>Description:</b> If you feel you can still improve on exercise 4, <a href="#asteroids">asteroids</a>,
+    go back to it and see if you can beat your old bots highscore, other groups highscore, or maybe even the
+    score you get when playing manually.
     </p>
     </li>
 
@@ -687,8 +715,9 @@ obstacle.xp.</p></li>
     <a href="library#asteroid">asteroid functions</a> with the respective
     <a href="library#enemy">enemy functions</a>. Try it out vs human players, started with the xpilot
     client, and/or vs other bots. You can either launch several copies of your own bot, invite another group
-    to join your server or launch the server without <a href="#reportMeta">reportToMetaServer</a> letting bots
-    and players roaming the internet join. You can restrict the number of internet bots by changing
+    to join your server or launch the server without the <a href="#reportMeta">reportToMetaServer</a> flag, letting bots
+    and players roaming the internet join. There are always bots on the internet that will join your server, but
+    it is rare to find other humans. You can restrict the number of internet bots by changing
     <a href="http://www.j-a-r-n-o.nl/xpilotserver.html#maxrobots">maxRobots</a> in the mapfile.
     </p>
     </li>
@@ -696,7 +725,8 @@ obstacle.xp.</p></li>
     <li>
     <h4>Use your <s>senses</s> sensors</h4>
     <b>Maps:</b> <a href="maps/simple.xp">simple.xp</a> and <a href="maps/obstacle.xp">obstacle.xp</a><br>
-    <b>Description:</b> Add support for fighting around walls and basic navigating.<br>
+    <b>Description:</b> Fight versus other bots and humans while not crashing into walls, and add some
+    basic reaction-based navigation, by flying towards enemies and adjusting the course to avoid walls.<br>
     <b>Recommended functions:</b> <a href="library#wall">wall</a> and <a href="library#map">map</a>
     </li>
 
@@ -704,7 +734,9 @@ obstacle.xp.</p></li>
     <h4>Quick reflexes</h4>
     <p>
     <b>Map:</b> <a href="maps/matrix.xp">matrix.xp</a><br>
-    <b>Description:</b> Avoid enemy bullets to stay alive longer.<br>
+    <b>Description:</b> Add support for dodging enemy bullets. The possibility to dodge depends heavily
+    on map settings such as shipmass, shotspeed and firerepeatrate, you can therefore adjust these options
+    if you find it too easy or too hard. You can test both on the supplied map or vs other humans/bots.<br>
     <b>Recommended functions:</b> <a href="library#shot">shot</a>.
     </p>
     </li>
@@ -724,22 +756,14 @@ obstacle.xp.</p></li>
     </p>
     </li>
 
-    <li>
-    <h4>Be aware of your environment</h4>
-    <p>
-    <b>Description:</b> Add support for map features. If you run low on fuel, locate a fuel station and
-    stop to refuel at it. If a cannon is hostile, shoot it or avoid it. Learn where wormholes can take you
-    and use that if you need to travel long distances.
-    </p>
-    </li>
 
     <a name="HTD"></a>
     <a name="HuntThemDown"></a>
     <li>
     <h4>Hunt them down. Every single one.</h4>
     <p>
-    <b>Description:</b> Make your bot able to navigate to your enemies using data gained with
-    <a href="library#mapData">mapData</a>.<br>
+    <b>Description:</b> Make your bot able to navigate to enemies or map features far away on the radar 
+    using data gained with <a href="library#mapData">mapData</a>.<br>
     <b>Suggested maps:</b>
     <a href="maps/obstacle.xp">obstacle.xp</a>,
     <a href="maps/default/lifeless.xp">lifeless.xp</a>,
@@ -748,6 +772,17 @@ obstacle.xp.</p></li>
     </p>
     </li>
 
+    <li>
+    <h4>Be aware of your environment</h4>
+    <p>
+    <b>Description:</b> Add support for <a href="library#map">map features</a>.
+    You can, among others:<br>
+    Locate and use fuel stations when low on fuel.<br>
+    Shoot or avoid hostile cannons.<br>
+    Use wormholes to travel long distances.<br>
+    Destroy targets if they are in your way.
+    </p>
+    </li>
 </ol>
 
 <a name="racing"></a>
@@ -766,8 +801,9 @@ obstacle.xp.</p></li>
     <h4>No seat belt</h4>
     <p>
     <b>Map:</b> <a href="maps/main_race_2.xp">main_race_2.xp</a><br>
-    <b>Description:</b> This is the same map as in the previous task, except that you will lose
-    the race if you die once, and touching the wall will kill you.
+    <b>Description:</b> On this you will die immediately if you crash into the wall and
+    have limited lives, forcing you to weigh speed vs safety. Start with modifying your bot
+    from the previous task so you no longer crash and then try to make it faster.
     </p>
     </li>
 
@@ -777,7 +813,8 @@ obstacle.xp.</p></li>
     <b>Maps:</b> <a href="maps/default/grandprix.xp">grandprix,xp</a>,
     <a href="maps/other/RaceInSpace.map">RaceInSpace.map</a> and maps you construct on your own.<br>
     <b>Description:</b> Similar to <a href="#HTD">Hunt them down</a>, implement an algorithm for navigating
-    to the next point.
+    to the next checkpoint. This is needed on more complicated maps when the path to the next checkpoint is
+    not always straight on.
     </p>
     </li>
 
@@ -788,24 +825,29 @@ obstacle.xp.</p></li>
     <a href="maps/other/RaceInSpace.map">RaceInSpace.map</a> and maps you construct on your own.<br>
     <b>Description:</b> On maps with limited amounts of fuel, lives and many laps, you will have to refuel
     at fuel stations to complete the course. How often you should stop to refuel and for how long depends
-    greatly on the map settings.
+    greatly on the map settings. This is hard to solve in the general case so you may hardcode different
+    values for how much fuel you need for a lap depending on the map.
     </p>
+    <b>Recommended functions:</b> <a href="library#fuel">fuel</a>,
+    <a href="library#fuel_station">fuel station</a>.
     </li>
 
     <li>
     <h4>Podracing</h4>
     <p>
-    <b>Description:</b> Add support for enemy ships. Depending on map settings it might be a good
-    idea to run over them, avoid them, or try to bump them into walls. Shooting them comes later in
-    <a href="#GTA">Grand Theft Auto</a> and using items in <a href="Mario Kart">Mario Kart</a>.
+    <b>Description:</b> Add support for enemy ships. Depending on many <a href="#server_options">map settings</a> such as
+    allowPlayerCrashes, allowPlayerBounces and maxUnshieldedWallBounceSpeed it might be a good
+    idea to run over them, avoid them, or try to bump them into walls. Disable shooting and items
+    as that comes later in <a href="#GTA">Grand Theft Auto</a> and <a href="Mario Kart">Mario Kart</a>.
     </p>
     </li>
 
     <li>
     <h4>Mario Kart</h4>
     <p>
-    <b>Description:</b> Add item concentrators and allow different items. Implement strategies on
-    where to place mines, when to shoot missiles, how to use phasing and more.
+    <b>Description:</b> Add <a href="mapdata.html#item_concentrator">item concentrators</a> and allow different items.
+    It is suggested you start with a few items and gradually add more until you support all the relevant ones. The easiest
+    ones to start with are mines and missiles.
     </p>
     </li>
 

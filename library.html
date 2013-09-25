@@ -48,7 +48,7 @@ Bool functions will return 0 for False and 1 for True.<br>
 The recommended way of dealing with angles is to use radians, due to python's built in trigonometric functions using it. <a href="#xdegree">Xpilot degrees</a> can be used sometimes, as that is the angular measurement that the game uses. Use of <a href="#degree">Degrees</a> is deprecated, if you want to produce human readable output use the <a href="#angle_conversion">Angle conversion</a> functions instead.<br>
 Xpilot uses three different coordinate systems. Pixels, which is the most common, radar, which is very imprecise (for big levels) and only used by the <a href="#radar">Radar functions</a> and blocks, which is what is specified in the map file when constructing the level. Block functions can be found in <a href="#map">Map feature functions</a>.<br>
 
-All coordinate systems have origo (x=0, y=0) in the bottom left.
+All coordinate systems have origo (x=0, y=0) in the bottom left, with X growing towards the right, and Y growing upwards.
 </p>
 
 <a name="TOC"></a>
@@ -177,6 +177,7 @@ All coordinate systems have origo (x=0, y=0) in the bottom left.
 <a name="ship_properties"></a>
 <a name="self"></a>
 <h3>Ship properties</h3>
+<p>The server rounds down the ship's velocity value before sending to the API, so your ship can be moving even though the velocity and speed functions return 0.</p>
 <dl>
     <dt><b>int selfX()</b></dt>
     <dd>Returns the ship's X position on the map.</dd>
@@ -189,9 +190,10 @@ All coordinate systems have origo (x=0, y=0) in the bottom left.
     <dt><b>int selfMass()</b></dt>
     <dd>Returns the ship's mass. This is increased as you pick up fuel and items.</dd>
     <dt><b>double selfSpeed()</b></dt>
-    <dd>Returns the ship's speed.</dd>
+    <dd>Returns the ship's speed. Calculated from selfVelX and selfVelY.</dd>
     <dt><b>double selfTrackingRad()</b></dt>
-    <dd>Returns the ship's tracking in radians. This is the direction the ship is travelling in.</dd>
+    <dd>Returns the ship's tracking in radians. This is the direction the ship is travelling in. Returns the ships 
+    heading if not moving. Calculated from selfVelX and selfVelY.</dd>
     <dt><b>double selfHeadingRad()</b></dt>
     <dd>Returns the heading of the ship in radians. This is the direction the ship is pointing in.</dd>
 </dl>
@@ -259,9 +261,9 @@ All coordinate systems have origo (x=0, y=0) in the bottom left.
 <a name="radar"></a>
 <h3>Radar Functions</h3>
 <p>
-The radar index is a separate index from those used by other types of functions. Radarindex 0 is always you (if you are alive), while other objects index change at random.<br>
+The radar index is a separate index from those used by other types of functions. Radarindex 0 is always you (if you are alive), while other objects index can change at random between ticks.<br>
 Several server options control what shows up on the radar.<br>
-The radar uses a separate coordinate system, which is much less precise than pixels. You should only use these when handling objects that are far away and not on your screen. Converting from an x radar coordinates to screen coordinate is done by diving with radarWidth() and multiplying with mapWidthPixels(). Converting an y coordinate is done similarly with height functions.
+The radar uses a separate coordinate system, which is much less precise than pixels. You should only use these when handling objects that are far away and not on your screen. Converting from an x radar coordinates to screen coordinate is done by dividing with radarWidth() and multiplying with mapWidthPixels(). Converting an y coordinate is done similarly with height functions.
 </p>
 <dl>
     <dt><b>int radarCount()</b></dt>
@@ -397,6 +399,7 @@ You can only change lock once per tick<br>
 
 <a name="asteroid"></a>
 <h3>Asteroid functions</h3>
+<p>The ID's of asteroids are not consistent between ticks.</p>
 <dl>
     <dt><b>int asteroidCountScreen()</b></dt>
     <dd>Returns the number of asteroids on the screen.</dd>
@@ -405,7 +408,7 @@ You can only change lock once per tick<br>
     <dt><b>int asteroidY(int i)</b></dt>
     <dd>Returns the y coordinate of the specified asteroid.</dd>
     <dt><b>int asteroidType(int i)</b></dt>
-    <dd>Returns the type of the specified asteroid.</dd>
+    <dd>Returns the type of the specified asteroid. The type only determines what model the game uses to paint the asteroid.</dd>
     <dt><b>int asteroidSize(int i)</b></dt>
     <dd>Returns the size of the specified asteroid.</dd>
     <dt><b>int asteroidRotation(int i)</b></dt>
@@ -490,7 +493,7 @@ You can only change lock once per tick<br>
     <dt><b>double wallFeelerRad(double dist, double rad)</b></dt>
     <dd>Returns the distance to a wall in the specified angle. If no wall is found within the specified distance it returns -1.</dd>
     <dt><b>double wallBetween(double x1, double y1, double x2, double y2)</b></dt>
-    <dd>Returns the distance from point 1 to the wall, or -1 if there is no wall.<br>
+    <dd>Returns the distance from point 1 (x1, y1) to the wall, in the direction of point 2 (x2, y2). Returns -1 if there is no wall.<br>
     Note: These wall functions treats triangle blocks as squares and can therefore give false positives.
     </dd>
 </dl>
@@ -570,6 +573,9 @@ You can only change lock once per tick<br>
 
 <a name="wormhole"></a>
 <h3>Wormhole functions</h3>
+<p>
+You can find out if wormholes are in, out or in/out with <a href="#mapData">mapData</a>.
+</p>
 <dl>
 <dt><b>int wormholeCountScreen(int i)</b></dt>
 <dd>Returns the number of wormholes on the screen.</dd>
@@ -589,9 +595,9 @@ You can only change lock once per tick<br>
 <dt><b>int cannonY(int i)</b></dt>
 <dd>Returns the y coordinate of the specified cannon.</dd>
 <dt><b>int cannonBlockX(int i)</b></dt>
-<dd>Returns the x coordinate of the specified cannon.</dd>
+<dd>Returns the x block of the specified cannon.</dd>
 <dt><b>int cannonBlockY(int i)</b></dt>
-<dd>Returns the y coordinate of the specified cannon.</dd>
+<dd>Returns the y block of the specified cannon.</dd>
 <dt><b>int cannonAlive(int i)</b></dt>
 <dd>Returns whether the specified cannon is dead.</dd>
 <dt><b>int cannonTeam(int i)</b></dt>
@@ -644,18 +650,14 @@ double angleDiffXdeg(double angle1, double angle2)</b></dt>
 <a name="angle_conversion"></a>
 <h3>Angle conversion functions.</h3>
 <dl>
-    <dt><b>double xdegToDeg(int xdeg)</b></dt>
+    <dt><b>double xdegToDeg(double xdeg)</b></dt>
     <dd>Converts <a href="#xdegree">xpilot degrees</a> to degrees.</dd>
-    <dt><b>double xdegToRad(int xdeg)</b></dt>
+    <dt><b>double xdegToRad(double xdeg)</b></dt>
     <dd>Converts <a href="#xdegree">xpilot degrees</a> to radians.</dd>
-    <dt><b>int degToXdeg(double deg)</b></dt>
+    <dt><b>double degToXdeg(double deg)</b></dt>
     <dd>Convers degrees to xpilot degrees.</dd>
-    <dt><b>double degToRad(double deg)</b></dt>
-    <dd>Converts degrees to radians.</dd>
-    <dt><b>int radToXdeg(double rad)</b></dt>
+    <dt><b>double radToXdeg(double rad)</b></dt>
     <dd>Converts radians to xpilot degrees.</dd>
-    <dt><b>double radToDeg(double rad)</b></dt>
-    <dd>Converts radians to degrees.</dd>
 </dl>
 
 
@@ -768,8 +770,8 @@ double angleDiffXdeg(double angle1, double angle2)</b></dt>
 <dl>
     <dt><b>int itemCountScreen()</b></dt>
     <dd>Returns the number of items on the screen.</dd>
-    <dt><b>int closestItemId()</b></dt>
-    <dd>Returns the closest item's index.</dd>
+    <!--<dt><b>int closestItemId()</b></dt> ##Removed from the API
+    <dd>Returns the closest item's index.</dd>-->
     <dt><b>int itemX(int i)</b></dt>
     <dd>Returns the X coordinate of the specified item.</dd>
     <dt><b>int itemY(int i)</b></dt>
@@ -1013,6 +1015,14 @@ Use <a href="library.html#timeLeftSec">timeLeftSec</a> together with enabling th
     <dd>Returns the direction of the specified laser.</dd>
     <dt><b>double asteroidTrackingDeg(int i)</b></dt>
     <dd>Returns the tracking, in degrees, of the specified asteroid. Approximated by the API.</dd>
+</dl>
+
+<p>It's better to use the language's built-in angle conversion functions</p>
+<dl>
+    <dt><b>double degToRad(double deg)</b></dt>
+    <dd>Converts degrees to radians.</dd>
+    <dt><b>double radToDeg(double rad)</b></dt>
+    <dd>Converts radians to degrees.</dd>
 </dl>
 
 <p>
