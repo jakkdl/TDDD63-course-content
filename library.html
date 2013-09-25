@@ -456,7 +456,7 @@ You can only change lock once per tick<br>
     <dt><b>int connectorY1(int i)</b></dt>
     <dd>Returns the y1 position of the specified connector.</dd>
     <dt><b>int connectorTractor(int i)</b></dt>
-    <dd>Returns the tractor of the specified connec</dd>
+    <dd>Returns the tractor of the specified connector.</dd>
 </dl>
 
 
@@ -477,7 +477,7 @@ You can only change lock once per tick<br>
     <dd>Returns the height of the map, in pixels.</dd>
     <a name="mapData"></a>
     <dt><b>int mapData(int x, int y) </b></dt>
-    <dd>Returns the type of block at the specified block coordinate. See common/setup.h for output.</dd>
+    <dd>Returns the type of block at the specified block coordinate. See <a href="mapdata.html">mapdata</a> for output.</dd>
     <dt><b>getOption(string option)</b></dt>
     <dd>Returns the value of the specified option. The API gets this information by requesting it with "/get" for most options. If you are gonna recieve many options using setMaxMsgs(15) or similar is recommended.<br>
     When this function is called with an option that haven't been fetched yet it will return the string "queued", which means the option is queued up. If you call the function again later* you will recieve the value of the option.<br>

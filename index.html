@@ -170,19 +170,11 @@ do that on the Sun system do the following:</p><p>
 <h3>On Linux or Mac</h3>
 
 <p>
-  If you want to run this on your own Linux or Mac computer, follow
-  the <a href="http://xpilot-ai.org/docs/install.html">installation
-  instructions</a>.  In this case we assume that you already have some
-  experience working with the command line / shell!  
-  And for Mac you might need some skill in getting things to work since it did
-  not compile out of the box on an Mac with newer OS than the one mentioned in the
-  instructions.
-  Note that for
-  Linux the default procedure described in the instructions will work
-  for Ubuntu 12.04 and possibly earlier versions also. For Debian
-  stable you should replace the startup script
-  with <a href="http://heyer.ida.liu.se/xpilot-ai/xpilot-ai-1.0-debian-stable.sh">xpilot-ai-1.0-debian-stable.sh</a>
-  instead.</p>
+  If you want to run this on your own Linux computer, download and install
+  the <a href="https://bitbucket.org/hatten/xpilot-ai-fork/raw/master/xpilot-ai-fork-linux.sh">installation script</a>.
+  The script might not work completely out of the box and you might need some
+  previous knowledge of the command-line to get it working.
+  </p>
 
 <p>On your platform you have to make sure that libraries and other
 files are found. Here is an example of how to do that in the .bashrc
@@ -636,7 +628,7 @@ obstacle.xp.</p></li>
 
 <p>
   As in all TDDD63 projects it is difficult to predict exactly how
-  many milestones you will be able to complete.  You might implement
+  many tasks you will be able to complete.  You might implement
   all of them and continue with additional extensions, or you may not
   be able to complete the entire list.  To make sure you are
   progressing at a sufficient pace, keep your assistant up to date on
@@ -644,7 +636,7 @@ obstacle.xp.</p></li>
 </p>
 
 <p>
-    The milestones are very loosely defined and sometimes doesn't even supply
+    The tasks are very loosely defined and sometimes doesn't even supply
     a map. You are then expected to supply this on your own and decide when you're
     finished with it. The assistant will therefore not grade you based on the number
     of tasks you have accomplished, but rather on how much time and work your group have
@@ -652,12 +644,16 @@ obstacle.xp.</p></li>
     modify them, either with a text editor or with <code>xp-mapedit</code>.
 </p>
 
+<p>
+    You do <b>not</b> need to implement the tasks in order, and you're encouraged to
+    pick and choose the ones you want to do.
+</p>
 
 <h4>Available projects</h4>
 <dl>
     <dt><b><a href="#fighter">Fighter bot</a></b></dt>
     <dd>Improve on the bot you wrote in exc. 3, but this time it should fight
-    against enemy ships. In later milestones you add support for walls, dodging enemy bullets,
+    against enemy ships. In later tasks you add support for walls, dodging enemy bullets,
     multiple enemies, items, navigation, gravity, fuelstations and many other server options and
     map features.
     <dt><b><a href="#racing">Racing</a></b></dt>
@@ -686,7 +682,7 @@ obstacle.xp.</p></li>
     Try to preserve the support for previous maps when moving onto later. This is best done by
     using <a href="library#getOption">getOption</a> to support as many changing map options as
     possible. This is entirely optional, and if you find it too hard you can make a separate program
-    for each milestone. You can also adjust the difficulty by changing options in the maps, making
+    for each task. You can also adjust the difficulty by changing options in the maps, making
     it easier or harder depending on how you're faring.
 </p>
 
@@ -897,7 +893,7 @@ found <a href="botcom.html">here</a>.
 point for the cooperating bots that are going to be written in this project. This file also shows
 how to use BotCom.</p>
 
-<p>The milestones should during development at least be tested with a
+<p>The tasks should during development at least be tested with a
   team size of 3 but the program should work for bigger team sizes so
   it is good to test with for example team sizes 5 and 7
   sometimes. Remember to start the server with the flag <code>-maxClientsPerIP</code> specifying
@@ -919,7 +915,7 @@ BotCom based communication.
 <li><p>Team that shoots down enemies. Design scenarios were
 cooperation is used. One example of that is to suppose that only one
 spaceship have a radar to find the enemies and only the other
-spaceships can fire and destroy the enemy. In this milestone the enemies can be single
+spaceships can fire and destroy the enemy. In this task the enemies can be single
 ships that do not cooperate and do not fire back.</p></li>
 
 <li><p><a href="maps/obstacle.xp">obstacle.xp</a> is 32x32 in size. Each wall element
