@@ -2,7 +2,6 @@
 # This file can be used as a starting point for the bot in exercise 1.
 #
 
-
 import sys
 import traceback
 import math
@@ -23,6 +22,9 @@ def tick():
     # The API won't print out exceptions, so we have to catch and print them ourselves.
     #
     try:
+        global tickCount
+        global mode
+        global targetId
 
         #
         # If we die then restart the state machine in the state "init"
@@ -32,13 +34,13 @@ def tick():
             mode = "aim"
             return
 
-        tickCount += 1
+        #tickCount += 1
 
         #
         # Read some "sensors"
         #
-        selfX = ai.selfX()
-        selfY = ai.selfY()
+        x = ai.selfX()
+        y = ai.selfY()
         heading = ai.selfHeadingRad() 
         # 0-2pi, 0 in x direction, positive toward y
 
@@ -53,45 +55,45 @@ def tick():
         #os.system('clear')
 
 
-        print (self.count, self.mode, self.targetId, numTargetsAlive)
+        #print (self.count, self.mode, self.targetId, numTargetsAlive)
 
 
-        if self.mode == "wait":
+        if mode == "wait":
           if numTargetsAlive > 0:
-            self.mode = "aim"
-        elif self.mode == "aim":
+            mode = "aim"
+        elif mode == "aim":
           if numTargetsAlive == 0:
-            self.mode = "wait"
+            mode = "wait"
             return
 
           for i in range(numTargets):
             if ai.targetAlive(i):
-              self.targetId = i
+              targetId = i
               break
 
-          targetX = ai.targetX(self.targetId)
-          targetY = ai.targetY(self.targetId)
+          targetX = ai.targetX(targetId)
+          targetY = ai.targetY(targetId)
 
           wantedHeading = math.atan2(targetY-y, targetX-x)
           
-          if self.count % 2 == 0:
+          if tickCount % 2 == 0:
             ai.turnToRad(wantedHeading)
 
           if ai.angleDiffRad(wantedHeading, heading) < ai.xdegToRad(2):
-            self.mode = "shoot"
+            mode = "shoot"
 
-        elif self.mode == "shoot":
-          targetX = ai.targetX(self.targetId)
-          targetY = ai.targetY(self.targetId)
+        elif mode == "shoot":
+          targetX = ai.targetX(targetId)
+          targetY = ai.targetY(targetId)
           wantedHeading = math.atan2(targetY-y, targetX-x)
           if ai.angleDiffRad(wantedHeading, heading) > ai.xdegToRad(2):
-            self.mode = "aim"
+            mode = "aim"
             return
 
-          if ai.targetAlive(self.targetId):
+          if ai.targetAlive(targetId):
             ai.fireShot()
           else:
-            self.mode = "aim"
+            mode = "aim"
     except:
         print(traceback.print_exc())
         print(sys.exc_info())
@@ -100,14 +102,14 @@ def tick():
 # Create an instace of the bot class myai.
 #
 
-bot = myai()
+#bot = myai()
 
 #
 # Connect the bot instance with the AI loop
 #
 
-def AI_loop():
-    bot.tick()
+#def AI_loop():
+    #bot.tick()
 
 #
 # Parse the command line arguments
@@ -128,7 +130,7 @@ name = "Exc. 1 solution"
 # Start the main loop. Callback are done to AI_loop.
 #
 
-ai.start(AI_loop,["-name", name, 
+ai.start(tick,["-name", name, 
                   "-join", 
                   "-turnSpeed", "64",
                   "-turnResistance", "0",
