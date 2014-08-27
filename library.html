@@ -321,7 +321,8 @@ The speed and tracking of the enemy ship is approximated by the API and can ther
     <dt><b>double enemySpeed(int idx)</b></dt>
     <dd>Returns the speed of the specified enemy.</dd>
     <dt><b>double enemyTrackingRad(int idx)</b></dt>
-    <dd>Returns the specified enemy's tracking in radians.</dd>
+    <dd>Returns the specified enemy's tracking in radians. Returns the enemy's 
+    heading if not moving.</dd>
 </dl>
 
 <h3>Enemy info</h3>
@@ -522,7 +523,7 @@ You can only change lock once per tick<br>
 <dl>
     <dt><b>refuel()</b></dt>
     <dd>Refuels the ship. Needs to be continusly called to keep refueling.</dd>
-    <dt><b>int fuelStationCountServer()</b></dt>
+    <dt><b>int fuelStationCount()</b></dt>
     <dd>Returns the number of fuel stations on the server.</dd>
     <dt><b>int fuelStationX(int i)</b></dt>
     <dd>Returns the x coordinate of the specified fuel station.</dd>
@@ -579,7 +580,7 @@ You can only change lock once per tick<br>
 You can find out if wormholes are in, out or in/out with <a href="#mapData">mapData</a>.
 </p>
 <dl>
-<dt><b>int wormholeCountScreen(int i)</b></dt>
+<dt><b>int wormholeCountScreen()</b></dt>
 <dd>Returns the number of wormholes on the screen.</dd>
 <dt><b>int wormholeX(int i)</b></dt>
 <dd>Returns the x coordinate of the specified wormhole.</dd>
@@ -821,11 +822,11 @@ double angleDiffXdeg(double angle1, double angle2)</b></dt>
 <h3>Missile Methods</h3>
 <dl>
     <dt><b>fireMissile()</b></dt>
-    <dd>Fires a missile from the ship.</dd>
+    <dd>Fires a smart missile from the ship. You must lock on an enemy before firing.</dd>
     <dt><b>fireTorpedo()</b></dt>
-    <dd>Fires a torpedo from the ship.</dd>
+    <dd>Fires a torpedo from the ship. The torpedo will go straight and no locking is neccessary. It will explode when near a target.</dd>
     <dt><b>fireHeat()</b></dt>
-    <dd>Fires a heat seeking missile from the ship.</dd>
+    <dd>Fires a heat seeking missile from the ship. The missile will lock onto the closest thrusting player which might be you.</dd>
     <dt><b>int missileCountScreen()</b></dt>
     <dd>Returns the number of missiles on the screen.</dd>
     <dt><b>int missileX(int i)</b></dt>
@@ -1002,7 +1003,8 @@ Use <a href="library.html#timeLeftSec">timeLeftSec</a> together with enabling th
     <dt><b>double enemyHeadingDeg(int idx)</b></dt>
     <dd>Returns the specified enemy's heading in degrees.</dd>
     <dt><b>double enemyTrackingDeg(int idx)</b></dt>
-    <dd>Returns the specified enemy's tracking in degrees.</dd>
+    <dd>Returns the specified enemy's tracking in degrees. Returns the enemy's 
+    heading if not moving.</dd>
     <dt><b>double shotTrackingDeg(int idx)</b></dt>
     <dd>Returns the direction of the velocity of a shot.</dd>
     <dt><b>double angleDiffDeg(double angle1, double angle2)</b></dt>
