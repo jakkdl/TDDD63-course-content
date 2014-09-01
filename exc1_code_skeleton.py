@@ -64,7 +64,7 @@ def tick():
         # os.system('clear') clears the terminal screen, which can be useful.
 
         print("tick count:", tickCount, "mode:", mode, "heading:",
-                round(ai.radToDeg(selfHeading)), "targets alive:", targetCountAlive)
+                round(math.degrees(selfHeading)), "targets alive:", targetCountAlive)
 
 
         if mode == "wait":
@@ -104,9 +104,8 @@ def tick():
             # Check if you are aiming in the direction of the target,
             # if so, change mode to shoot.
             # Note that, due to how the game handles angles, the difference
-            # cannot be 0 for many angles.
+            # cannot be 0 (but pretty close to) for many angles.
             # useful variables: selfHeading, targetDirection, mode
-            # useful functions: ai.angleDiffRad, ai.radToDeg
 
             """your code here"""
 

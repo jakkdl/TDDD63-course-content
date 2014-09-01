@@ -45,10 +45,17 @@ PRE.sh_python {
 <h1>XPilot-AI API Documentation</h1>
 <p>In Xpilot-AI, 0 degrees is to the right and 90 degrees is up.<br>
 Bool functions will return 0 for False and 1 for True.<br>
-The recommended way of dealing with angles is to use radians, due to python's built in trigonometric functions using it. <a href="#xdegree">Xpilot degrees</a> can be used sometimes, as that is the angular measurement that the game uses. Use of <a href="#degree">Degrees</a> is deprecated, if you want to produce human readable output use the <a href="#angle_conversion">Angle conversion</a> functions instead.<br>
+The recommended way of dealing with angles is to use radians, due to python's built in trigonometric functions using it. <a href="#xdegree">Xpilot degrees</a> can be used sometimes, as that is the angular measurement that the game uses. Use of <a href="#degree">Degrees</a> is deprecated, if you want to produce human readable output use the built in functions in the language to convert angles.<br>
 Xpilot uses three different coordinate systems. Pixels, which is the most common, radar, which is very imprecise (for big levels) and only used by the <a href="#radar">Radar functions</a> and blocks, which is what is specified in the map file when constructing the level. Block functions can be found in <a href="#map">Map feature functions</a>.<br>
 
-All coordinate systems have origo (x=0, y=0) in the bottom left, with X growing towards the right, and Y growing upwards.
+All coordinate systems have origo (x=0, y=0) in the bottom left, with X growing towards the right, and Y growing upwards.<br><br>
+
+The indexes used by different groups of functions are never the same, and are randomized between ticks. The only way to reliably identify ships is with their server id, which are constant and the same between the functions selfId(), playerId(int i) and shipId(int i).<br><br>
+
+
+
+The API is under development and you might encounter bugs, if you do contact your assistant or send a mail to john.litborn@liu.se with steps to reproduce.
+Code from previous years are also likely to break, the main changes are: Separating enemy functions into ship and player. Velocities of objects are no longer approximated by the api and sent directly through the server, giving increased precision. Due to that reason all Age and Alert functions have been removed.
 </p>
 
 <a name="TOC"></a>
@@ -57,6 +64,7 @@ All coordinate systems have origo (x=0, y=0) in the bottom left, with X growing 
 <ul>
     <li><a href="#control">API control</a></li>
     <li><a href="#server">Server</a></li>
+    <li><a href="#player">Enemy info</a></li>
     <li><a href="#chat">Chat</a></li>
     <li><a href="#ship_functions">Ship functions</a>
     <ul>
@@ -71,8 +79,7 @@ All coordinate systems have origo (x=0, y=0) in the bottom left, with X growing 
     <li><a href="#sensor">Sensors</a>
     <ul>
         <li><a href="#radar">Radar</a></li>
-        <li><a href="#enemy">Enemy properties</a></li>
-        <li><a href="#enemy">Enemy info</a></li>
+        <li><a href="#ship">Ship properties</a></li>
         <li><a href="#lock">Lock</a></li>
         <li><a href="#shot">Shot</a></li>
         <li><a href="#asteroid">Asteroid</a></li>
@@ -93,7 +100,6 @@ All coordinate systems have origo (x=0, y=0) in the bottom left, with X growing 
     </li>
     <li><a href="#angle_handling"</a>Angle handling
     <ul>
-        <li><a href="#radian">Radian</a></li>
         <li><a href="#xdegree">Xpilot degree</a></li>
         <li><a href="#angle_conversion">Angle conversion</a></li>
     </ul>
@@ -142,14 +148,30 @@ All coordinate systems have origo (x=0, y=0) in the bottom left, with X growing 
 <dl>
     <dt><b>int timeLeftSec()</b></dt>
     <dd>Returns the time left of the match.</dd>
+</dl>
+
+<a name="player"></a>
+<h3>Player info</h3>
+<p>
+These functions handle all players on the server, including paused players, as well as things such as tanks.
+</p>
+<dl>
     <dt><b>int playerCountServer()</b></dt>
-    <dd>Returns the number of players (ships) on the server.</dd>
-    <dt><b>int otherCountServer()</b></dt>
-    <dd>Returns number of entities on the server, includes paused players and tanks.</dd>
+    <dd>Returns the number of players on the server.</dd>
     <dt><b>int pausedCountServer()</b></dt>
     <dd>Returns the number of paused ships on the server.</dd>
     <dt><b>int tankCountServer()</b></dt>
     <dd>Returns the number of fueltanks on the server.</dd>
+    <dt><b>int playerId(int i)</b></dt>
+    <dd>Returns the specified player's server id.</dd>
+    <dt><b>int playerLives(int i)</b></dt>
+    <dd>Returns the specified player's remaining lives.</dd>
+    <dt><b>string playerName(int i)</b></dt>
+    <dd>Returns the specified player's name.</dd>
+    <dt><b>string playerScore(int i)</b></dt>
+    <dd>Returns the specified player's score.</dd>
+    <dt><b>int playerTeam(int i)</b></dt>
+    <dd>Returns the specified player's team.</dd>
 </dl>
 
 <a name="chat"></a>
@@ -161,11 +183,11 @@ All coordinate systems have origo (x=0, y=0) in the bottom left, with X growing 
     <dd>Returns the maximum amount of messages to be displayed.</dd>
     <dt><b>talk(char* talk_str)</b></dt>
     <dd>Sends a message.</dd>
-    <dt><b>scanTalkMsg(int id)</b></dt>
+    <dt><b>scanTalkMsg(int i)</b></dt>
     <dd>Returns the specified talk message. ID 0 is the most recent occurring message.</dd>
     <dt><b>removeTalkMsg(int i)</b></dt>
     <dd>Removes the specified talk message. Useful for clearing up the screen if you have requested many options.</dd>
-    <dt><b>scanGameMsg(int id)</b></dt>
+    <dt><b>scanGameMsg(int i)</b></dt>
     <dd>Returns the specified game message. ID 0 is the most recent occurring message.</dd>
     <dt><b>toggleShowMessage()</b></dt>
     <dd>Toggles messages on the bottom on the screen.</dd>
@@ -179,34 +201,33 @@ All coordinate systems have origo (x=0, y=0) in the bottom left, with X growing 
 <a name="ship_properties"></a>
 <a name="self"></a>
 <h3>Ship properties</h3>
-<p>The server rounds down the ship's velocity value before sending to the API, so your ship can be moving even though the velocity and speed functions return 0.</p>
 <dl>
     <dt><b>int selfX()</b></dt>
     <dd>Returns the ship's X position on the map.</dd>
     <dt><b>int selfY()</b></dt>
     <dd>Returns the ship's Y position on the map.</dd>
-    <dt><b>int selfVelX()</b></dt>
+    <dt><b>double selfVelX()</b></dt>
     <dd>Returns the ship's X velocity.</dd>
-    <dt><b>int selfVelY()</b></dt>
+    <dt><b>double selfVelY()</b></dt>
     <dd>Returns the ship's Y velocity.</dd>
-    <dt><b>int selfMass()</b></dt>
+    <dt><b>double selfMass()</b></dt>
     <dd>Returns the ship's mass. This is increased as you pick up fuel and items.</dd>
+    <dt><b>double selfHeadingRad()</b></dt>
+    <dd>Returns the heading of the ship in radians. This is the direction the ship is pointing in.</dd>
     <dt><b>double selfSpeed()</b></dt>
     <dd>Returns the ship's speed. Calculated from selfVelX and selfVelY.</dd>
     <dt><b>double selfTrackingRad()</b></dt>
     <dd>Returns the ship's tracking in radians. This is the direction the ship is travelling in. Returns the ships 
     heading if not moving. Calculated from selfVelX and selfVelY.</dd>
-    <dt><b>double selfHeadingRad()</b></dt>
-    <dd>Returns the heading of the ship in radians. This is the direction the ship is pointing in.</dd>
 </dl>
 
 <a name="ship_info"></a>
 <h3>Ship info</h3>
 <dl>
-    <dt><b>int selfID()</b></dt>
-    <dd>Returns the ID of the ship.</dd>
+    <dt><b>int selfId()</b></dt>
+    <dd>Returns the server id of the ship.</dd>
     <dt><b>bool selfAlive()</b></dt>
-    <dd>Returns if the ship is alive.</dd>
+    <dd>Returns whether the ship is alive.</dd>
     <dt><b>int selfLives()</b></dt>
     <dd>Returns how many lives are left for the ship.</dd>
     <dt><b>string selfName()</b></dt>
@@ -290,59 +311,37 @@ The radar uses a separate coordinate system, which is much less precise than pix
     <dd>Returns the height of the radar.</dd>
 </dl>
 
-<a name="enemy"></a>
-<h3>Enemy properties</h3>
+<a name="ship"></a>
+<h3>Ship properties</h3>
 <p>
-These functions only work if the enemy is on your screen.<br>
-Note that the index used here is different from other indexes. The ships in the buffer are sorted in ascending distance from you, so idx 0 should always be the closest ship.<br>
-All functions return -1 if the ship doesn't exist.<br>
-The speed and tracking of the enemy ship is approximated by the API and can therefore be slightly incorrect.
+These functions handle all the ships on the screen, including yourself. This means that if you want to only use this function for enemy ships you need to subtract 1 from shipCountScreen(), and check that the server id of the ship is not the same as your own.
 </p>
 <dl>
     <dt><b>int shipCountScreen()</b></dt>
     <dd>Returns the number of ships on the screen. Note that you're most likely one of them.</dd>
-    <dt><b>int enemyId(int idx)</b></dt>
+    <dt><b>int shipId(int i)</b></dt>
     <dd>returns the server id of the specified ship. Returns -1 if ship doesn't exist.</dd>
-    <dt><b>int enemyX(int idx)</b></dt>
-    <dd>Returns the specified enemy's X coordinate on the map.</dd>
-    <dt><b>int enemyY(int idx)</b></dt>
-    <dd>Returns the specified enemy's Y coordinate on the map.</dd>
-    <dt><b>double enemyDistance(int idx)</b></dt>
-    <dd>Returns the distance between the ship and the specified enemy.</dd>
-    <dt><b>double enemyHeadingRad(int idx)</b></dt>
-    <dd>Returns the specified enemy's heading in radians.</dd>
-</dl>
-<h4>Estimated by the API</h4>
-<dl>
-    <dt><b>double enemyVelX(int idx)</b></dt>
-    <dd>Returns the x velocity of the specified enemy.</dd>
-    <dt><b>double enemyVelY(int idx)</b></dt>
-    <dd>Returns the y velocity of the specified enemy.</dd>
-    <dt><b>double enemySpeed(int idx)</b></dt>
-    <dd>Returns the speed of the specified enemy.</dd>
-    <dt><b>double enemyTrackingRad(int idx)</b></dt>
-    <dd>Returns the specified enemy's tracking in radians. Returns the enemy's 
-    heading if not moving.</dd>
+    <dt><b>int shipX(int i)</b></dt>
+    <dd>Returns the specified ship's X coordinate on the map.</dd>
+    <dt><b>int shipY(int i)</b></dt>
+    <dd>Returns the specified ship's Y coordinate on the map.</dd>
+    <dt><b>double shipVelX(int i)</b></dt>
+    <dd>Returns the x velocity of the specified ship.</dd>
+    <dt><b>double shipVelY(int i)</b></dt>
+    <dd>Returns the y velocity of the specified ship.</dd>
+    <dt><b>int shipShield(int i)</b></dt>
+    <dd>Returns the specified enemy's shield status.</dd>
+    <dt><b>double shipHeadingRad(int i)</b></dt>
+    <dd>Returns the specified ship's heading in radians.</dd>
+    <dt><b>double shipTrackingRad(int i)</b></dt>
+    <dd>Returns the specified ship's tracking in radians. Returns the ship's 
+    heading if not moving. Calculated from shipVelX and shipVelY.</dd>
+    <dt><b>double shipDistance(int i)</b></dt>
+    <dd>Returns the distance between yourself and the specified ship. Calculated from selfX, selfY, shipX and shipY.</dd>
+    <dt><b>double shipSpeed(int i)</b></dt>
+    <dd>Returns the speed of the specified ship. Calculated from shipVelX and shipVelY.</dd>
 </dl>
 
-<h3>Enemy info</h3>
-<p>
-Uses the same index as Enemy properties
-</p>
-<dl>
-    <dt><b>int enemyReload(int idx)</b></dt>
-    <dd>Returns the specified enemy's reload time remaining.</dd>
-    <dt><b>int enemyShield(int idx)</b></dt>
-    <dd>Returns the specified enemy's shield status.</dd>
-    <dt><b>int enemyLives(int idx)</b></dt>
-    <dd>Returns the specified enemy's remaining lives.</dd>
-    <dt><b>string enemyName(int idx)</b></dt>
-    <dd>Returns the specified enemy's name.</dd>
-    <dt><b>string enemyScore(int idx)</b></dt>
-    <dd>Returns the specified enemy's score.</dd>
-    <dt><b>int enemyTeam(int idx)</b></dt>
-    <dd>Returns the specified enemy's team.</dd>
-</dl>
 
 <a name="lock"></a>
 <h3>Lock functions</h3>
@@ -377,27 +376,21 @@ You can only change lock once per tick<br>
 <dl>
     <dt><b>int shotCountScreen()</b></dt>
     <dd>Returns the number of shots on the screen.</dd>
-    <dt><b>int shotX(int idx)</b></dt>
+    <dt><b>int shotX(int i)</b></dt>
     <dd>Returns the X coordinate of a shot.</dd>
-    <dt><b>int shotY(int idx)</b></dt>
+    <dt><b>int shotY(int i)</b></dt>
     <dd>Returns the Y coordinate of a shot.</dd>
-    <dt><b>double shotDist(int idx)</b></dt>
-    <dd>Returns the distance of a shot from the ship.</dd>
-</dl>
-<h4>Estimated by the API</h4>
-<dl>
-    <dt><b>int shotAge(int idx)</b></dt>
-    <dd>Returns for how many ticks the API have tracked a shot. With a value of two or more the data about a shot is correct. With a value of 1 the shot might not exist and with a value of 0 no velocity of the shot is known.</dd>
-    <dt><b>double shotVelX(int idx)</b></dt>
+    <dt><b>double shotVelX(int i)</b></dt>
     <dd>Returns the X velocity of a shot.</dd>
-    <dt><b>double shotVelY(int idx)</b></dt>
+    <dt><b>double shotVelY(int i)</b></dt>
     <dd>Returns the Y velocity of a shot.</dd>
-    <dt><b>double shotSpeed(int idx)</b></dt>
-    <dd>Returns the speed of a shot.</dd>
-    <dt><b>double shotTrackingRad(int idx)</b></dt>
-    <dd>Returns the direction of the velocity of a shot.</dd>
-    <dt><b>int shotAlert(int idx)</b></dt>
-    <dd>Returns a danger rating of a shot, the smaller the number the more likely the shot is to hit the ship. Note that this number is unreliable, it might be better to calculate this on your own.</dd>
+
+    <dt><b>double shotDist(int i)</b></dt>
+    <dd>Returns the distance of a shot from the ship. Calculated from selfX, selfY, shotX and shotY.</dd>
+    <dt><b>double shotTrackingRad(int i)</b></dt>
+    <dd>Returns the direction of the velocity of a shot. Calculated from shotVelX and shotVelY.</dd>
+    <dt><b>double shotSpeed(int i)</b></dt>
+    <dd>Returns the speed of a shot. Calculated from shotVelX and shotVelY.</dd>
 </dl>
 
 <a name="asteroid"></a>
@@ -410,29 +403,23 @@ You can only change lock once per tick<br>
     <dd>Returns the x coordinate of the specified asteroid.</dd>
     <dt><b>int asteroidY(int i)</b></dt>
     <dd>Returns the y coordinate of the specified asteroid.</dd>
+    <dt><b>int asteroidVelX(int i)</b></dt>
+    <dd>Returns the X velocity of the specified asteroid.</dd>
+    <dt><b>int asteroidVelY(int i)</b></dt>
+    <dd>Returns the Y velocity of the specified asteroid.</dd>
     <dt><b>int asteroidType(int i)</b></dt>
     <dd>Returns the type of the specified asteroid. The type only determines what model the game uses to paint the asteroid.</dd>
     <dt><b>int asteroidSize(int i)</b></dt>
     <dd>Returns the size of the specified asteroid.</dd>
     <dt><b>int asteroidRotation(int i)</b></dt>
     <dd>Returns the rotation of the specified asteroid.</dd>
+
     <dt><b>double asteroidDist(int i)</b></dt>
-    <dd>Returns the distance to the specified asteroid.</dd>
-</dl>
-<h4>Estimated by the API</h4>
-<dl>
-    <dt><b>int asteroidAge(int i)</b></dt>
-    <dd>Returns for how many ticks the specified asteroid have been on the screen. Because the velocity of an asteroid is approximated by the API the data returned by other functions may be wrong. With age=0 the functions approximated will return an error. With age=1 the functions may return asteroids that may not exist. You should normally ignore asteroids with age less than 2 unless you are paranoid.</dd>
-    <dt><b>int asteroidVelX(int i)</b></dt>
-    <dd>Returns the X velocity of the specified asteroid. Approximated by the API.</dd>
-    <dt><b>int asteroidVelY(int i)</b></dt>
-    <dd>Returns the Y velocity of the specified asteroid. Approximated by the API.</dd>
+    <dd>Returns the distance to the specified asteroid. Calculated from selfX, selfY, asteroidX and asteroidY.</dd>
     <dt><b>double asteroidSpeed(int i)</b></dt>
-    <dd>Returns the speed of the specififed asteroid. Approximated by the API.</dd>
+    <dd>Returns the speed of the specififed asteroid. Calculated from asteroidVelX and asteroidVelY.</dd>
     <dt><b>double asteroidTrackingRad(int i)</b></dt>
-    <dd>Returns the tracking, in radians, of the specified asteroid. Approximated by the API.</dd>
-    <dt><b>int asteroidAlert(int i)</b></dt>
-    <dd>Returns a danger rating of the specified asteroid. Approximated by the API.</dd>
+    <dd>Returns the tracking, in radians, of the specified asteroid. Calculated from asteroidVelX and asteroidVelY.</dd>
 </dl>
 
 <a name="ball"></a>
@@ -545,13 +532,13 @@ You can only change lock once per tick<br>
 <dl>
     <dt><b>int nextCheckPoint()</b></dt>
     <dd>Returns the index of the next checkpoint, for timing mode.</dd>
-    <dt><b>int checkPointX(idx)</b></dt>
+    <dt><b>int checkPointX(int i)</b></dt>
     <dd>Returns the x coordinate of the specified checkpoint. Returns 0 if checkpoint doesn't exist.</dd>
-    <dt><b>int checkPointY(idx)</b></dt>
+    <dt><b>int checkPointY(int i)</b></dt>
     <dd>Returns the y coordinate of the specified checkpoint. Returns 0 if the checkpoint doesn't exist.</dd>
-    <dt><b>int checkPointBlockX(idx)</b></dt>
+    <dt><b>int checkPointBlockX(int i)</b></dt>
     <dd>Returns the x block of the specified checkpoint. Returns 0 if checkpoint doesn't exist. </dd>
-    <dt><b>int checkPointBlockY(idx)</b></dt>
+    <dt><b>int checkPointBlockY(int i)</b></dt>
     <dd>Returns the y block of the specified checkpoint. Returns 0 if the checkpoint doesn't exist.</dd>
 </dl>
 
@@ -610,44 +597,30 @@ You can find out if wormholes are in, out or in/out with <a href="#mapData">mapD
 <a name="angle_handling"></a>
 <h2>Angle handling</h2>
 
-<a name="radian"></a>
-<h3>Radian functions</h3>
-<p>
-The default unit for handling angles is radians, so most functions dealing with it can be found in the rest of the documentation.
-</p>
-<dl>
-    <dt><b>double angleDiffRad(double angle1, double angle2)</b></dt>
-    <dd>Calculates the difference between two angles in radians, will always be positive.</dd>
-    <dt><b>double angleAddRad(double angle1, double angle2)</b></dt>
-    <dd>Calculates the sum of two angles. In radians.</dd>
-</dl>
-
 <a name="xdegree"></a>
 <h3>Xpilot degree functions.</h3>
 <p>
 Xpilot degrees is the angular measurement that xpilot uses, ranging from 0 to 127. It is only possible to turn (and turn to) whole xpilot degrees. For example you cannot turn 5 degrees (1.422 xdeg), so the API will turn 2.8125 (1 xdeg) degrees instead. This is not noticeable most of the time and the API will do all the necessary rounding behind the scenes.
 </p>
 <dl>
-<dt><b>int selfHeadingXdeg()</b></dt>
-<dd>Returns the heading of the ship in xpilot-degrees.</dd>
-<dt><b>turnXdeg(double xdeg)</b></dt>
-<dd>Turns the ship in the specified number of xdegrees.</dd>
-<dt><b>turnToXdeg(double xdeg)</b></dt>
-<dd>Turns the ship towards the specified heading, in xdegrees.</dd>
-<dt><b>setMaxTurnXdeg(double i)</b></dt>
-<dd>Sets the maximum angle, in xpilot degrees, the ship is allowed to turn. If you try to turn a bigger angle with any of the turn functions it will turn the maximum allowed angle. 0&lt;=i&lt;=64</dd>
-<dt><b>double getMaxTurnXdeg()</b></dt>
-<dd>Returns the maximum allowed angle to turn, in xpilot degrees.</dd>
-<dt><b>int enemyHeadingXdeg(int idx)<br>
-int lockHeadingXdeg()<br>
-double angleDiffXdeg(double angle1, double angle2)</b></dt>
-<dd>Calculates the difference between two angles in xdegrees.</dd>
-<dt><b>double angleAddXdeg(double angle1, double angle2)</b></dt>
-<dd>Calculates the sum of two anglesin xdegrees.</dd>
-<dt><b>double missileHeadingXdeg(int i)</b></dt>
-<dd>Returns the direction of the specified missile in xpilot degrees.</dd>
-<dt><b>int laserHeadingXdeg(int i)</b></dt>
-<dd>Returns the direction of the specified laser.</dd>
+    <dt><b>int selfHeadingXdeg()</b></dt>
+    <dd>Returns the heading of the ship in xpilot-degrees.</dd>
+    <dt><b>turnXdeg(double xdeg)</b></dt>
+    <dd>Turns the ship in the specified number of xdegrees.</dd>
+    <dt><b>turnToXdeg(double xdeg)</b></dt>
+    <dd>Turns the ship towards the specified heading, in xdegrees.</dd>
+    <dt><b>setMaxTurnXdeg(double i)</b></dt>
+    <dd>Sets the maximum angle, in xpilot degrees, the ship is allowed to turn. If you try to turn a bigger angle with any of the turn functions it will turn the maximum allowed angle. 0&lt;=i&lt;=64</dd>
+    <dt><b>double getMaxTurnXdeg()</b></dt>
+    <dd>Returns the maximum allowed angle to turn, in xpilot degrees.</dd>
+    <dt><b>int shipHeadingXdeg(int i)</b></dt>
+    <dd>Returns the specified ship's heading in xpilot degrees.</dd>
+    <dt><b>int lockHeadingXdeg()</b></dt>
+    <dd>Returns in degrees the direction of the ship's lock-on of an enemy.</dd>
+    <dt><b>double missileHeadingXdeg(int i)</b></dt>
+    <dd>Returns the direction of the specified missile in xpilot degrees.</dd>
+    <dt><b>int laserHeadingXdeg(int i)</b></dt>
+    <dd>Returns the direction of the specified laser.</dd>
 </dl>
 
 <a name="angle_conversion"></a>
@@ -658,9 +631,9 @@ double angleDiffXdeg(double angle1, double angle2)</b></dt>
     <dt><b>double xdegToRad(double xdeg)</b></dt>
     <dd>Converts <a href="#xdegree">xpilot degrees</a> to radians.</dd>
     <dt><b>double degToXdeg(double deg)</b></dt>
-    <dd>Convers degrees to xpilot degrees.</dd>
+    <dd>Convers degrees to <a href="#xdegree">xpilot degrees</a>.</dd>
     <dt><b>double radToXdeg(double rad)</b></dt>
-    <dd>Converts radians to xpilot degrees.</dd>
+    <dd>Converts radians to <a href="#xdegree">xpilot degrees</a>.</dd>
 </dl>
 
 
@@ -773,31 +746,24 @@ double angleDiffXdeg(double angle1, double angle2)</b></dt>
 <dl>
     <dt><b>int itemCountScreen()</b></dt>
     <dd>Returns the number of items on the screen.</dd>
-    <!--<dt><b>int closestItemId()</b></dt> ##Removed from the API
-    <dd>Returns the closest item's index.</dd>-->
     <dt><b>int itemX(int i)</b></dt>
     <dd>Returns the X coordinate of the specified item.</dd>
     <dt><b>int itemY(int i)</b></dt>
     <dd>Returns the Y coordinate of the specified item.</dd>
+    <dt><b>int itemVelX(int i)</b></dt>
+    <dd>Returns the X velocity of the specified asteroid.</dd>
+    <dt><b>int itemVelY(int i)</b></dt>
+    <dd>Returns the Y velocity of the specified asteroid.</dd>
     <dt><b>int itemType(int i)</b></dt>
     <dd>See table for output. If the item is 'random' it's type will cycle through all available types.</dd>
-    <dt><b>int itemDist(int i></b></dt>
-    <dd>Returns the distance to the specified item.</dd>
-</dl>
-<h4>Approximated by the API.</h4>
-<dl>
-    <dt><b>int itemAge(int i)</b></dt>
-    <dd>Returns for how many ticks the specified item have been on the screen. Because the velocity of an item is approximated by the API the data returned by other functions may be wrong. With age=0 the functions approximated will return an error. With age=1 the functions may return items that may not exist. You should normally ignore items with age less than 2.</dd>
-    <dt><b>int itemVelX(int i)</b></dt>
-    <dd>Returns the X velocity of the specified asteroid. Approximated by the API.</dd>
-    <dt><b>int itemVelY(int i)</b></dt>
-    <dd>Returns the Y velocity of the specified asteroid. Approximated by the API.</dd>
-    <dt><b>double itemSpeed(int i)</b></dt>
-    <dd>Returns the speed of the specififed asteroid. Approximated by the API.</dd>
-    <dt><b>double itemTrackingRad(int i)</b></dt>
-    <dd>Returns the tracking, in radians, of the specified asteroid. Approximated by the API.</dd>
     <dt><b>bool itemRandom(int i)</b></dt>
     <dd>Returns whether the item is 'random'</dd>
+    <dt><b>int itemDist(int i></b></dt>
+    <dd>Returns the distance to the specified item. Calculated from selfX, selfY, itemX and itemY.</dd>
+    <dt><b>double itemSpeed(int i)</b></dt>
+    <dd>Returns the speed of the specififed asteroid. Calculated from itemVelX and itemVelY.</dd>
+    <dt><b>double itemTrackingRad(int i)</b></dt>
+    <dd>Returns the tracking, in radians, of the specified asteroid. Calculated from itemVelX and itemVelY.</dd>
 </dl>
 
 <a name="fuel"></a>
@@ -819,7 +785,7 @@ double angleDiffXdeg(double angle1, double angle2)</b></dt>
 </dl>
 
 <a name="missile"></a>
-<h3>Missile Methods</h3>
+<h3>Missile functions</h3>
 <dl>
     <dt><b>fireMissile()</b></dt>
     <dd>Fires a smart missile from the ship. You must lock on an enemy before firing.</dd>
@@ -941,7 +907,7 @@ double angleDiffXdeg(double angle1, double angle2)</b></dt>
 </dl>
 
 <a name="modifier"></a>
-<h3>Modifier Methods</h3>
+<h3>Modifier functions</h3>
 <dl>
     <dt><b>toggleCluster()</b></dt>
     <dd>Toggles the option to have the ship fire Cluster weapons instead of regular weapons.</dd>
@@ -983,6 +949,7 @@ Use <a href="library.html#timeLeftSec">timeLeftSec</a> together with enabling th
 <p>You can still use these but it's recommended not to as they may be removed in future releases. If you see a reason these should not be removed send a mail to johli603@student.liu.se with your arguments and intended use.<br>
 </p>
 
+
 <a name="degree"></a>
 <h3>Degree functions</h3>
 <dl>
@@ -1000,17 +967,13 @@ Use <a href="library.html#timeLeftSec">timeLeftSec</a> together with enabling th
     <dd>Returns the maximum allowed angle to turn, in degrees.</dd>
     <dt><b>double lockHeadingDeg()</b></dt>
     <dd>Returns in degrees the direction of the ship's lock-on of an enemy.</dd>
-    <dt><b>double enemyHeadingDeg(int idx)</b></dt>
-    <dd>Returns the specified enemy's heading in degrees.</dd>
-    <dt><b>double enemyTrackingDeg(int idx)</b></dt>
-    <dd>Returns the specified enemy's tracking in degrees. Returns the enemy's 
+    <dt><b>double shipHeadingDeg(int i)</b></dt>
+    <dd>Returns the specified ship's heading in degrees.</dd>
+    <dt><b>double shipTrackingDeg(int i)</b></dt>
+    <dd>Returns the specified ship's tracking in degrees. Returns the ship's 
     heading if not moving.</dd>
-    <dt><b>double shotTrackingDeg(int idx)</b></dt>
+    <dt><b>double shotTrackingDeg(int i)</b></dt>
     <dd>Returns the direction of the velocity of a shot.</dd>
-    <dt><b>double angleDiffDeg(double angle1, double angle2)</b></dt>
-    <dd>Calculates the difference between two angles in degrees</dd>
-    <dt><b>double angleAddDeg(double angle1, double angle2)</b></dt>
-    <dd>Calculates the sum of two angles in degrees.</dd>
     <dt><b>double wallFeelerDeg(double dist, double deg)</b></dt>
     <dd>Returns if there is a wall or not at the specified angle within the specified distance of the ship. Returns -1 if no wall.</dd>
     <dt><b>double missileHeadingDeg(int i)</b></dt>
@@ -1018,7 +981,7 @@ Use <a href="library.html#timeLeftSec">timeLeftSec</a> together with enabling th
     <dt><b>double laserHeadingDeg(int i)</b></dt>
     <dd>Returns the direction of the specified laser.</dd>
     <dt><b>double asteroidTrackingDeg(int i)</b></dt>
-    <dd>Returns the tracking, in degrees, of the specified asteroid. Approximated by the API.</dd>
+    <dd>Returns the tracking, in degrees, of the specified asteroid.</dd>
 </dl>
 
 <p>It's better to use the language's built-in angle conversion functions</p>
@@ -1051,16 +1014,6 @@ Due to all turn functions requiring turnResistance 0 and turnSpeed 64 to work as
     <dd>Turns the ship left. Will turn 'turnSpeed' number of xpilot degrees.</dd>
     <dt><b>turnRight()</b></dt>
     <dd>Turns the ship right. Will turn 'turnSpeed' number of xpilot degrees.</dd>
-</dl>
-
-<br>
-
-<p>
-In previous versions of the API there was support for handling enemies by their server id. In order to easily translate these programs to newer versions a function for translating server id to 'idx' is offered.
-</p>
-<dl>
-<dt><b>int enemyIdx(int id)</b></dt>
-<dd>returns the index of the specified ship. Returns -1 if ship doesn't exist.</dd>
 </dl>
 
 <br>
